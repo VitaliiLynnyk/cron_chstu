@@ -24,29 +24,38 @@ public  class GUI {
         projectFrame.setLayout(null);
         projectFrame.setBackground(Color.white);
 
-        String[] firstMenuItem = {
-                "Lecce_Pen",
-                "Parker_Pen",
-                "AURORA"
-        };
-        JMenuBar firstMenu = new JMenuBar();
-        firstMenu.setBounds(0,0,950,40);
-        projectFrame.add(firstMenu);
+        //topMenu
+        JPanel leftTopMenu = new JPanel();
+        leftTopMenu.setBounds(0,0,250,40);
+        leftTopMenu.setBackground(Color.YELLOW);
+        projectFrame.add(leftTopMenu);
 
-        JMenuItem item = new JMenuItem("firstMenuItem");
-        item.setBounds(0,5,100,40);
-        firstMenu.add(item);
+        //НЕ ЗАБУТИ ЛЕЙБЕЛ//НЕ ЗАБУТИ ЛЕЙБЕЛ//НЕ ЗАБУТИ ЛЕЙБЕЛ//НЕ ЗАБУТИ ЛЕЙБЕЛ//НЕ ЗАБУТИ ЛЕЙБЕЛ//НЕ ЗАБУТИ ЛЕЙБЕЛ//НЕ ЗАБУТИ ЛЕЙБЕЛ//НЕ ЗАБУТИ ЛЕЙБЕЛ
 
-        JButton btSearch = new JButton("search");
-        btSearch.setBounds(1100,5,100,30);
-        projectFrame.add(btSearch);
 
-        JTextField textSearch = new JTextField();
-        textSearch.setBounds(950,5,150,30);
-        projectFrame.add(textSearch);
+        JPanel centerTopMenu = new JPanel();
+        centerTopMenu.setLayout(null);
+        centerTopMenu.setBounds(251,0,650,40);
+        centerTopMenu.setBackground(Color.pink);
+        projectFrame.add(centerTopMenu);
 
 
 
+        JLabel namePickedSubject = new JLabel();
+        namePickedSubject.setText("NAME OF SUBJECT");
+        namePickedSubject.setBounds(10,0,150,40);
+        centerTopMenu.add(namePickedSubject);
+
+
+
+        JTextField numberOfSubject = new JTextField();
+        numberOfSubject.setBounds(170,10,100,20);
+        centerTopMenu.add(numberOfSubject);
+
+
+        JButton btnOkey = new JButton("OK");
+        btnOkey.setBounds(300,10,100,20);
+        centerTopMenu.add(btnOkey);
         //LEFT PANEL
 
         JPanel leftPanel = new JPanel();
@@ -76,12 +85,18 @@ public  class GUI {
 
 
         //CENTER PANEL
-        JPanel centerPanel = new JPanel();
-        centerPanel.setBounds(250,40,650,700);
-        centerPanel.setBackground(Color.RED);
-        projectFrame.add(centerPanel);
+        JPanel TopCenterPanel = new JPanel();
+        TopCenterPanel.setBounds(250,40,650,150);
+        TopCenterPanel.setBackground(Color.RED);
+        projectFrame.add(TopCenterPanel);
 
 
+
+
+        JPanel BottomCenterPanel = new JPanel();
+        BottomCenterPanel.setBounds(250,190,650,500);
+        BottomCenterPanel.setBackground(Color.LIGHT_GRAY);
+        projectFrame.add(BottomCenterPanel);
 
 
 
@@ -115,15 +130,15 @@ public  class GUI {
         p.put("text.year", "Year");
         JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
 
-        datePanel.setPreferredSize(new Dimension(300,300));
+        datePanel.setPreferredSize(new Dimension(300,200));
         topRightPanel.add(datePanel);
 
 
 
         JPanel bottomRightPanel = new JPanel();
         bottomRightPanel.setBounds(900,340,300,300);
-        bottomRightPanel.setBackground(Color.LIGHT_GRAY);
-
+        bottomRightPanel.setBackground(Color.blue);
+        projectFrame.add(bottomRightPanel);
 
 
 
