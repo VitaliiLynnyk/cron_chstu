@@ -28,11 +28,10 @@ public class DBAdapter {
         String sqlTask = "SELECT * FROM subjects;";
         try{
             ResultSet resultSet = statement.executeQuery(sqlTask);
-            while (resultSet.next()){
-                namesOfSubjects.add(resultSet.getString("name"));
-            }
+            while (resultSet.next()) namesOfSubjects.add(resultSet.getString("name"));
         }
         catch (Exception e){
+            e.printStackTrace();
             System.out.println("Cannot get name of subjects");
         }
 
@@ -104,6 +103,22 @@ public class DBAdapter {
         }
 
         return  labsList;
+    }
+
+    public ArrayList<Integer> getSubjectsForPass(String date){
+        ArrayList<Integer> listOfSubjects = new ArrayList<>();
+
+        String sqlTask = "SELECT id_subject FROM labs WHERE deadline = " + date + ";";
+        try{
+            ResultSet resultSet = statement.executeQuery(sqlTask);
+            while(resultSet.next()) listOfSubjects.add(resultSet.getInt("id_subject"));
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            System.out.println("Not appropriate subjects");
+        }
+
+        return listOfSubjects;
     }
 
 }
