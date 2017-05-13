@@ -4,8 +4,11 @@ package chstu.Interface;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.net.URL;
 import java.util.Properties;
 
 /**
@@ -31,9 +34,13 @@ public  class GUI {
         leftTopMenu.setBackground(Color.YELLOW);
         projectFrame.add(leftTopMenu);
 
+        JLabel label = new JLabel(new ImageIcon(getClass().getClassLoader().getResource("libs/dev_ico.jpg")));
+        label.setBounds(0,0,40,40);
+        leftTopMenu.add(label);
+
         JLabel nameProject = new JLabel();
         nameProject.setText("NAME OF SUBJECT");
-        nameProject.setBounds(30,0,200,40);
+        nameProject.setBounds(50,0,200,40);
         nameProject.setFont(new Font("Chiller", Font.ITALIC, 26));
         leftTopMenu.add(nameProject);
 
