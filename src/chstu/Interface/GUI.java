@@ -56,10 +56,6 @@ public  class GUI {
         numberOfSubject.setBounds(170,10,100,20);
         centerTopMenu.add(numberOfSubject);
 
-        JD deadlineDate = new JTextField();
-        numberOfSubject.setBounds(300,10,100,20);
-        centerTopMenu.add(deadlineDate);
-
         JButton btnOkey = new JButton("OK");
         btnOkey.setBounds(400,10,100,20);
         centerTopMenu.add(btnOkey);
