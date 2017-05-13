@@ -8,7 +8,7 @@ import java.util.ArrayList;
  * Created by Ar-Krav on 13.05.2017.
  */
 public class DBAdapter {
-    public DBAdapter() {
+    public  DBAdapter() {
         try{
             Class.forName("org.sqlite.JDBC");
             conector = DriverManager.getConnection("jdbc:sqlite:chdtu.db");
