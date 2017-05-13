@@ -26,11 +26,21 @@ public  class GUI {
 
         //topMenu
         JPanel leftTopMenu = new JPanel();
+        leftTopMenu.setLayout(null);
         leftTopMenu.setBounds(0,0,250,40);
         leftTopMenu.setBackground(Color.YELLOW);
         projectFrame.add(leftTopMenu);
 
+        JLabel nameProject = new JLabel();
+        nameProject.setText("NAME OF SUBJECT");
+        nameProject.setBounds(30,0,200,40);
+        nameProject.setFont(new Font("Chiller", Font.ITALIC, 26));
+        leftTopMenu.add(nameProject);
+
         //НЕ ЗАБУТИ ЛЕЙБЕЛ//НЕ ЗАБУТИ ЛЕЙБЕЛ//НЕ ЗАБУТИ ЛЕЙБЕЛ//НЕ ЗАБУТИ ЛЕЙБЕЛ//НЕ ЗАБУТИ ЛЕЙБЕЛ//НЕ ЗАБУТИ ЛЕЙБЕЛ//НЕ ЗАБУТИ ЛЕЙБЕЛ//НЕ ЗАБУТИ ЛЕЙБЕЛ
+
+
+
 
 
         JPanel centerTopMenu = new JPanel();
@@ -118,7 +128,8 @@ public  class GUI {
 
         //RIGHT PANEL
         JPanel topRightPanel = new JPanel();
-        topRightPanel.setBounds(900,40,300,300);
+        topRightPanel.setLayout(null);
+        topRightPanel.setBounds(900,0,300,350);
         topRightPanel.setBackground(Color.YELLOW);
         projectFrame.add(topRightPanel);
 
@@ -129,14 +140,13 @@ public  class GUI {
         p.put("text.month", "Month");
         p.put("text.year", "Year");
         JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
-
-        datePanel.setPreferredSize(new Dimension(300,200));
+        datePanel.setBounds(0,0,300,200);
         topRightPanel.add(datePanel);
 
 
 
         JPanel bottomRightPanel = new JPanel();
-        bottomRightPanel.setBounds(900,340,300,300);
+        bottomRightPanel.setBounds(900,340,300,330);
         bottomRightPanel.setBackground(Color.blue);
         projectFrame.add(bottomRightPanel);
 
