@@ -2,6 +2,8 @@ package chstu;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * Created by linni on 5/13/2017.
@@ -40,10 +42,16 @@ public class GUI {
         textSearch.setBounds(950,5,150,30);
         projectFrame.add(textSearch);
 
+
+
+        //LEFT PANEL
+
         JPanel leftPanel = new JPanel();
         leftPanel.setBounds(0,40,250,630);
         leftPanel.setBackground(Color.BLACK);
         projectFrame.add(leftPanel);
+
+
 
 
         JButton[] btn = new JButton[20];
@@ -51,14 +59,60 @@ public class GUI {
             btn[i] = new JButton(i +"");
             btn[i].setPreferredSize(new Dimension(100,80));
             leftPanel.setLayout(new GridLayout(0,1));
-
+            btn[i].setBorderPainted(false);
+            btn[i].setFocusPainted(false);
+            btn[i].setBackground(Color.cyan);
             leftPanel.add(btn[i]);
         }
+
 
         JScrollPane jScrollPaneLeftPanel  = new JScrollPane(leftPanel,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                 JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         jScrollPaneLeftPanel.setBounds(0,40,250,630);
         projectFrame.add(jScrollPaneLeftPanel);
+
+
+        //CENTER PANEL
+        JPanel centerPanel = new JPanel();
+        centerPanel.setBounds(250,40,650,700);
+        centerPanel.setBackground(Color.RED);
+        projectFrame.add(centerPanel);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //RIGHT PANEL
+        JPanel topRightPanel = new JPanel();
+        topRightPanel.setBounds(900,40,300,300);
+        topRightPanel.setBackground(Color.BLACK);
+        projectFrame.add(topRightPanel);
+
+
+        JPanel bottomRightPanel = new JPanel();
+        bottomRightPanel.setBounds(900,340,300,300);
+        bottomRightPanel.setBackground(Color.LIGHT_GRAY);
+
+
+
+
+
 
         projectFrame.setVisible(true);
     }
