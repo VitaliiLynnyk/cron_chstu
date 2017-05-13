@@ -22,6 +22,22 @@ public class DBAdapter {
     Connection conector = null;
     Statement statement = null;
 
+    public ArrayList<String> getEndOfLessons(){
+        ArrayList <String> endOflessonsList = new ArrayList<String>();
+
+        String sqlTask = "SELECT * FROM lessons_timetable;";
+        try{
+            ResultSet resultSet = statement.executeQuery(sqlTask);
+            while (resultSet.next()) endOflessonsList.add(resultSet.getString("lessons_end"));
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            System.out.println("Cannot get lessons timetable");
+        }
+
+        return  endOflessonsList;
+    }
+
     public ArrayList<String> getNamesOfSubjects(){
         ArrayList <String> namesOfSubjects = new ArrayList<String>();
 
@@ -43,9 +59,9 @@ public class DBAdapter {
         ArrayList<ArrayList<String>> listOfLessons = new ArrayList<>();
 
         String sqlTask = " SELECT number_lesson, subjects.name, type_lesson.name FROM timetable" +
-                         " INNER JOIN subjects ON timetable.id_subject = subjects.id" +
-                         " INNER JOIN type_lesson ON timetable.type_lesson = type_lessons.id" +
-                         " WHERE day_number = " + dayNumber +" AND week_type =" + weekType;
+                " INNER JOIN subjects ON timetable.id_subject = subjects.id" +
+                " INNER JOIN type_lesson ON timetable.type_lesson = type_lessons.id" +
+                " WHERE day_number = " + dayNumber +" AND week_type =" + weekType;
 
         try{
             ResultSet resultSet = statement.executeQuery(sqlTask);
@@ -68,7 +84,7 @@ public class DBAdapter {
 
     public void setNewLab(int subject,int labNumber, String labComment, String deadlineDate, int labStatus){
         String sqlTask = " INSERT INTO labs (id, id_subject, lab_number, comment, deadline, stat)" +
-                         " VALUES(NULL, " + subject + ", " + labNumber + ", " + labComment + ", " + deadlineDate + ", " + labStatus + ");" ;
+                " VALUES(NULL, " + subject + ", " + labNumber + ", " + labComment + ", " + deadlineDate + ", " + labStatus + ");" ;
 
         try{
             statement.executeUpdate(sqlTask);
@@ -127,11 +143,11 @@ public class DBAdapter {
         String sqlTask = "SELECT number_lesson FROM timetable WHERE day_number = " + dayNumber + " AND id_subject = " + subject + " AND type_week = " + weekType + ";";
         try{
             ResultSet resultSet = statement.executeQuery(sqlTask);
-            //while(resultSet.next()) listOfLessons.add(resultSet.getInt("id_subject"));
+            while(resultSet.next()) listOfLessons.add(resultSet.getInt("number_lessons"));
         }
         catch (Exception e){
             e.printStackTrace();
-            System.out.println("Not appropriate subjects");
+            System.out.println("It`s not lessons today");
         }
 
         return listOfLessons;
