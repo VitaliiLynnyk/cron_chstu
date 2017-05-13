@@ -1,4 +1,4 @@
-package chstu;
+package chstu.ui;
 
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;

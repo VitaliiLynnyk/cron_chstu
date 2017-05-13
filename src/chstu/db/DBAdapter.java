@@ -1,6 +1,5 @@
 package chstu.db;
 
-import java.lang.reflect.Executable;
 import java.sql.*;
 import java.util.ArrayList;
 

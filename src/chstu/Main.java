@@ -1,5 +1,8 @@
 package chstu;
 
+import chstu.ui.Calendars;
+import chstu.ui.GUI;
+
 public class Main {
 
     public static void main(String[] args) {
