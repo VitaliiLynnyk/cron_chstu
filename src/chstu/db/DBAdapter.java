@@ -121,4 +121,20 @@ public class DBAdapter {
         return listOfSubjects;
     }
 
+    public ArrayList<Integer> getNumberOfLessonsForPassedSubjects(int subject, int dayNumber, int weekType){
+        ArrayList<Integer> listOfLessons = new ArrayList<>();
+
+        String sqlTask = "SELECT number_lesson FROM timetable WHERE day_number = " + dayNumber + " AND id_subject = " + subject + " AND type_week = " + weekType + ";";
+        try{
+            ResultSet resultSet = statement.executeQuery(sqlTask);
+            //while(resultSet.next()) listOfLessons.add(resultSet.getInt("id_subject"));
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            System.out.println("Not appropriate subjects");
+        }
+
+        return listOfLessons;
+    }
+
 }
