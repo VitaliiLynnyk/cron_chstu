@@ -1,9 +1,14 @@
 package chstu;
 
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.UtilDateModel;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Properties;
 
 /**
  * Created by linni on 5/13/2017.
@@ -103,6 +108,18 @@ public class GUI {
         topRightPanel.setBounds(900,40,300,300);
         topRightPanel.setBackground(Color.YELLOW);
         projectFrame.add(topRightPanel);
+
+
+        UtilDateModel model = new UtilDateModel();
+        Properties p = new Properties();
+        p.put("text.today", "Today");
+        p.put("text.month", "Month");
+        p.put("text.year", "Year");
+        JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
+
+        datePanel.setPreferredSize(new Dimension(300,300));
+        topRightPanel.add(datePanel);
+
 
 
         JPanel bottomRightPanel = new JPanel();
