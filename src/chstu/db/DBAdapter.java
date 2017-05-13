@@ -10,11 +10,12 @@ public class DBAdapter {
     public DBAdapter() {
         try{
             Class.forName("org.sqlite.JDBC");
-            conector = DriverManager.getConnection("jdbc:sqlite:test.db");
+            conector = DriverManager.getConnection("jdbc:sqlite:chdtu.db");
             conector.setAutoCommit(false);
             System.out.println("Opened database successfully");
         }
         catch (Exception e){
+            e.printStackTrace();
             System.out.println("Connection to DB faild");
         }
     }
@@ -56,6 +57,7 @@ public class DBAdapter {
             }
         }
         catch (Exception e){
+            e.printStackTrace();
             System.out.println("Cannot get name of subjects");
         }
 

@@ -5,6 +5,8 @@ package chstu.db;
  */
 public class DBTest {
     public static void main(String[] args) {
+        DBAdapter dbAdapter = new DBAdapter();
 
+        dbAdapter.getAllLessonsOfDay(1,0);
     }
 }
