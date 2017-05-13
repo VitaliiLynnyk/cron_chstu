@@ -1,19 +1,17 @@
-package chstu;
+package chstu.Interface;
+
 
 import org.jdatepicker.impl.JDatePanelImpl;
-import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Properties;
 
 /**
  * Created by linni on 5/13/2017.
  */
-public class GUI {
+public  class GUI {
 
     public void makeForm(){
         JFrame projectFrame = new JFrame();
