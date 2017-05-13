@@ -4,9 +4,7 @@ import java.lang.reflect.Executable;
 import java.sql.*;
 import java.util.ArrayList;
 
-/**
- * Created by Ar-Krav on 13.05.2017.
- */
+
 public class DBAdapter {
     public DBAdapter() {
         try{
@@ -82,6 +80,31 @@ public class DBAdapter {
             e.printStackTrace();
             System.out.println("Lab can`t be added");
         }
+    }
+
+    public ArrayList<ArrayList<String>> getAlllabsBySubject(int subject){
+        ArrayList<ArrayList<String>> labsList = new ArrayList<>();
+        ArrayList <String> labsInfo;
+
+        String sqlTask = "SELECT lab_number, comment, deadline, stat FROM subjects WHERE id_subject = " + subject + ";";
+        try{
+            ResultSet resultSet = statement.executeQuery(sqlTask);
+            while (resultSet.next()){
+                labsInfo = new ArrayList<String>();
+                labsInfo.add("" + resultSet.getInt("lab_number"));
+                labsInfo.add(resultSet.getString("comment"));
+                labsInfo.add(resultSet.getString("deadline"));
+                labsInfo.add("" + resultSet.getInt("stat"));
+
+                labsList.add(labsInfo);
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            System.out.println("Cannot get name of subjects");
+        }
+
+        return  labsList;
     }
 
 }
