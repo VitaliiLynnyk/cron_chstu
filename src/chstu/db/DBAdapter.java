@@ -76,6 +76,7 @@ public class DBAdapter {
 
         try{
             statement.executeUpdate(sqlTask);
+            conector.commit();
         }
         catch (Exception e){
             e.printStackTrace();
