@@ -37,7 +37,7 @@ public  class GUI {
         nameProject.setFont(new Font("Chiller", Font.ITALIC, 26));
         leftTopMenu.add(nameProject);
 
-        //НЕ ЗАБУТИ ЛЕЙБЕЛ//НЕ ЗАБУТИ ЛЕЙБЕЛ//НЕ ЗАБУТИ ЛЕЙБЕЛ//НЕ ЗАБУТИ ЛЕЙБЕЛ//НЕ ЗАБУТИ ЛЕЙБЕЛ//НЕ ЗАБУТИ ЛЕЙБЕЛ//НЕ ЗАБУТИ ЛЕЙБЕЛ//НЕ ЗАБУТИ ЛЕЙБЕЛ
+
 
 
 
