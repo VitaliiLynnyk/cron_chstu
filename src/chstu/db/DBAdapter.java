@@ -39,6 +39,27 @@ public class DBAdapter {
         return  namesOfSubjects;
     }
 
-    public
+    public ArrayList<ArrayList<String>> getAllLessonsOfDay(int dayNumber, int weekType){
+        ArrayList <String> lessonInfo = new ArrayList<String>();
+        ArrayList<ArrayList<String>> listOfLessons = new ArrayList<>();
+
+        String sqlTask = " SELECT number_lesson, subjects.name, type_lesson.name FROM timetable" +
+                         " INNER JOIN subjects ON timetable.id_subject = subjects.id" +
+                         " INNER JOIN type_lesson ON timetable.type_lesson = type_lessons.id" +
+                         " WHERE day_number = " + dayNumber +" AND week_type =" + weekType;
+        try{
+            ResultSet resultSet = statement.executeQuery(sqlTask);
+            while (resultSet.next()){
+                lessonInfo.add("" + resultSet.getInt("number_lesson"));
+                lessonInfo.add(resultSet.getString("subjects.name"));
+                lessonInfo.add(resultSet.getString("type_lesson.name"));
+            }
+        }
+        catch (Exception e){
+            System.out.println("Cannot get name of subjects");
+        }
+
+        return  listOfLessons;
+    }
 
 }
