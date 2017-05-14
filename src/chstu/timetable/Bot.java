@@ -21,10 +21,10 @@ public class Bot {
 
     ArrayList<Integer> subjectsForPassToday;
     ArrayList<Integer> numberLessonsOfSubjectForPass;
-    int inProcess = 0, passedLab = 1, debt = 2;
+    int inProcess = 0, debt = 2;
 
 
-    public void checkUserDutyForToday() {
+    private void checkUserDutyForToday() {
         subjectsForPassToday = dataBase.getSubjectsForPass(dateUtil.getCurrentDate());
         numberLessonsOfSubjectForPass = new ArrayList<>();
 

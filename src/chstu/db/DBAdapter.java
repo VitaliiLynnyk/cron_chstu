@@ -25,14 +25,14 @@ public class DBAdapter {
     Statement statement = null;
 
     public ArrayList<java.util.Date> getEndOfLessons(){
-        ArrayList <Date> endOflessonsList = new ArrayList<Date>();
+        ArrayList <Date> endOfLessonsList = new ArrayList<Date>();
 
-        String sqlTask = "SELECT * FROM lessons_timetable;";
+        String sqlTask = "SELECT * FROM lesson_timetable;";
         try{
             ResultSet resultSet = statement.executeQuery(sqlTask);
             SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
             while (resultSet.next()) {
-                endOflessonsList.add(dateFormat.parse(resultSet.getString("lessons_end")));
+                endOfLessonsList.add(dateFormat.parse(resultSet.getString("end_lesson")));
             }
         }
         catch (Exception e){
@@ -40,7 +40,7 @@ public class DBAdapter {
             System.out.println("Cannot get lessons timetable");
         }
 
-        return  endOflessonsList;
+        return  endOfLessonsList;
     }
 
     public ArrayList<String> getNamesOfSubjects(){
