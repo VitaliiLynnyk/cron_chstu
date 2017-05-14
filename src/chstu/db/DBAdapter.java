@@ -154,7 +154,7 @@ public class DBAdapter {
     public ArrayList<Integer> getSubjectsByDayDate(String dayDate){
         ArrayList<Integer> listOfSubjects = new ArrayList<>();
 
-        String sqlTask = "SELECT id_subject FROM timetable WHERE lesson_date = " + dayDate + ";";
+        String sqlTask = "SELECT id_subject FROM timetable WHERE lesson_date = '" + dayDate + "';";
         try{
             ResultSet resultSet = statement.executeQuery(sqlTask);
             while(resultSet.next()) listOfSubjects.add(resultSet.getInt("id_subject"));

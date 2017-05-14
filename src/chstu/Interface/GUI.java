@@ -2,6 +2,7 @@ package chstu.Interface;
 
 
 import chstu.db.DBAdapter;
+import chstu.timetable.Tasks;
 import org.jdatepicker.DateModel;
 import org.jdatepicker.JDatePicker;
 import org.jdatepicker.impl.JDatePanelImpl;
@@ -77,8 +78,8 @@ public  class GUI {
                         }
 
                         Tasks tasks = new Tasks();
-                        tasks.createNewLabs(subject,Integer.parseInt(numberOfSubject.getText()));
-                    }
+                        System.out.print(tasks.numberLesson(subject));
+                    }//,Integer.parseInt(numberOfSubject.getText())
                 }
         );
 

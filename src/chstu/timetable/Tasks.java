@@ -2,6 +2,8 @@ package chstu.timetable;
 
 import chstu.db.DBAdapter;
 
+import javax.security.auth.Subject;
+
 /**
  * Created by alex3 on 5/13/2017.
  */
@@ -9,7 +11,36 @@ public class Tasks {
     final public String startSemester = "2017-05-15";
     final public String endSemester = "2017-05-29";
     DBAdapter dbAdapter = new DBAdapter();
-    int numberLessons(int day){
+    public String addDate(String buf,int number){
+        String result = buf;
+        int dd = Integer.parseInt(buf.charAt(8)+""+buf.charAt(9));
+        for(int i=0; i<8;i++) {
+            result += startSemester.charAt(i);
+        }
+        return result+dd;
+    }
+
+    int  getDay(String subject){
+        return Integer.parseInt(startSemester.charAt(8)+""+startSemester.charAt(9));
+    }
+
+    public int numberLesson(int subject){
+        String copy = startSemester;
+        int result = 0;
+        do {
+            for(int i=1;i<dbAdapter.getSubjectsByDayDate(copy).size();i++){
+                String s = (dbAdapter.getSubjectsByDayDate(copy).get(i)).toString();
+                if(subject == Integer.parseInt(s)){
+                    result++;
+                }
+            }
+            copy = addDate(copy,1);
+
+        } while (getDay(copy) <= getDay(endSemester));
+        return result;
+    }
+
+    /*int numberLessons(int day){
         int result = 0;
         for(int j=1; j<3;j++) {
             for (int i = 1; i < 6; i++)
@@ -50,7 +81,7 @@ public class Tasks {
         }
         return result+day;
 
-    }
+    }*/
 
 
 }
