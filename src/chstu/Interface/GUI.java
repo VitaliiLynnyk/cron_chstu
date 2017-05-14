@@ -28,27 +28,33 @@ public class GUI {
             projectFrame.setBackground(Color.white);
 
 //topMenu
-        JPanel leftTopMenu = new JPanel();
+            JPanel leftTopMenu = new JPanel();
             leftTopMenu.setLayout(null);
             leftTopMenu.setBounds(0,0,250,40);
-            leftTopMenu.setBackground(Color.YELLOW);
+            leftTopMenu.setBackground(new Color(113, 74, 176));
             projectFrame.add(leftTopMenu);
 
             JLabel programName = new JLabel();
             programName.setText("CRON_CHSTU");
-            programName.setBounds(70,0,150,40);
+            programName.setForeground(Color.yellow);
+            programName.setBounds(45,0,150,40);
             programName.setFont(new Font("Chiller", Font.ITALIC, 30));
             leftTopMenu.add(programName);
 
 
+
+
+
             JPanel centerTopMenu = new JPanel();
             centerTopMenu.setLayout(null);
-            centerTopMenu.setBounds(251,0,650,40);
-            centerTopMenu.setBackground(Color.pink);
+            centerTopMenu.setBounds(251,0,648,40);
             projectFrame.add(centerTopMenu);
 
 
-
+            JLabel comment = new JLabel();
+            comment.setText("введіть кількість лаб");
+            comment.setBounds(300,0,150,40);
+            centerTopMenu.add(comment);
 
             JLabel namePickedSubject = new JLabel();
             namePickedSubject.setText("NAME OF SUBJECT");
@@ -62,7 +68,7 @@ public class GUI {
             centerTopMenu.add(numberOfSubject);
 
             JButton btnOkey = new JButton("OK");
-            btnOkey.setBounds(400,10,100,20);
+            btnOkey.setBounds(500,10,100,20);
             centerTopMenu.add(btnOkey);
 //LEFT PANEL
 
@@ -100,30 +106,32 @@ public class GUI {
                 btn[i].setVerticalAlignment(JLabel.CENTER);
                 btn[i].setBorderPainted(false);
                 btn[i].setFocusPainted(false);
-                btn[i].setBackground(Color.cyan);
+                btn[i].setBackground(new Color(177, 148, 226));
                 leftPanel.add(btn[i]);
             }
 
-            JScrollPane jScrollPaneLeftPanel = new JScrollPane(leftPanel,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+            JScrollPane jScrollPaneLeftPanel = new JScrollPane(leftPanel,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                     JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+            jScrollPaneLeftPanel.getVerticalScrollBar().setPreferredSize(new Dimension(0,0));
             jScrollPaneLeftPanel.setBounds(0,40,250,630);
             projectFrame.add(jScrollPaneLeftPanel);
 
 //CENTER PANEL
         JPanel TopCenterPanel = new JPanel();
             TopCenterPanel.setBounds(250,40,650,150);
-            TopCenterPanel.setBackground(Color.RED);
+            TopCenterPanel.setBackground(new Color(214, 195, 244));
             projectFrame.add(TopCenterPanel);
 
         JPanel BottomCenterPanel = new JPanel();
             BottomCenterPanel.setBounds(250,190,650,500);
-            BottomCenterPanel.setBackground(Color.LIGHT_GRAY);
+            BottomCenterPanel.setBackground(new Color(157, 98, 255));
             projectFrame.add(BottomCenterPanel);
 
 //RIGHT PANEL
-        JPanel topRightPanel = new JPanel();
+
+            JPanel topRightPanel = new JPanel();
             topRightPanel.setBounds(900,-5,300,320);
-            topRightPanel.setBackground(Color.YELLOW);
+            topRightPanel.setBackground(new Color(113, 74, 176));
             projectFrame.add(topRightPanel);
 
         UtilDateModel model = new UtilDateModel();
@@ -131,15 +139,16 @@ public class GUI {
             p.put("text.today", "Today");
             p.put("text.month", "Month");
             p.put("text.year", "Year");
-            JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
 
-        datePanel.setPreferredSize(new Dimension(300,200));
-        topRightPanel.add(datePanel);
+            JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
+            datePanel.setPreferredSize(new Dimension(300,200));
+            datePanel.setBounds(900,30,300,200);
+            topRightPanel.add(datePanel);
 
         JPanel bottomRightPanel = new JPanel();
             bottomRightPanel.setLayout(new GridLayout(0,1));
             bottomRightPanel.setBounds(900,300,300,400);
-            bottomRightPanel.setBackground(Color.blue);
+            bottomRightPanel.setBackground(new Color(177, 148, 226));
             projectFrame.add(bottomRightPanel);
 
             DateUtil dates = new DateUtil();
@@ -150,16 +159,17 @@ public class GUI {
                 JLabel [] nextDayTimetableLable = new JLabel[nextDaySubjects.size()];
                 for (int i = 0; i < nextDaySubjects.size(); i++){
                     nextDayTimetableLable[i] = new JLabel();
-                    nextDayTimetableLable[i].setPreferredSize(new Dimension(290,50));
+                    nextDayTimetableLable[i].setPreferredSize(new Dimension(300,50));
                     nextDayTimetableLable[i].setText(nextDaySubjects.get(i).get(0) + " | " + nextDaySubjects.get(i).get(1) + " | " + nextDaySubjects.get(i).get(2));
                     nextDayTimetableLable[i].setForeground(Color.GREEN);
                     nextDayTimetableLable[i].setVerticalAlignment(JLabel.CENTER);
                     nextDayTimetableLable[i].setFont(new Font("Calibri", Font.ITALIC, 26));
                     bottomRightPanel.add(nextDayTimetableLable[i]);
                 }
-            JScrollPane jScrollPaneRightPanel = new JScrollPane(bottomRightPanel,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+            JScrollPane jScrollPaneRightPanel = new JScrollPane(bottomRightPanel,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                     JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-            jScrollPaneRightPanel.setBounds(900,300,290,400);
+            jScrollPaneRightPanel.getVerticalScrollBar().setPreferredSize(new Dimension(0,0));
+            jScrollPaneRightPanel.setBounds(900,300,300,400);
             projectFrame.add(jScrollPaneRightPanel);
 
         projectFrame.setVisible(true);
