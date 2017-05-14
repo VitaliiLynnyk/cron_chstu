@@ -40,7 +40,7 @@ public class GUI {
         projectFrame.add(leftTopMenu);
 
         JLabel programName = new JLabel();
-        programName.setText("programName");
+        programName.setText("CRON_CHSTU");
         programName.setBounds(70,0,150,40);
         programName.setFont(new Font("Chiller", Font.ITALIC, 30));
         leftTopMenu.add(programName);
@@ -101,6 +101,8 @@ public class GUI {
             btn[i] = new JButton(arrayList.get(i)+"");
             btn[i].setPreferredSize(new Dimension(100,100));
             leftPanel.setLayout(new GridLayout(0,1));
+            btn[i].setFont(new Font("Calibri", Font.ITALIC, 26));
+            btn[i].setVerticalAlignment(JLabel.CENTER);
             btn[i].setBorderPainted(false);
             btn[i].setFocusPainted(false);
             btn[i].setBackground(Color.cyan);
@@ -141,23 +143,30 @@ public class GUI {
         topRightPanel.add(datePanel);
 
         JPanel bottomRightPanel = new JPanel();
+        bottomRightPanel.setLayout(new GridLayout(0,1));
         bottomRightPanel.setBounds(900,300,300,400);
         bottomRightPanel.setBackground(Color.blue);
         projectFrame.add(bottomRightPanel);
 
-        JLabel nextDaySubject = new JLabel();
-        nextDaySubject.setBounds(0,0,200,100);
-        bottomRightPanel.add(nextDaySubject);
-
         DateUtil dates = new DateUtil();
             String strDate = dates.getCurrentDate();
             DBAdapter db = DBAdapter.getInstance();
-            ArrayList<ArrayList<String>> nextDaySubjects = db.getAllLessonsOfDay(strDate);
-            ArrayList<String> st = null;
+            ArrayList<ArrayList<String>> nextDaySubjects = db.getAllLessonsOfDay("2017-05-16");
 
+            JLabel [] nextDayTimetableLable = new JLabel[nextDaySubjects.size()];
             for (int i = 0; i < nextDaySubjects.size(); i++){
-
+                nextDayTimetableLable[i] = new JLabel();
+                nextDayTimetableLable[i].setPreferredSize(new Dimension(290,50));
+                nextDayTimetableLable[i].setText(nextDaySubjects.get(i).get(0) + " | " + nextDaySubjects.get(i).get(1) + " | " + nextDaySubjects.get(i).get(2));
+                nextDayTimetableLable[i].setForeground(Color.GREEN);
+                nextDayTimetableLable[i].setVerticalAlignment(JLabel.CENTER);
+                nextDayTimetableLable[i].setFont(new Font("Calibri", Font.ITALIC, 26));
+                bottomRightPanel.add(nextDayTimetableLable[i]);
             }
+        JScrollPane jScrollPaneRightPanel = new JScrollPane(bottomRightPanel,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        jScrollPaneRightPanel.setBounds(900,300,290,400);
+        projectFrame.add(jScrollPaneRightPanel);
 
         projectFrame.setVisible(true);
     }
