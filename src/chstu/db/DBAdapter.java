@@ -21,18 +21,27 @@ public class DBAdapter {
         }
     }
 
+    private static DBAdapter instance;
+    public static DBAdapter getInstance(){
+        if (instance == null) {
+            instance = new DBAdapter();
+        }
+
+        return  instance;
+    }
+
     Connection conector = null;
     Statement statement = null;
 
-    public ArrayList<java.util.Date> getEndOfLessons(){
-        ArrayList <Date> endOflessonsList = new ArrayList<Date>();
+    public ArrayList<Long> getEndOfLessons(){
+        ArrayList <Long> endOfLessonsList = new ArrayList<>();
 
-        String sqlTask = "SELECT * FROM lessons_timetable;";
+        String sqlTask = "SELECT * FROM lesson_timetable;";
         try{
             ResultSet resultSet = statement.executeQuery(sqlTask);
             SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
             while (resultSet.next()) {
-                endOflessonsList.add(dateFormat.parse(resultSet.getString("lessons_end")));
+                endOfLessonsList.add(dateFormat.parse(resultSet.getString("end_lesson")).getTime());
             }
         }
         catch (Exception e){
@@ -40,7 +49,7 @@ public class DBAdapter {
             System.out.println("Cannot get lessons timetable");
         }
 
-        return  endOflessonsList;
+        return  endOfLessonsList;
     }
 
     public ArrayList<String> getNamesOfSubjects(){
