@@ -4,7 +4,6 @@ import chstu.db.DBAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 
 public class Bot {
@@ -58,9 +57,14 @@ public class Bot {
     private void checkLabsStatys(){
         ArrayList<Date> endOfLessons = dataBase.getEndOfLessons();
         for (int i = 0; i < numberLessonsOfSubjectForPass.size(); i++){
+            int subject = dataBase.getSubjectByLessonNuberAtDay(numberLessonsOfSubjectForPass.get(i),getCurrentDate());
             if (getCurrentTime().getTime() >= endOfLessons.get(numberLessonsOfSubjectForPass.get(i)-1).getTime()){
-                //dataBase.setLabStatus(dataBase.getSubjectBylessonnuberAtDay(numberLessonsOfSubjectForPass));
+                if(dataBase.getlabStatus(subject,getCurrentDate()) == inProcess) dataBase.setLabStatus(subject,getCurrentDate(),debt);
             }
         }
     }
+
+    /*private long getTimeToNextLesson(){
+        cur
+    }*/
 }
