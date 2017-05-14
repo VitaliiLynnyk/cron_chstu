@@ -4,7 +4,6 @@ import chstu.db.DBAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 
 public class Bot {
@@ -38,27 +37,6 @@ public class Bot {
         return currentTimeDate;
     }
 
-    private int getTypeOfWeek() {
-        int pairWeek = 1, nonPairWeek = 0;
-        SimpleDateFormat dateFormat = new SimpleDateFormat("w");
-
-        if (Integer.parseInt(dateFormat.toString()) % 2 == 0) return pairWeek;
-        else return nonPairWeek;
-    }
-
-    private int getNumberOfDayOfWeek() {
-        Calendar cl = Calendar.getInstance();
-        cl.setFirstDayOfWeek(Calendar.MONDAY);
-        cl.setTime(currentDate);
-
-        int dayNumber = cl.get(Calendar.DAY_OF_WEEK) - 1;
-        if (dayNumber == 0) {
-            dayNumber = 7;
-        }
-
-        return dayNumber;
-    }
-
     public void checkUserDutyForToday() {
         subjectsForPassToday = dataBase.getSubjectsForPass(getCurrentDate());
         numberLessonsOfSubjectForPass = new ArrayList<>();
@@ -68,11 +46,8 @@ public class Bot {
             return;
         }
 
-        int dayNumber = getNumberOfDayOfWeek();
-        int typeOfWeek = getTypeOfWeek();
-
         for (int i = 0; i < subjectsForPassToday.size(); i++) {
-             ArrayList<Integer> numbersOfLessonsForOneSubject = dataBase.getNumberOfLessonsForPassedSubjects(subjectsForPassToday.get(i), dayNumber, typeOfWeek);
+             ArrayList<Integer> numbersOfLessonsForOneSubject = dataBase.getNumberOfLessonsForPassedSubjects(subjectsForPassToday.get(i), getCurrentDate());
              for (int j = 0; i < numbersOfLessonsForOneSubject.size(); j++){
                  numberLessonsOfSubjectForPass.add(numbersOfLessonsForOneSubject.get(j));
              }
@@ -82,9 +57,14 @@ public class Bot {
     private void checkLabsStatys(){
         ArrayList<Date> endOfLessons = dataBase.getEndOfLessons();
         for (int i = 0; i < numberLessonsOfSubjectForPass.size(); i++){
+            int subject = dataBase.getSubjectByLessonNuberAtDay(numberLessonsOfSubjectForPass.get(i),getCurrentDate());
             if (getCurrentTime().getTime() >= endOfLessons.get(numberLessonsOfSubjectForPass.get(i)-1).getTime()){
-                //dataBase.setLabStatus(,getCurrentDate(),debt);
+                if(dataBase.getlabStatus(subject,getCurrentDate()) == inProcess) dataBase.setLabStatus(subject,getCurrentDate(),debt);
             }
         }
     }
+
+    /*private long getTimeToNextLesson(){
+        cur
+    }*/
 }
