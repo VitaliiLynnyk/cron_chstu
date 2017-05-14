@@ -3,6 +3,8 @@ package chstu.Interface;
 
 import chstu.Tasks;
 import chstu.db.DBAdapter;
+import org.jdatepicker.DateModel;
+import org.jdatepicker.JDatePicker;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
@@ -86,8 +88,6 @@ public  class GUI {
         leftPanel.setBounds(0,40,250,630);
         leftPanel.setBackground(Color.BLACK);
         projectFrame.add(leftPanel);
-
-
 
 
         JButton[] btn = new JButton[20];
