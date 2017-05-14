@@ -7,7 +7,7 @@ import java.util.Date;
 
 
 public class DBAdapter {
-    public DBAdapter() {
+    public  DBAdapter() {
         try{
             Class.forName("org.sqlite.JDBC");
             conector = DriverManager.getConnection("jdbc:sqlite:chdtu.db");

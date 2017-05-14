@@ -1,11 +1,18 @@
 package chstu.Interface;
 
 
+import chstu.Tasks;
+import chstu.db.DBAdapter;
+import org.jdatepicker.DateModel;
+import org.jdatepicker.JDatePicker;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Properties;
 
 /**
@@ -52,18 +59,35 @@ public  class GUI {
         numberOfSubject.setBounds(170,10,100,20);
         centerTopMenu.add(numberOfSubject);
 
-
         JButton btnOkey = new JButton("OK");
-        btnOkey.setBounds(300,10,100,20);
+        btnOkey.setBounds(400,10,100,20);
         centerTopMenu.add(btnOkey);
         //LEFT PANEL
+
+
+        btnOkey.addActionListener(
+                new ActionListener()
+                {
+                    public void actionPerformed(ActionEvent e)
+                    {   DBAdapter dbAdapter;
+                        dbAdapter = new DBAdapter();
+                        int subject = 0;
+                        for(int i=0; i<dbAdapter.getNamesOfSubjects().size(); i++){
+                            if(namePickedSubject.getText() == dbAdapter.getNamesOfSubjects().get(i))
+                                    subject = i;
+                        }
+
+                        Tasks tasks = new Tasks();
+                        tasks.createNewLabs(subject,Integer.parseInt(numberOfSubject.getText()));
+                    }
+                }
+        );
+
 
         JPanel leftPanel = new JPanel();
         leftPanel.setBounds(0,40,250,630);
         leftPanel.setBackground(Color.BLACK);
         projectFrame.add(leftPanel);
-
-
 
 
         JButton[] btn = new JButton[20];
