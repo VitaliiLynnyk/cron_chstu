@@ -1,8 +1,7 @@
 package chstu.Interface;
 
-
-import chstu.Tasks;
 import chstu.db.DBAdapter;
+import chstu.timetable.Tasks;
 import org.jdatepicker.DateModel;
 import org.jdatepicker.JDatePicker;
 import org.jdatepicker.impl.JDatePanelImpl;
