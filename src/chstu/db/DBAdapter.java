@@ -219,4 +219,22 @@ public class DBAdapter {
         return status;
     }
 
+    public int getNumberLessonsInDay(String dayDate){
+        String sqlTask = "SELECT id FROM timetable WHERE lesson_date = " + dayDate + ";";
+        int numberLessons = 0;
+        try{
+            ResultSet resultSet = statement.executeQuery(sqlTask);
+            while (resultSet.next()){
+                numberLessons += 1;
+            }
+
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            System.out.println("Status of lab si secret!");
+        }
+
+        return numberLessons;
+    }
+
 }
