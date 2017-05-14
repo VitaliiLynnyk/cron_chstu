@@ -1,15 +1,14 @@
 package chstu.db;
 
-import java.util.ArrayList;
+import chstu.timetable.Bot;
+import chstu.timetable.DateUtil;
 
-/**
- * Created by Ar-Krav on 13.05.2017.
- */
+import java.text.SimpleDateFormat;
+
 public class DBTest {
     public static void main(String[] args) {
-        DBAdapter dbAdapter = new DBAdapter();
+        Bot bot = new Bot();
 
-        ArrayList<String> ar = dbAdapter.getNamesOfSubjects();
-        for (int i = 0; i < ar.size(); i++) System.out.println(ar.get(i));
+        bot.checkLabsStatys();
     }
 }
