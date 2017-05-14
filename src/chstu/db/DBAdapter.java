@@ -1,7 +1,9 @@
 package chstu.db;
 
 import java.sql.*;
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.Date;
 
 
 public class DBAdapter {
@@ -22,13 +24,16 @@ public class DBAdapter {
     Connection conector = null;
     Statement statement = null;
 
-    public ArrayList<String> getEndOfLessons(){
-        ArrayList <String> endOflessonsList = new ArrayList<String>();
+    public ArrayList<java.util.Date> getEndOfLessons(){
+        ArrayList <Date> endOflessonsList = new ArrayList<Date>();
 
         String sqlTask = "SELECT * FROM lessons_timetable;";
         try{
             ResultSet resultSet = statement.executeQuery(sqlTask);
-            while (resultSet.next()) endOflessonsList.add(resultSet.getString("lessons_end"));
+            SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
+            while (resultSet.next()) {
+                endOflessonsList.add(dateFormat.parse(resultSet.getString("lessons_end")));
+            }
         }
         catch (Exception e){
             e.printStackTrace();
@@ -168,5 +173,22 @@ public class DBAdapter {
 
         return listOfLessons;
     }
+
+    public void setLabStatus(int subject, String dayNumber, int status){
+        String sqlTask = "UPDATE labs SET stat = " + status + " WHERE id_subject = " + subject + " AND day_number = " + dayNumber + ";";
+
+        try{
+            statement.executeUpdate(sqlTask);
+            conector.commit();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            System.out.println("Lab can`t be updated");
+        }
+    }
+
+    /*ublic int getSubjectBylessonnuberAtDay(int lessonNumber, int dayNumber, ){
+
+    }*/
 
 }
