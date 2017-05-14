@@ -141,6 +141,7 @@ public  class GUI {
 
 
 
+
         //RIGHT PANEL
         JPanel topRightPanel = new JPanel();
         topRightPanel.setBounds(900,40,300,300);
