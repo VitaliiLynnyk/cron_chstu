@@ -3,7 +3,6 @@ package chstu.timetable;
 import chstu.db.DBAdapter;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -34,6 +33,25 @@ public class DateUtil {
         }
 
         return currentTimeDate;
+    }
+
+
+    public boolean isMoreLessonsToday(DBAdapter dataBase){
+        if(getCurrentTime().getTime() >= dataBase.getEndOfLessons().get(dataBase.getNumberLessonsInDay(getCurrentDate())-1).getTime()) return false;
+        else return true;
+    }
+
+    public long getTimeToNextLesson(DBAdapter dataBase){
+        long timeToNExtLesson = -1;
+
+        if(isMoreLessonsToday(dataBase)) {
+            for (int i = 0; i < dataBase.getEndOfLessons().size(); i++){
+                if (getCurrentTime().getTime() < dataBase.getEndOfLessons().get(i).getTime()){
+                    timeToNExtLesson = dataBase.getEndOfLessons().get(i).getTime() - getCurrentTime().getTime();
+                }
+            }
+        }
+        return  timeToNExtLesson;
     }
 
 }

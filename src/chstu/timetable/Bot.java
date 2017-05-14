@@ -5,11 +5,14 @@ import chstu.db.DBAdapter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Timer;
 
 public class Bot {
     public Bot() {
         currentDate = new Date();
         dataBase = new DBAdapter();
+
+        checkUserDutyForToday();
     }
 
     Date currentDate;
@@ -38,7 +41,7 @@ public class Bot {
         }
     }
 
-    private void checkLabsStatys(){
+    public void checkLabsStatys(){
         ArrayList<Date> endOfLessons = dataBase.getEndOfLessons();
         for (int i = 0; i < numberLessonsOfSubjectForPass.size(); i++){
             int subject = dataBase.getSubjectByLessonNuberAtDay(numberLessonsOfSubjectForPass.get(i),dateUtil.getCurrentDate());
@@ -46,21 +49,13 @@ public class Bot {
                 if(dataBase.getlabStatus(subject,dateUtil.getCurrentDate()) == inProcess) dataBase.setLabStatus(subject,dateUtil.getCurrentDate(),debt);
             }
         }
+
+        if(dateUtil.isMoreLessonsToday(dataBase)) startBotTimer();
     }
 
-    private boolean isMoreLessonsToday(){
-        if(dateUtil.getCurrentTime().getTime() >= dataBase.getEndOfLessons().get(dataBase.getNumberLessonsInDay(dateUtil.getCurrentDate())-1).getTime()) return false;
-        else return true;
+    public void startBotTimer(){
+        Timer timer = new Timer();
+        BotCronTask botCronTask = new BotCronTask(timer);
+        timer.schedule(botCronTask,dateUtil.getTimeToNextLesson(dataBase));
     }
-
-    /*private long getTimeToNextLesson(){
-        if(isMoreLessonsToday()) {
-            for (int i = 0; i < dataBase.getEndOfLessons().size(); i++){
-                if (dateUtil.getCurrentTime().getTime() < dataBase.getEndOfLessons().get(i).getTime()){
-                    //return dataBase.getEndOfLessons().get(i).getTime() - dateUtil.getCurrentTime();
-                }
-            }
-        }
-        return  4444;
-    }*/
 }
