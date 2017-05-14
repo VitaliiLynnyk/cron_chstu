@@ -3,6 +3,9 @@ package chstu.timetable;
 import chstu.db.DBAdapter;
 
 import javax.security.auth.Subject;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by alex3 on 5/13/2017.
@@ -10,18 +13,34 @@ import javax.security.auth.Subject;
 public class Tasks {
     final public String startSemester = "2017-05-15";
     final public String endSemester = "2017-05-29";
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
     DBAdapter dbAdapter = new DBAdapter();
     public String addDate(String buf,int number){
-        String result = buf;
-        int dd = Integer.parseInt(buf.charAt(8)+""+buf.charAt(9));
-        for(int i=0; i<8;i++) {
-            result += startSemester.charAt(i);
+
+        Calendar cl = Calendar.getInstance();
+        try {
+            cl.setTimeInMillis(dateFormat.parse(buf).getTime()+ (1000 * 60 * 60 * 24 * number));
+            String newDate = dateFormat.format(cl.getTime());
+            return newDate;
         }
-        return result+dd;
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
     int  getDay(String subject){
-        return Integer.parseInt(startSemester.charAt(8)+""+startSemester.charAt(9));
+        Calendar cl = Calendar.getInstance();
+        try {
+            cl.setTime(dateFormat.parse(subject));
+            int day = cl.get(Calendar.DAY_OF_MONTH);
+            return day;
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     public int numberLesson(int subject){
