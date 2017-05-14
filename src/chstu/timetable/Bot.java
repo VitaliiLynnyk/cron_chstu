@@ -4,7 +4,6 @@ import chstu.db.DBAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 
 public class Bot {
@@ -15,52 +14,15 @@ public class Bot {
 
     Date currentDate;
     DBAdapter dataBase;
+    DateUtil dateUtil = new DateUtil();
+
     ArrayList<Integer> subjectsForPassToday;
     ArrayList<Integer> numberLessonsOfSubjectForPass;
     int inProcess = 0, passedLab = 1, debt = 2;
 
-    private String getCurrentDate() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        return dateFormat.format(currentDate);
-    }
-
-    private Date getCurrentTime(){
-        SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
-        Date currentTimeDate = null;
-
-        try {
-            currentTimeDate = dateFormat.parse(dateFormat.format(currentDate));
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-
-        return currentTimeDate;
-    }
-
-    private int getTypeOfWeek() {
-        int pairWeek = 1, nonPairWeek = 0;
-        SimpleDateFormat dateFormat = new SimpleDateFormat("w");
-
-        if (Integer.parseInt(dateFormat.toString()) % 2 == 0) return pairWeek;
-        else return nonPairWeek;
-    }
-
-    private int getNumberOfDayOfWeek() {
-        Calendar cl = Calendar.getInstance();
-        cl.setFirstDayOfWeek(Calendar.MONDAY);
-        cl.setTime(currentDate);
-
-        int dayNumber = cl.get(Calendar.DAY_OF_WEEK) - 1;
-        if (dayNumber == 0) {
-            dayNumber = 7;
-        }
-
-        return dayNumber;
-    }
 
     public void checkUserDutyForToday() {
-        subjectsForPassToday = dataBase.getSubjectsForPass(getCurrentDate());
+        subjectsForPassToday = dataBase.getSubjectsForPass(dateUtil.getCurrentDate());
         numberLessonsOfSubjectForPass = new ArrayList<>();
 
         if (subjectsForPassToday.size() == 0) {
@@ -68,11 +30,8 @@ public class Bot {
             return;
         }
 
-        int dayNumber = getNumberOfDayOfWeek();
-        int typeOfWeek = getTypeOfWeek();
-
         for (int i = 0; i < subjectsForPassToday.size(); i++) {
-             ArrayList<Integer> numbersOfLessonsForOneSubject = dataBase.getNumberOfLessonsForPassedSubjects(subjectsForPassToday.get(i), dayNumber, typeOfWeek);
+             ArrayList<Integer> numbersOfLessonsForOneSubject = dataBase.getNumberOfLessonsForPassedSubjects(subjectsForPassToday.get(i), dateUtil.getCurrentDate());
              for (int j = 0; i < numbersOfLessonsForOneSubject.size(); j++){
                  numberLessonsOfSubjectForPass.add(numbersOfLessonsForOneSubject.get(j));
              }
@@ -82,9 +41,26 @@ public class Bot {
     private void checkLabsStatys(){
         ArrayList<Date> endOfLessons = dataBase.getEndOfLessons();
         for (int i = 0; i < numberLessonsOfSubjectForPass.size(); i++){
-            if (getCurrentTime().getTime() >= endOfLessons.get(numberLessonsOfSubjectForPass.get(i)-1).getTime()){
-                //dataBase.setLabStatus(,getCurrentDate(),debt);
+            int subject = dataBase.getSubjectByLessonNuberAtDay(numberLessonsOfSubjectForPass.get(i),dateUtil.getCurrentDate());
+            if (dateUtil.getCurrentTime().getTime() >= endOfLessons.get(numberLessonsOfSubjectForPass.get(i)-1).getTime()){
+                if(dataBase.getlabStatus(subject,dateUtil.getCurrentDate()) == inProcess) dataBase.setLabStatus(subject,dateUtil.getCurrentDate(),debt);
             }
         }
     }
+
+    private boolean isMoreLessonsToday(){
+        if(dateUtil.getCurrentTime().getTime() >= dataBase.getEndOfLessons().get(dataBase.getNumberLessonsInDay(dateUtil.getCurrentDate())-1).getTime()) return false;
+        else return true;
+    }
+
+    /*private long getTimeToNextLesson(){
+        if(isMoreLessonsToday()) {
+            for (int i = 0; i < dataBase.getEndOfLessons().size(); i++){
+                if (dateUtil.getCurrentTime().getTime() < dataBase.getEndOfLessons().get(i).getTime()){
+                    //return dataBase.getEndOfLessons().get(i).getTime() - dateUtil.getCurrentTime();
+                }
+            }
+        }
+        return  4444;
+    }*/
 }

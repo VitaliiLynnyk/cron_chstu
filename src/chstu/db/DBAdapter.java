@@ -187,7 +187,7 @@ public class DBAdapter {
         }
     }
 
-    public int getSubjectBylessonnuberAtDay(int lessonNumber, String dayDate){
+    public int getSubjectByLessonNuberAtDay(int lessonNumber, String dayDate){
         String sqlTask = "SELECT id_subject FROM timetable WHERE lesson_date = " + dayDate + " AND number_lesson = " + lessonNumber + ";";
         int subject = -1;
         try{
@@ -201,6 +201,40 @@ public class DBAdapter {
         }
 
         return subject;
+    }
+
+    public int getlabStatus(int subject, String dayDate){
+        String sqlTask = "SELECT stat FROM labs WHERE deadline = " + dayDate + " AND id_subject = " + subject + ";";
+        int status = -1;
+        try{
+            ResultSet resultSet = statement.executeQuery(sqlTask);
+            subject = resultSet.getInt("stat");
+
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            System.out.println("Status of lab si secret!");
+        }
+
+        return status;
+    }
+
+    public int getNumberLessonsInDay(String dayDate){
+        String sqlTask = "SELECT id FROM timetable WHERE lesson_date = " + dayDate + ";";
+        int numberLessons = 0;
+        try{
+            ResultSet resultSet = statement.executeQuery(sqlTask);
+            while (resultSet.next()){
+                numberLessons += 1;
+            }
+
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            System.out.println("Status of lab si secret!");
+        }
+
+        return numberLessons;
     }
 
 }

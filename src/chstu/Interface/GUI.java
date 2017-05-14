@@ -1,14 +1,17 @@
 package chstu.Interface;
 
-
+import chstu.db.DBAdapter;
+import chstu.timetable.Tasks;
+import org.jdatepicker.DateModel;
+import org.jdatepicker.JDatePicker;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.net.URL;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Properties;
 
 /**
@@ -29,25 +32,11 @@ public  class GUI {
 
         //topMenu
         JPanel leftTopMenu = new JPanel();
-        leftTopMenu.setLayout(null);
         leftTopMenu.setBounds(0,0,250,40);
         leftTopMenu.setBackground(Color.YELLOW);
         projectFrame.add(leftTopMenu);
 
-        JLabel label = new JLabel(new ImageIcon(getClass().getClassLoader().getResource("libs/dev_ico.jpg")));
-        label.setBounds(0,0,40,40);
-        leftTopMenu.add(label);
-
-        JLabel nameProject = new JLabel();
-        nameProject.setText("NAME OF SUBJECT");
-        nameProject.setBounds(50,0,200,40);
-        nameProject.setFont(new Font("Chiller", Font.ITALIC, 26));
-        leftTopMenu.add(nameProject);
-
-
-
-
-
+        //НЕ ЗАБУТИ ЛЕЙБЕЛ//НЕ ЗАБУТИ ЛЕЙБЕЛ//НЕ ЗАБУТИ ЛЕЙБЕЛ//НЕ ЗАБУТИ ЛЕЙБЕЛ//НЕ ЗАБУТИ ЛЕЙБЕЛ//НЕ ЗАБУТИ ЛЕЙБЕЛ//НЕ ЗАБУТИ ЛЕЙБЕЛ//НЕ ЗАБУТИ ЛЕЙБЕЛ
 
 
         JPanel centerTopMenu = new JPanel();
@@ -69,18 +58,35 @@ public  class GUI {
         numberOfSubject.setBounds(170,10,100,20);
         centerTopMenu.add(numberOfSubject);
 
-
         JButton btnOkey = new JButton("OK");
-        btnOkey.setBounds(300,10,100,20);
+        btnOkey.setBounds(400,10,100,20);
         centerTopMenu.add(btnOkey);
         //LEFT PANEL
+
+
+        btnOkey.addActionListener(
+                new ActionListener()
+                {
+                    public void actionPerformed(ActionEvent e)
+                    {   DBAdapter dbAdapter;
+                        dbAdapter = new DBAdapter();
+                        int subject = 0;
+                        for(int i=0; i<dbAdapter.getNamesOfSubjects().size(); i++){
+                            if(namePickedSubject.getText() == dbAdapter.getNamesOfSubjects().get(i))
+                                    subject = i;
+                        }
+
+                        Tasks tasks = new Tasks();
+                        tasks.createNewLabs(subject,Integer.parseInt(numberOfSubject.getText()));
+                    }
+                }
+        );
+
 
         JPanel leftPanel = new JPanel();
         leftPanel.setBounds(0,40,250,630);
         leftPanel.setBackground(Color.BLACK);
         projectFrame.add(leftPanel);
-
-
 
 
         JButton[] btn = new JButton[20];
@@ -92,6 +98,7 @@ public  class GUI {
             btn[i].setFocusPainted(false);
             btn[i].setBackground(Color.cyan);
             leftPanel.add(btn[i]);
+
         }
 
 
@@ -135,8 +142,7 @@ public  class GUI {
 
         //RIGHT PANEL
         JPanel topRightPanel = new JPanel();
-        topRightPanel.setLayout(null);
-        topRightPanel.setBounds(900,0,300,350);
+        topRightPanel.setBounds(900,40,300,300);
         topRightPanel.setBackground(Color.YELLOW);
         projectFrame.add(topRightPanel);
 
@@ -147,13 +153,14 @@ public  class GUI {
         p.put("text.month", "Month");
         p.put("text.year", "Year");
         JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
-        datePanel.setBounds(0,0,300,200);
+
+        datePanel.setPreferredSize(new Dimension(300,200));
         topRightPanel.add(datePanel);
 
 
 
         JPanel bottomRightPanel = new JPanel();
-        bottomRightPanel.setBounds(900,340,300,330);
+        bottomRightPanel.setBounds(900,340,300,300);
         bottomRightPanel.setBackground(Color.blue);
         projectFrame.add(bottomRightPanel);
 
