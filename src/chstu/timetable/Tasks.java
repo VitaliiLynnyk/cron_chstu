@@ -11,14 +11,14 @@ public class Tasks {
     DBAdapter dbAdapter = new DBAdapter();
     int numberLessons(int day){
         int result = 0;
-        for(int j=1; j<3;j++) {
+        /*for(int j=1; j<3;j++) {
             for (int i = 1; i < 6; i++)
                 for (int k=0; k<(dbAdapter.(i,j)).size();k++){
                 if(day+1 == Integer.parseInt((dbAdapter.getSubjectsByDayNumber(i,j).get(k)).toString())){
                     result++;
                 }
             }
-        }
+        }*/
         System.out.print(result);
         return result;
     }
