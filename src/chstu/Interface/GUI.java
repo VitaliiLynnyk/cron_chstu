@@ -99,6 +99,7 @@ public  class GUI {
             btn[i].setFocusPainted(false);
             btn[i].setBackground(Color.cyan);
             leftPanel.add(btn[i]);
+
         }
 
 
