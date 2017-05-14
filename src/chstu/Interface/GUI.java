@@ -3,17 +3,12 @@ package chstu.Interface;
 import chstu.db.DBAdapter;
 import chstu.timetable.DateUtil;
 
-import org.jdatepicker.DateModel;
-import org.jdatepicker.JDatePicker;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Properties;
 
 /**
