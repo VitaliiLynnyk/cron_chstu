@@ -1,6 +1,7 @@
 package chstu.Interface;
 
 
+import chstu.Tasks;
 import chstu.db.DBAdapter;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.UtilDateModel;
@@ -74,8 +75,8 @@ public  class GUI {
                                     subject = i;
                         }
 
-                        System.out.println(dbAdapter.getNamesOfSubjects().get(0));
-                        dbAdapter.setNewLab(subject,Integer.parseInt(numberOfSubject.getText()),"",deadlineDate.getToolTipText());
+                        Tasks tasks = new Tasks();
+                        tasks.createNewLabs(subject,Integer.parseInt(numberOfSubject.getText()));
                     }
                 }
         );
