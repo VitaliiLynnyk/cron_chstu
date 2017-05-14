@@ -114,7 +114,7 @@ public class DBAdapter {
         ArrayList<ArrayList<String>> labsList = new ArrayList<>();
         ArrayList <String> labsInfo;
 
-        String sqlTask = "SELECT lab_number, comment, deadline, stat FROM subjects WHERE id_subject = " + subject + ";";
+        String sqlTask = "SELECT lab_number, comment, deadline, stat FROM labs WHERE id_subject = " + subject + ";";
         try{
             ResultSet resultSet = statement.executeQuery(sqlTask);
             while (resultSet.next()){
@@ -123,6 +123,7 @@ public class DBAdapter {
                 labsInfo.add(resultSet.getString("comment"));
                 labsInfo.add(resultSet.getString("deadline"));
                 labsInfo.add("" + resultSet.getInt("stat"));
+
 
                 labsList.add(labsInfo);
             }

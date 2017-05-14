@@ -19,14 +19,15 @@ import java.util.Properties;
  * Created by linni on 5/13/2017.
  */
 public  class GUI {
-
+    JFrame projectFrame;
+    JPanel BottomCenterPanel;
     public void makeForm(){
-        JFrame projectFrame = new JFrame();
+        projectFrame = new JFrame();
         projectFrame.setSize(1200,700);
         projectFrame.setTitle("frame");
         projectFrame.setResizable(false);
 
-        projectFrame.setDefaultCloseOperation(projectFrame.EXIT_ON_CLOSE);
+        projectFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         projectFrame.setLocationRelativeTo(null);
         projectFrame.setLayout(null);
         projectFrame.setBackground(Color.white);
@@ -68,18 +69,10 @@ public  class GUI {
         btnOkey.addActionListener(
                 new ActionListener()
                 {
-                    public void actionPerformed(ActionEvent e)
-                    {   DBAdapter dbAdapter;
-                        dbAdapter = new DBAdapter();
-                        int subject = 0;
-                        for(int i=0; i<dbAdapter.getNamesOfSubjects().size(); i++){
-                            if(namePickedSubject.getText() == dbAdapter.getNamesOfSubjects().get(i))
-                                    subject = i;
-                        }
+                    public void actionPerformed(ActionEvent e) {
+                        drawLabs(1);
+                    }
 
-                        Tasks tasks = new Tasks();
-                        System.out.print(tasks.numberLesson(subject));
-                    }//,Integer.parseInt(numberOfSubject.getText())
                 }
         );
 
@@ -115,32 +108,10 @@ public  class GUI {
         TopCenterPanel.setBackground(Color.RED);
         projectFrame.add(TopCenterPanel);
 
-
-
-
-        JPanel BottomCenterPanel = new JPanel();
-        BottomCenterPanel.setBounds(250,190,650,500);
-        BottomCenterPanel.setBackground(Color.LIGHT_GRAY);
-        projectFrame.add(BottomCenterPanel);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        //BottomCenterPanel = new JPanel();
+        //BottomCenterPanel.setBounds(250,190,650,500);
+//        BottomCenterPanel.setBackground(Color.LIGHT_GRAY);
+//        projectFrame.add(BottomCenterPanel);
 
         //RIGHT PANEL
         JPanel topRightPanel = new JPanel();
@@ -166,10 +137,35 @@ public  class GUI {
         bottomRightPanel.setBackground(Color.blue);
         projectFrame.add(bottomRightPanel);
 
-
-
-
+        drawLabs(1);
 
         projectFrame.setVisible(true);
     }
-}
+
+    void drawLabs(int subject){
+        JPanel BottomCenterPanel = new JPanel();
+        BottomCenterPanel.setBounds(250,190,650,500);
+        BottomCenterPanel.setBackground(Color.LIGHT_GRAY);
+        projectFrame.add(BottomCenterPanel);
+
+        DBAdapter dbAdapter = DBAdapter.getInstance();
+        GridLayout gbl = new GridLayout(dbAdapter.getAlllabsBySubject(subject).size(),1);
+        BottomCenterPanel.setLayout(gbl);
+        JPanel labs [] = new JPanel[dbAdapter.getAlllabsBySubject(subject).size()];
+
+        ArrayList<ArrayList<String>> ar = dbAdapter.getAlllabsBySubject(subject);
+
+            for(int i=0; i<ar.size(); i++) {
+                labs[i] = new JPanel();
+                GridLayout g = new GridLayout(1,4);
+                labs[i].setLayout(g);
+                labs[i].add(new TextField(i+1));
+                labs[i].add(new TextField(ar.get(i).get(1)));
+                labs[i].add(new TextField(ar.get(i).get(2)));
+                labs[i].add(new TextField(ar.get(i).get(3)));
+                BottomCenterPanel.add(labs[i]);
+            }
+
+
+        }
+    }
