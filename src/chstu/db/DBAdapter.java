@@ -59,14 +59,14 @@ public class DBAdapter {
         return  namesOfSubjects;
     }
 
-    public ArrayList<ArrayList<String>> getAllLessonsOfDay(int dayNumber, int weekType){
+    public ArrayList<ArrayList<String>> getAllLessonsOfDay(String dauDate){
         ArrayList <String> lessonInfo;
         ArrayList<ArrayList<String>> listOfLessons = new ArrayList<>();
 
         String sqlTask = " SELECT number_lesson, subjects.name, type_lesson.name FROM timetable" +
                 " INNER JOIN subjects ON timetable.id_subject = subjects.id" +
                 " INNER JOIN type_lesson ON timetable.type_lesson = type_lessons.id" +
-                " WHERE day_number = " + dayNumber +" AND week_type =" + weekType;
+                " WHERE lesson_date = " + dauDate +";";
 
         try{
             ResultSet resultSet = statement.executeQuery(sqlTask);
@@ -142,10 +142,10 @@ public class DBAdapter {
         return listOfSubjects;
     }
 
-    public ArrayList<Integer> getSubjectsByDayNumber(int dayNumber, int typeOfWeek){
+    public ArrayList<Integer> getSubjectsByDayDate(String dayDate){
         ArrayList<Integer> listOfSubjects = new ArrayList<>();
 
-        String sqlTask = "SELECT id_subject FROM timetable WHERE day_number = " + dayNumber + " AND type_week = " + typeOfWeek + ";";
+        String sqlTask = "SELECT id_subject FROM timetable WHERE lesson_date = " + dayDate + ";";
         try{
             ResultSet resultSet = statement.executeQuery(sqlTask);
             while(resultSet.next()) listOfSubjects.add(resultSet.getInt("id_subject"));
@@ -158,10 +158,10 @@ public class DBAdapter {
         return listOfSubjects;
     }
 
-    public ArrayList<Integer> getNumberOfLessonsForPassedSubjects(int subject, int dayNumber, int weekType){
+    public ArrayList<Integer> getNumberOfLessonsForPassedSubjects(int subject, String dayDate){
         ArrayList<Integer> listOfLessons = new ArrayList<>();
 
-        String sqlTask = "SELECT number_lesson FROM timetable WHERE day_number = " + dayNumber + " AND id_subject = " + subject + " AND type_week = " + weekType + ";";
+        String sqlTask = "SELECT number_lesson FROM timetable WHERE lesson_date = " + dayDate + " AND id_subject = " + subject + ";";
         try{
             ResultSet resultSet = statement.executeQuery(sqlTask);
             while(resultSet.next()) listOfLessons.add(resultSet.getInt("number_lessons"));
@@ -174,8 +174,8 @@ public class DBAdapter {
         return listOfLessons;
     }
 
-    public void setLabStatus(int subject, String dayNumber, int status){
-        String sqlTask = "UPDATE labs SET stat = " + status + " WHERE id_subject = " + subject + " AND day_number = " + dayNumber + ";";
+    public void setLabStatus(int subject, String dayDate, int status){
+        String sqlTask = "UPDATE labs SET stat = " + status + " WHERE id_subject = " + subject + " AND day_number = " + dayDate + ";";
 
         try{
             statement.executeUpdate(sqlTask);
@@ -187,8 +187,20 @@ public class DBAdapter {
         }
     }
 
-    /*ublic int getSubjectBylessonnuberAtDay(int lessonNumber, int dayNumber, ){
+    public int getSubjectBylessonnuberAtDay(int lessonNumber, String dayDate){
+        String sqlTask = "SELECT id_subject FROM timetable WHERE lesson_date = " + dayDate + " AND number_lesson = " + lessonNumber + ";";
+        int subject = -1;
+        try{
+            ResultSet resultSet = statement.executeQuery(sqlTask);
+            subject = resultSet.getInt("id_subject");
 
-    }*/
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            System.out.println("It`s not lessons today");
+        }
+
+        return subject;
+    }
 
 }
