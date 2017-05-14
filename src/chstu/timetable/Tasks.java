@@ -28,14 +28,13 @@ public class Tasks {
         String copy = startSemester;
         int result = 0;
         do {
-            for(int i=1;i<dbAdapter.getSubjectsByDayDate(copy).size();i++){
+            copy = addDate(copy,1);
+            for(int i=0;i<dbAdapter.getSubjectsByDayDate(copy).size();i++){System.out.print("!!!!!!!!!!");
                 String s = (dbAdapter.getSubjectsByDayDate(copy).get(i)).toString();
                 if(subject == Integer.parseInt(s)){
                     result++;
                 }
             }
-            copy = addDate(copy,1);
-
         } while (getDay(copy) <= getDay(endSemester));
         return result;
     }
