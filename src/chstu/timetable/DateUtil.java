@@ -3,6 +3,7 @@ package chstu.timetable;
 import chstu.db.DBAdapter;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -20,13 +21,13 @@ public class DateUtil {
         return dateFormat.format(currentDate);
     }
 
-    public Date getCurrentTime(){
+    public long getCurrentTime(){
         currentDate = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
-        Date currentTimeDate = null;
+        long currentTimeDate = -1;
 
         try {
-            currentTimeDate = dateFormat.parse(dateFormat.format(currentDate));
+            currentTimeDate = dateFormat.parse(dateFormat.format(currentDate)).getTime();
         }
         catch (Exception e){
             e.printStackTrace();
@@ -37,8 +38,10 @@ public class DateUtil {
 
 
     public boolean isMoreLessonsToday(DBAdapter dataBase){
-        if(getCurrentTime().getTime() >= dataBase.getEndOfLessons().get(dataBase.getNumberLessonsInDay(getCurrentDate())-1).getTime()) return false;
-        else return true;
+        int indexOfEndLessonArray = dataBase.getNumberLessonsInDay(getCurrentDate())-1;
+        ArrayList<Long> endOfLesson = dataBase.getEndOfLessons();
+
+        return !(endOfLesson.contains(indexOfEndLessonArray) && getCurrentTime() >= endOfLesson.get(indexOfEndLessonArray));
     }
 
     public long getTimeToNextLesson(DBAdapter dataBase){
@@ -46,8 +49,8 @@ public class DateUtil {
 
         if(isMoreLessonsToday(dataBase)) {
             for (int i = 0; i < dataBase.getEndOfLessons().size(); i++){
-                if (getCurrentTime().getTime() < dataBase.getEndOfLessons().get(i).getTime()){
-                    timeToNExtLesson = dataBase.getEndOfLessons().get(i).getTime() - getCurrentTime().getTime();
+                if (getCurrentTime() < dataBase.getEndOfLessons().get(i)){
+                    timeToNExtLesson = dataBase.getEndOfLessons().get(i) - getCurrentTime();
                 }
             }
         }

@@ -10,7 +10,7 @@ import java.util.Timer;
 public class Bot {
     public Bot() {
         currentDate = new Date();
-        dataBase = new DBAdapter();
+        dataBase = DBAdapter.getInstance();
 
         checkUserDutyForToday();
     }
@@ -42,10 +42,10 @@ public class Bot {
     }
 
     public void checkLabsStatys(){
-        ArrayList<Date> endOfLessons = dataBase.getEndOfLessons();
+        ArrayList<Long> endOfLessons = dataBase.getEndOfLessons();
         for (int i = 0; i < numberLessonsOfSubjectForPass.size(); i++){
             int subject = dataBase.getSubjectByLessonNuberAtDay(numberLessonsOfSubjectForPass.get(i),dateUtil.getCurrentDate());
-            if (dateUtil.getCurrentTime().getTime() >= endOfLessons.get(numberLessonsOfSubjectForPass.get(i)-1).getTime()){
+            if (dateUtil.getCurrentTime() >= endOfLessons.get(numberLessonsOfSubjectForPass.get(i)-1)){
                 if(dataBase.getlabStatus(subject,dateUtil.getCurrentDate()) == inProcess) dataBase.setLabStatus(subject,dateUtil.getCurrentDate(),debt);
             }
         }

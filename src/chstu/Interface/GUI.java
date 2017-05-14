@@ -69,7 +69,7 @@ public  class GUI {
                 {
                     public void actionPerformed(ActionEvent e)
                     {   DBAdapter dbAdapter;
-                        dbAdapter = new DBAdapter();
+                        dbAdapter = DBAdapter.getInstance();
                         int subject = 0;
                         for(int i=0; i<dbAdapter.getNamesOfSubjects().size(); i++){
                             if(namePickedSubject.getText() == dbAdapter.getNamesOfSubjects().get(i))
