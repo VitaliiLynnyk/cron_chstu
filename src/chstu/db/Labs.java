@@ -1,39 +1,43 @@
 package chstu.db;
 
 public class Labs {
-    public Labs(int id, int numberLesson, int idSubject, String lessonDate, int typeLesson) {
+    public Labs(int id, int idSubject, int labNumber, String comment, String deadline, int status) {
         this.id = id;
-        this.numberLesson = numberLesson;
         this.idSubject = idSubject;
-        this.lessonDate = lessonDate;
-        this.typeLesson = typeLesson;
+        this.labNumber = labNumber;
+        this.comment = comment;
+        this.deadline = deadline;
+        this.status = status;
     }
 
     private int id;
-    private int numberLesson;
     private int idSubject;
-    private String lessonDate;
-    private int typeLesson;
+    private int labNumber;
+    private String comment;
+    private String deadline;
+    private int status;
 
     public int getId() {
         return id;
-    }
-
-    public int getNumberLesson() {
-        return numberLesson;
     }
 
     public int getIdSubject() {
         return idSubject;
     }
 
-    public String getLessonDate() {
-        return lessonDate;
+    public int getLabNumber() {
+        return labNumber;
     }
 
-    public int getTypeLesson() {
-        return typeLesson;
+    public String getComment() {
+        return comment;
     }
 
+    public String getDeadline() {
+        return deadline;
+    }
 
+    public int getStatus() {
+        return status;
+    }
 }

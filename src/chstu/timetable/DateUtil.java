@@ -38,22 +38,23 @@ public class DateUtil {
 
 
     public boolean isMoreLessonsToday(DBAdapter dataBase){
-        int indexOfEndLessonArray = dataBase.getNumberLessonsInDay(getCurrentDate())-1;
+        /*int indexOfEndLessonArray = dataBase.getNumberLessonsInDay(getCurrentDate())-1;
         ArrayList<Long> endOfLesson = dataBase.getEndOfLessons();
 
-        return !(endOfLesson.contains(indexOfEndLessonArray) && getCurrentTime() >= endOfLesson.get(indexOfEndLessonArray));
+        return !(endOfLesson.contains(indexOfEndLessonArray) && getCurrentTime() >= endOfLesson.get(indexOfEndLessonArray));*/
+        return false;
     }
 
     public long getTimeToNextLesson(DBAdapter dataBase){
         long timeToNExtLesson = -1;
 
-        if(isMoreLessonsToday(dataBase)) {
+        /*if(isMoreLessonsToday(dataBase)) {
             for (int i = 0; i < dataBase.getEndOfLessons().size(); i++){
                 if (getCurrentTime() < dataBase.getEndOfLessons().get(i)){
                     timeToNExtLesson = dataBase.getEndOfLessons().get(i) - getCurrentTime();
                 }
             }
-        }
+        }*/
         return  timeToNExtLesson;
     }
 

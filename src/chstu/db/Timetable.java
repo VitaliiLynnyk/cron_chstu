@@ -1,8 +1,6 @@
 package chstu.db;
 
-/**
- * Created by Ar-Krav on 18.05.2017.
- */
+
 public class Timetable {
     public Timetable(int id, int numberLesson, int idSubject, String lessonDate, int typeLesson) {
         this.id = id;
