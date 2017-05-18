@@ -3,7 +3,6 @@ package chstu.db;
 import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.Date;
 
 
 public class DBAdapter {
@@ -68,22 +67,22 @@ public class DBAdapter {
         return  namesOfSubjects;
     }
 
-    public ArrayList<ArrayList<String>> getAllLessonsOfDay(String dauDate){
+    public ArrayList<ArrayList<String>> getAllLessonsOfDay(String dayDate){
         ArrayList <String> lessonInfo;
         ArrayList<ArrayList<String>> listOfLessons = new ArrayList<>();
 
-        String sqlTask = " SELECT number_lesson, subjects.name, type_lesson.name FROM timetable" +
+        String sqlTask = " SELECT number_lesson, subjects.name AS subjectName, type_lesson.name AS typeName FROM timetable" +
                 " INNER JOIN subjects ON timetable.id_subject = subjects.id" +
-                " INNER JOIN type_lesson ON timetable.type_lesson = type_lessons.id" +
-                " WHERE lesson_date = " + dauDate +";";
+                " INNER JOIN type_lesson ON timetable.type_lesson = type_lesson.id" +
+                " WHERE lesson_date = '" + dayDate +"';";
 
         try{
             ResultSet resultSet = statement.executeQuery(sqlTask);
             while (resultSet.next()){
                 lessonInfo = new ArrayList<String>();
                 lessonInfo.add("" + resultSet.getInt("number_lesson"));
-                lessonInfo.add(resultSet.getString("subjects.name"));
-                lessonInfo.add(resultSet.getString("type_lesson.name"));
+                lessonInfo.add(resultSet.getString("subjectName"));
+                lessonInfo.add(resultSet.getString("typeName"));
 
                 listOfLessons.add(lessonInfo);
             }

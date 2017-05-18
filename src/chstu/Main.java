@@ -1,7 +1,7 @@
 package chstu;
 
-import chstu.Interface.Calendars;
 import chstu.Interface.GUI;
+
 
 public class Main {
 
@@ -9,6 +9,4 @@ public class Main {
         GUI form = new GUI();
         form.makeForm();
     }
-
-
 }
