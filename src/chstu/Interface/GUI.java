@@ -3,15 +3,22 @@ package chstu.Interface;
 import chstu.db.DBAdapter;
 import chstu.timetable.DateUtil;
 
+import javafx.scene.control.DatePicker;
+import org.jdatepicker.JDatePicker;
 import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 import sun.font.TextLabel;
 
 import javax.swing.*;
+import javax.swing.text.DateFormatter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Properties;
 
 /**
@@ -107,6 +114,9 @@ public class GUI {
         labelSubjectName.setFont(new Font("Times New Roman", Font.BOLD, 30));
         projectFrame.add(labelSubjectName);
 
+
+        btn.get(1).setBackground(new Color(100, 148, 26));
+
 //CENTER PANEL
         JPanel TopCenterPanel = new JPanel();
         TopCenterPanel.setBounds(250,40,650,150);
@@ -125,11 +135,22 @@ public class GUI {
         p.put("text.month", "Month");
         p.put("text.year", "Year");
 
-        JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
+        JDatePanelImpl datePanel = new JDatePanelImpl(model,p);
         datePanel.setPreferredSize(new Dimension(300,200));
         datePanel.setBounds(900,30,300,200);
         topRightPanel.add(datePanel);
 
+        JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new Calendars());
+        topRightPanel.add(datePicker);
+
+
+        System.out.println(datePicker.getJFormattedTextField().getText());
+
+        Date selectedDates = (Date) datePicker.getModel().getValue();
+
+
+
+        System.out.println();
         JPanel bottomRightPanel = new JPanel();
         bottomRightPanel.setLayout(new GridLayout(0,1));
         bottomRightPanel.setBounds(900,300,300,400);
