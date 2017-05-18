@@ -161,4 +161,36 @@ public class DBAdapter {
         }
     }
 
+    public void updateLabComment(String newComment, int idSubject, int labNumber){
+        String sqlTask = "UPDATE labs" +
+                         " SET comment = " + newComment +
+                         " WHERE id_subject = " + idSubject + " AND lab_number = " + labNumber + ";";
+        updateLabInfo(sqlTask);
+    }
+
+    public void updateLabDeadline(String newDeadline, int idSubject, int labNumber){
+        String sqlTask = "UPDATE labs" +
+                " SET deadline = " + newDeadline +
+                " WHERE id_subject = " + idSubject + " AND lab_number = " + labNumber + ";";
+        updateLabInfo(sqlTask);
+    }
+
+    public void updateLabStatus(int newStatus, int idSubject, int labNumber){
+        String sqlTask = "UPDATE labs" +
+                " SET status = " + newStatus +
+                " WHERE id_subject = " + idSubject + " AND lab_number = " + labNumber + ";";
+        updateLabInfo(sqlTask);
+    }
+
+    private void updateLabInfo(String sqlTask){
+        try{
+            statement.executeUpdate(sqlTask);
+            conector.commit();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            System.out.println("can`t update information about lab.");
+        }
+    }
+
 }
