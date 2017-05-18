@@ -1,9 +1,14 @@
 package chstu.timetable;
 
 import chstu.db.DBAdapter;
+import chstu.db.Labs;
+import chstu.db.LessonTimetable;
+import chstu.db.Timetable;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Timer;
 
 public class Bot {
@@ -18,38 +23,36 @@ public class Bot {
     DBAdapter dataBase;
     DateUtil dateUtil = new DateUtil();
 
-    ArrayList<Integer> subjectsForPassToday;
-    ArrayList<Integer> numberLessonsOfSubjectForPass;
+    List<Timetable> lessonForPass;
     int inProcess = 0, debt = 2;
 
 
     private void checkUserDutyForToday() {
-        /*subjectsForPassToday = dataBase.getSubjectsForPass(dateUtil.getCurrentDate());
-        numberLessonsOfSubjectForPass = new ArrayList<>();
+        List<Labs> labsForPassToday = dataBase.getLabsByDay(dateUtil.getCurrentDate());
+        lessonForPass = new ArrayList<>();
 
-        if (subjectsForPassToday.size() == 0) {
+        if (labsForPassToday.size() == 0) {
             System.out.println("No subject for pass today!");
             return;
         }
 
-        for (int i = 0; i < subjectsForPassToday.size(); i++) {
-             ArrayList<Integer> numbersOfLessonsForOneSubject = dataBase.getNumberOfLessonsForPassedSubjects(subjectsForPassToday.get(i), dateUtil.getCurrentDate());
-             for (int j = 0; i < numbersOfLessonsForOneSubject.size(); j++){
-                 numberLessonsOfSubjectForPass.add(numbersOfLessonsForOneSubject.get(j));
-             }
-        }*/
+        for(Labs lab : labsForPassToday){
+            lessonForPass.addAll(dataBase.getLessonsForSubjectInDay(lab.getIdSubject(),lab.getDeadline()));
+        }
     }
 
     public void checkLabsStatys(){
-        /*ArrayList<Long> endOfLessons = dataBase.getEndOfLessons();
-        for (int i = 0; i < numberLessonsOfSubjectForPass.size(); i++){
-            int subject = dataBase.getSubjectByLessonNuberAtDay(numberLessonsOfSubjectForPass.get(i),dateUtil.getCurrentDate());
-            if (dateUtil.getCurrentTime() >= endOfLessons.get(numberLessonsOfSubjectForPass.get(i)-1)){
-                if(dataBase.getlabStatus(subject,dateUtil.getCurrentDate()) == inProcess) dataBase.setLabStatus(subject,dateUtil.getCurrentDate(),debt);
+        List<LessonTimetable> endOfLessons = dataBase.getLessonTimetable();
+
+        for(Timetable lesson : lessonForPass){
+            if(dateUtil.getCurrentTime() >= dateUtil.convertTimeInMS(endOfLessons.get(lesson.getNumberLesson()).getEndLesson())){
+                //if(dataBase.getlabStatus(subject,dateUtil.getCurrentDate()) == inProcess) dataBase.setLabStatus(subject,dateUtil.getCurrentDate(),debt);
             }
         }
 
-        if(dateUtil.isMoreLessonsToday(dataBase)) startBotTimer();*/
+        if(dateUtil.isMoreLessonsToday(dataBase)) {
+            startBotTimer();
+        }
     }
 
     public void startBotTimer(){

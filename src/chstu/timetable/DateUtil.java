@@ -36,6 +36,20 @@ public class DateUtil {
         return currentTimeDate;
     }
 
+    public long convertTimeInMS(String time){
+        long miliseconds = 0;
+        SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
+        try {
+            miliseconds = dateFormat.parse(time).getTime();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            System.out.println("Convert time impossible");
+        }
+
+        return miliseconds;
+    }
+
 
     public boolean isMoreLessonsToday(DBAdapter dataBase){
         /*int indexOfEndLessonArray = dataBase.getNumberLessonsInDay(getCurrentDate())-1;
