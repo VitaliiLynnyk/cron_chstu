@@ -1,7 +1,6 @@
 package chstu.db;
 
 import java.sql.*;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 
@@ -32,6 +31,9 @@ public class DBAdapter {
     private Connection conector = null;
     private Statement statement = null;
 
+    /*
+        Methods for get ALL fields from tables of DB
+    */
     public List<Labs> getListOfLabs(){
         List<Labs> labsList = new ArrayList<>();
         String sqlTask = "SELECT * FROM labs;";
@@ -147,6 +149,10 @@ public class DBAdapter {
         return lessonsTypeList;
     }
 
+    /*
+        Methods for working with "labs" table
+    */
+
     public void setNewLab(int id, int idSubject, int labNumber, String comment, String deadline, int status){
         String sqlTask = "INSERT INTO labs" +
                          " VALUES (" + id + ", " + idSubject + ", " + labNumber + ", '" + comment + "', '" + deadline + "', " + status + ");";
@@ -193,4 +199,25 @@ public class DBAdapter {
         }
     }
 
+    /*
+        Methods for working with timetable.
+    */
+
+    public int getCountLessonsOfSubject(int subject, String dayDate){
+        int countOfLessons = 0;
+
+        String sqlTask = "SELECT COUNT(id) AS num FROM timetable" +
+                         " WHERE lesson_date = '" + dayDate + "' AND id_subject = " + subject + ";";
+
+        try{
+            ResultSet result = statement.executeQuery(sqlTask);
+            countOfLessons = result.getInt("num");
+        }
+        catch(Exception e){
+            e.printStackTrace();
+            System.out.println("CAn`t read date of subject in a day.");
+        }
+
+        return countOfLessons;
+    }
 }
