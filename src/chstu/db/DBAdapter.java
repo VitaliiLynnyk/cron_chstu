@@ -105,8 +105,9 @@ public class DBAdapter {
         Methods for working with "labs" table
     */
 
-    public List<Labs> getAllLabs(){
-        String sqlTask = "SELECT * FROM labs;";
+    public List<Labs> getLabsByDaySubject(String deadline, int subject){
+        String sqlTask = "SELECT * FROM labs" +
+                " WHERE deadline = " + deadline + " AND id_subject = " + subject +";";
         return getListOfLabs(sqlTask);
     }
 

@@ -23,12 +23,13 @@ public class Bot {
     DBAdapter dataBase;
     DateUtil dateUtil = new DateUtil();
 
+    List<Labs> labsForPassToday;
     List<Timetable> lessonForPass;
     int inProcess = 0, debt = 2;
 
 
     private void checkUserDutyForToday() {
-        List<Labs> labsForPassToday = dataBase.getLabsByDay(dateUtil.getCurrentDate());
+        labsForPassToday = dataBase.getLabsByDay(dateUtil.getCurrentDate());
         lessonForPass = new ArrayList<>();
 
         if (labsForPassToday.size() == 0) {
@@ -46,7 +47,11 @@ public class Bot {
 
         for(Timetable lesson : lessonForPass){
             if(dateUtil.getCurrentTime() >= dateUtil.convertTimeInMS(endOfLessons.get(lesson.getNumberLesson()).getEndLesson())){
-                //if(dataBase.getlabStatus(subject,dateUtil.getCurrentDate()) == inProcess) dataBase.setLabStatus(subject,dateUtil.getCurrentDate(),debt);
+                for(Labs lab : labsForPassToday){
+                    if (lab.getIdSubject() == lesson.getIdSubject() && lab.getStatus() == inProcess) {
+                        dataBase.updateLabStatus(debt,lab.getIdSubject(),lab.getLabNumber());
+                    }
+                }
             }
         }
 
