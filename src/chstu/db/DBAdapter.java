@@ -1,7 +1,6 @@
 package chstu.db;
 
 import java.sql.*;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 
@@ -29,220 +28,226 @@ public class DBAdapter {
         return  instance;
     }
 
-    Connection conector = null;
-    Statement statement = null;
+    private Connection conector = null;
+    private Statement statement = null;
 
-    public ArrayList<Long> getEndOfLessons(){
-        ArrayList <Long> endOfLessonsList = new ArrayList<>();
+    /*
+        Methods for get ALL fields from tables of DB
+    */
 
+    public List<LessonTimetable> getLessonTimetable(){
+        List<LessonTimetable> timetableList = new ArrayList<>();
         String sqlTask = "SELECT * FROM lesson_timetable;";
+
         try{
-            ResultSet resultSet = statement.executeQuery(sqlTask);
-            SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
-            while (resultSet.next()) {
-                endOfLessonsList.add(dateFormat.parse(resultSet.getString("end_lesson")).getTime());
+            ResultSet result = statement.executeQuery(sqlTask);
+            while (result.next()){
+                int id = result.getInt("id");
+                String endLesson = result.getString("end_lesson");
+
+                timetableList.add(new LessonTimetable(id,endLesson));
             }
+
         }
         catch (Exception e){
             e.printStackTrace();
-            System.out.println("Cannot get lessons timetable");
+            System.out.println("Lesson timetable is secret.");
         }
 
-        return  endOfLessonsList;
+        return timetableList;
     }
 
-    public ArrayList<String> getNamesOfSubjects(){
-        ArrayList <String> namesOfSubjects = new ArrayList<String>();
-
+    public List<Subjects> getAllSubjects(){
+        List<Subjects> subjectsList = new ArrayList<>();
         String sqlTask = "SELECT * FROM subjects;";
+
         try{
-            ResultSet resultSet = statement.executeQuery(sqlTask);
-            while (resultSet.next()) namesOfSubjects.add(resultSet.getString("name"));
+            ResultSet result = statement.executeQuery(sqlTask);
+            while (result.next()){
+                int id = result.getInt("id");
+                String name = result.getString("name");
+
+                subjectsList.add(new Subjects(id,name));
+            }
+
         }
         catch (Exception e){
             e.printStackTrace();
-            System.out.println("Cannot get name of subjects");
+            System.out.println("Can`t get subjects.");
         }
 
-        return  namesOfSubjects;
+        return subjectsList;
     }
 
-    public ArrayList<ArrayList<String>> getAllLessonsOfDay(String dayDate){
-        ArrayList <String> lessonInfo;
-        ArrayList<ArrayList<String>> listOfLessons = new ArrayList<>();
-
-        String sqlTask = " SELECT number_lesson, subjects.name AS subjectName, type_lesson.name AS typeName FROM timetable" +
-                " INNER JOIN subjects ON timetable.id_subject = subjects.id" +
-                " INNER JOIN type_lesson ON timetable.type_lesson = type_lesson.id" +
-                " WHERE lesson_date = '" + dayDate +"';";
+    public List<TypeLesson> getAllLessonsType(){
+        List<TypeLesson> lessonsTypeList = new ArrayList<>();
+        String sqlTask = "SELECT * FROM type_lesson;";
 
         try{
-            ResultSet resultSet = statement.executeQuery(sqlTask);
-            while (resultSet.next()){
-                lessonInfo = new ArrayList<String>();
-                lessonInfo.add("" + resultSet.getInt("number_lesson"));
-                lessonInfo.add(resultSet.getString("subjectName"));
-                lessonInfo.add(resultSet.getString("typeName"));
+            ResultSet result = statement.executeQuery(sqlTask);
+            while (result.next()){
+                int id = result.getInt("id");
+                String name = result.getString("name");
 
-                listOfLessons.add(lessonInfo);
+                lessonsTypeList.add(new TypeLesson(id,name));
+            }
+
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            System.out.println("Lessons type are not avaliable.");
+        }
+
+        return lessonsTypeList;
+    }
+
+    /*
+        Methods for working with "labs" table
+    */
+
+    public List<Labs> getAllLabs(){
+        String sqlTask = "SELECT * FROM labs;";
+        return getListOfLabs(sqlTask);
+    }
+
+    public List<Labs> getLabsByDay(String deadline){
+        String sqlTask = "SELECT * FROM labs" +
+                         " WHERE deadline = " + deadline + ";";
+        return getListOfLabs(sqlTask);
+    }
+
+    public List<Labs> getLabsBySubject(int subject){
+        String sqlTask = "SELECT * FROM labs" +
+                " WHERE id_subject = " + subject + ";";
+        return getListOfLabs(sqlTask);
+    }
+
+    private List<Labs> getListOfLabs(String sqlTask){
+        List<Labs> labsList = new ArrayList<>();
+
+        try{
+            ResultSet result = statement.executeQuery(sqlTask);
+            while (result.next()){
+                int id = result.getInt("id");
+                int idSubject = result.getInt("id_subject");
+                int labNumber = result.getInt("lab_number");
+                String comment = result.getString("comment");
+                String deadline = result.getString("deadline");
+                int status = result.getInt("status");
+
+                labsList.add(new Labs(id,idSubject,labNumber,comment,deadline,status));
             }
         }
         catch (Exception e){
             e.printStackTrace();
-            System.out.println("Cannot get name of subjects");
+            System.out.println("Labs can`t be get!");
         }
 
-        return  listOfLessons;
+        return labsList;
     }
 
-    public void setNewLab(int subject,int labNumber, String labComment, String deadlineDate, int labStatus){
-        String sqlTask = " INSERT INTO labs (id, id_subject, lab_number, comment, deadline, stat)" +
-                " VALUES(NULL, " + subject + ", " + labNumber + ", " + labComment + ", " + deadlineDate + ", " + labStatus + ");" ;
+    public void setNewLab(int id, int idSubject, int labNumber, String comment, String deadline, int status){
+        String sqlTask = "INSERT INTO labs" +
+                         " VALUES (" + id + ", " + idSubject + ", " + labNumber + ", '" + comment + "', '" + deadline + "', " + status + ");";
 
+        try{
+            statement.executeUpdate(sqlTask);
+            conector.commit();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+            System.out.println("Can`t add new lab.");
+        }
+    }
+
+    public void updateLabComment(String newComment, int idSubject, int labNumber){
+        String sqlTask = "UPDATE labs" +
+                         " SET comment = " + newComment +
+                         " WHERE id_subject = " + idSubject + " AND lab_number = " + labNumber + ";";
+        updateLabInfo(sqlTask);
+    }
+
+    public void updateLabDeadline(String newDeadline, int idSubject, int labNumber){
+        String sqlTask = "UPDATE labs" +
+                " SET deadline = " + newDeadline +
+                " WHERE id_subject = " + idSubject + " AND lab_number = " + labNumber + ";";
+        updateLabInfo(sqlTask);
+    }
+
+    public void updateLabStatus(int newStatus, int idSubject, int labNumber){
+        String sqlTask = "UPDATE labs" +
+                " SET status = " + newStatus +
+                " WHERE id_subject = " + idSubject + " AND lab_number = " + labNumber + ";";
+        updateLabInfo(sqlTask);
+    }
+
+    private void updateLabInfo(String sqlTask){
         try{
             statement.executeUpdate(sqlTask);
             conector.commit();
         }
         catch (Exception e){
             e.printStackTrace();
-            System.out.println("Lab can`t be added");
+            System.out.println("can`t update information about lab.");
         }
     }
 
-    public ArrayList<ArrayList<String>> getAlllabsBySubject(int subject){
-        ArrayList<ArrayList<String>> labsList = new ArrayList<>();
-        ArrayList <String> labsInfo;
+    /*
+        Methods for working with timetable.
+    */
 
-        String sqlTask = "SELECT lab_number, comment, deadline, stat FROM labs WHERE id_subject = " + subject + ";";
+    public List<Timetable> getLessonsForSubjectInDay(int subject, String dayDate){
+        String sqlTask = "SELECT * FROM timetable" +
+                         " WHERE id_subject = " + subject + " AND lesson_date = " + dayDate + ";";
+        return getTimetable(sqlTask);
+    }
+
+    public List<Timetable> getLessonsInDay(String dayDate){
+        String sqlTask = "SELECT * FROM timetable" +
+                " WHERE lesson_date = " + dayDate + ";";
+        return getTimetable(sqlTask);
+    }
+
+    private List<Timetable> getTimetable(String sqlTask){
+        List<Timetable> timetableList = new ArrayList<>();
+
         try{
-            ResultSet resultSet = statement.executeQuery(sqlTask);
-            while (resultSet.next()){
-                labsInfo = new ArrayList<String>();
-                labsInfo.add("" + resultSet.getInt("lab_number"));
-                labsInfo.add(resultSet.getString("comment"));
-                labsInfo.add(resultSet.getString("deadline"));
-                labsInfo.add("" + resultSet.getInt("stat"));
+            ResultSet result = statement.executeQuery(sqlTask);
+            while (result.next()){
+                int id = result.getInt("id");
+                int numberLesson = result.getInt("number_lesson");
+                int idSubject = result.getInt("id_subject");
+                String lessonDate = result.getString("lesson_date");
+                int typeLesson = result.getInt("type_lesson");
 
-                labsList.add(labsInfo);
+                timetableList.add(new Timetable(id,numberLesson,idSubject,lessonDate,typeLesson));
             }
         }
         catch (Exception e){
             e.printStackTrace();
-            System.out.println("Cannot get name of subjects");
+            System.out.println("Timetable for group can`t get.");
         }
 
-        return  labsList;
+        return timetableList;
     }
 
-    public ArrayList<Integer> getSubjectsForPass(String date){
-        ArrayList<Integer> listOfSubjects = new ArrayList<>();
 
-        String sqlTask = "SELECT id_subject FROM labs WHERE deadline = " + date + ";";
-        try{
-            ResultSet resultSet = statement.executeQuery(sqlTask);
-            while(resultSet.next()) listOfSubjects.add(resultSet.getInt("id_subject"));
-        }
-        catch (Exception e){
-            e.printStackTrace();
-            System.out.println("Not appropriate subjects");
-        }
 
-        return listOfSubjects;
-    }
+    public int getCountLessonsOfSubject(int subject, String dayDate){
+        int countOfLessons = 0;
 
-    public ArrayList<Integer> getSubjectsByDayDate(String dayDate){
-        ArrayList<Integer> listOfSubjects = new ArrayList<>();
-
-        String sqlTask = "SELECT id_subject FROM timetable WHERE lesson_date = " + dayDate + ";";
-        try{
-            ResultSet resultSet = statement.executeQuery(sqlTask);
-            while(resultSet.next()) listOfSubjects.add(resultSet.getInt("id_subject"));
-        }
-        catch (Exception e){
-            e.printStackTrace();
-            System.out.println("Not appropriate subjects");
-        }
-
-        return listOfSubjects;
-    }
-
-    public ArrayList<Integer> getNumberOfLessonsForPassedSubjects(int subject, String dayDate){
-        ArrayList<Integer> listOfLessons = new ArrayList<>();
-
-        String sqlTask = "SELECT number_lesson FROM timetable WHERE lesson_date = " + dayDate + " AND id_subject = " + subject + ";";
-        try{
-            ResultSet resultSet = statement.executeQuery(sqlTask);
-            while(resultSet.next()) listOfLessons.add(resultSet.getInt("number_lessons"));
-        }
-        catch (Exception e){
-            e.printStackTrace();
-            System.out.println("It`s not lessons today");
-        }
-
-        return listOfLessons;
-    }
-
-    public void setLabStatus(int subject, String dayDate, int status){
-        String sqlTask = "UPDATE labs SET stat = " + status + " WHERE id_subject = " + subject + " AND day_number = " + dayDate + ";";
+        String sqlTask = "SELECT COUNT(id) AS num FROM timetable" +
+                         " WHERE lesson_date = '" + dayDate + "' AND id_subject = " + subject + ";";
 
         try{
-            statement.executeUpdate(sqlTask);
-            conector.commit();
+            ResultSet result = statement.executeQuery(sqlTask);
+            countOfLessons = result.getInt("num");
         }
-        catch (Exception e){
+        catch(Exception e){
             e.printStackTrace();
-            System.out.println("Lab can`t be updated");
+            System.out.println("CAn`t read date of subject in a day.");
         }
+
+        return countOfLessons;
     }
-
-    public int getSubjectByLessonNuberAtDay(int lessonNumber, String dayDate){
-        String sqlTask = "SELECT id_subject FROM timetable WHERE lesson_date = " + dayDate + " AND number_lesson = " + lessonNumber + ";";
-        int subject = -1;
-        try{
-            ResultSet resultSet = statement.executeQuery(sqlTask);
-            subject = resultSet.getInt("id_subject");
-
-        }
-        catch (Exception e){
-            e.printStackTrace();
-            System.out.println("It`s not lessons today");
-        }
-
-        return subject;
-    }
-
-    public int getlabStatus(int subject, String dayDate){
-        String sqlTask = "SELECT stat FROM labs WHERE deadline = " + dayDate + " AND id_subject = " + subject + ";";
-        int status = -1;
-        try{
-            ResultSet resultSet = statement.executeQuery(sqlTask);
-            subject = resultSet.getInt("stat");
-
-        }
-        catch (Exception e){
-            e.printStackTrace();
-            System.out.println("Status of lab si secret!");
-        }
-
-        return status;
-    }
-
-    public int getNumberLessonsInDay(String dayDate){
-        String sqlTask = "SELECT id FROM timetable WHERE lesson_date = " + dayDate + ";";
-        int numberLessons = 0;
-        try{
-            ResultSet resultSet = statement.executeQuery(sqlTask);
-            while (resultSet.next()){
-                numberLessons += 1;
-            }
-
-        }
-        catch (Exception e){
-            e.printStackTrace();
-            System.out.println("Status of lab si secret!");
-        }
-
-        return numberLessons;
-    }
-
 }
