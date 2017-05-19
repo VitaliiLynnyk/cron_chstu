@@ -55,14 +55,10 @@ public class Bot {
             }
         }
 
-        if(dateUtil.isMoreLessonsToday(dataBase)) {
-            startBotTimer();
+        if(dateUtil.getTimeToNextLesson() > 0) {
+            Timer timer = new Timer();
+            BotCronTask botCronTask = new BotCronTask(timer);
+            timer.schedule(botCronTask,dateUtil.getTimeToNextLesson());
         }
-    }
-
-    public void startBotTimer(){
-        Timer timer = new Timer();
-        BotCronTask botCronTask = new BotCronTask(timer);
-        timer.schedule(botCronTask,dateUtil.getTimeToNextLesson(dataBase));
     }
 }

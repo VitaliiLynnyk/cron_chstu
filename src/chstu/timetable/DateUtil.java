@@ -1,20 +1,27 @@
 package chstu.timetable;
 
 import chstu.db.DBAdapter;
+import chstu.db.LessonTimetable;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Ar-Krav on 14.05.2017.
  */
 public class DateUtil {
     public DateUtil() {
+        dataBase = DBAdapter.getInstance();
+
         currentDate = new Date();
+        lessonTimetables = dataBase.getLessonTimetable();
     }
 
     Date currentDate;
+    List<LessonTimetable> lessonTimetables;
+    DBAdapter dataBase;
 
     public String getCurrentDate() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -50,25 +57,15 @@ public class DateUtil {
         return miliseconds;
     }
 
+    public long getTimeToNextLesson(){
+        long timeToNExtLesson = -1; //In position where method called, should be verification about not -1. It`s mean an error statement!
 
-    public boolean isMoreLessonsToday(DBAdapter dataBase){
-        /*int indexOfEndLessonArray = dataBase.getNumberLessonsInDay(getCurrentDate())-1;
-        ArrayList<Long> endOfLesson = dataBase.getEndOfLessons();
-
-        return !(endOfLesson.contains(indexOfEndLessonArray) && getCurrentTime() >= endOfLesson.get(indexOfEndLessonArray));*/
-        return false;
-    }
-
-    public long getTimeToNextLesson(DBAdapter dataBase){
-        long timeToNExtLesson = -1;
-
-        /*if(isMoreLessonsToday(dataBase)) {
-            for (int i = 0; i < dataBase.getEndOfLessons().size(); i++){
-                if (getCurrentTime() < dataBase.getEndOfLessons().get(i)){
-                    timeToNExtLesson = dataBase.getEndOfLessons().get(i) - getCurrentTime();
-                }
+        for(LessonTimetable endOfLesson : lessonTimetables){
+            if(getCurrentTime() < convertTimeInMS(endOfLesson.getEndLesson())){
+                timeToNExtLesson = convertTimeInMS(endOfLesson.getEndLesson()) - getCurrentTime();
             }
-        }*/
+        }
+
         return  timeToNExtLesson;
     }
 
