@@ -1,17 +1,18 @@
 package chstu.timetable;
 
+import chstu.db.DBAdapter;
+import chstu.db.LessonTimetable;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
-/**
- * Created by Ar-Krav on 20.05.2017.
- */
+
 public class DateUtilTest {
 
     static DateUtil dateUtil;
@@ -28,7 +29,7 @@ public class DateUtilTest {
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("kk:mm:ss");
         assertEquals("Time is diferent!",dateFormat.format(currentDate),dateFormat.format(testDate));
-        System.out.println(dateFormat.format(currentDate));
+        System.out.println("-getCurrentTime: " + dateFormat.format(currentDate));
     }
 
     @Test
@@ -36,12 +37,32 @@ public class DateUtilTest {
         Date testDate = new Date(dateUtil.convertTimeInMS("11:20:00"));
         SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
         assertEquals("Convertion is not correct","11:20:00",dateFormat.format(testDate));
-        System.out.println(dateFormat.format(testDate));
+        System.out.println("-convertTimeInMS: " + dateFormat.format(testDate));
     }
 
     @Test
     public void getTimeToNextLesson() throws Exception {
+        DBAdapter dataBase = DBAdapter.getInstance();
+        List<LessonTimetable> lessonTimetables = dataBase.getLessonTimetable();
+        Boolean isMoreLesson = null;
 
+        if (dateUtil.getTimeToNextLesson() < 0) return;
+
+        for (LessonTimetable lessonTimetable : lessonTimetables){
+            if (dateUtil.getCurrentTimeMS() + dateUtil.getTimeToNextLesson() == dateUtil.convertTimeInMS(lessonTimetable.getEndLesson())){
+                System.out.println("-getTimeToNextLesson: " + lessonTimetable.getEndLesson());
+                return;
+            }
+        }
+
+        fail("Time to next lesson not correct.");
     }
 
+    @Test
+    public void getTimeToNextDayLesson() throws Exception {
+        Date testDate = new Date(dateUtil.getTimeToNextDayLesson());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("kk:mm:ss");
+
+        System.out.println("-getTimeToNextDayLesson: " + dateFormat.format(testDate));
+    }
 }

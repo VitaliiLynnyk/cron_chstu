@@ -15,7 +15,7 @@ public class Bot {
         currentDate = new Date();
         dataBase = DBAdapter.getInstance();
 
-        checkUserDutyForToday();
+        haveUserDutyForToday();
     }
 
     Date currentDate;
@@ -27,21 +27,28 @@ public class Bot {
     int inProcess = 0, debt = 2;
 
 
-    private void checkUserDutyForToday() {
+    private boolean haveUserDutyForToday() {
         labsForPassToday = dataBase.getLabsByDay(dateUtil.getCurrentDate());
         lessonForPass = new ArrayList<>();
 
         if (labsForPassToday.size() == 0) {
             System.out.println("No subject for pass today!");
-            return;
+            return false;
         }
 
         for(Labs lab : labsForPassToday){
             lessonForPass.addAll(dataBase.getLessonsForSubjectInDay(lab.getIdSubject(),lab.getDeadline()));
         }
+
+        return true;
     }
 
     public void checkLabsStatys(){
+        if (!haveUserDutyForToday()){
+            startTimer(dateUtil.getTimeToNextDayLesson());
+            return;
+        }
+
         List<LessonTimetable> endOfLessons = dataBase.getLessonTimetable();
 
         for(Timetable lesson : lessonForPass){
@@ -55,9 +62,16 @@ public class Bot {
         }
 
         if(dateUtil.getTimeToNextLesson() > 0) {
-            Timer timer = new Timer();
-            BotCronTask botCronTask = new BotCronTask(timer);
-            timer.schedule(botCronTask,dateUtil.getTimeToNextLesson());
+            startTimer(dateUtil.getTimeToNextLesson());
         }
+        else{
+            startTimer(dateUtil.getTimeToNextDayLesson());
+        }
+    }
+
+    private void startTimer(long delay){
+        Timer timer = new Timer();
+        BotCronTask botCronTask = new BotCronTask(timer);
+        timer.schedule(botCronTask,delay);
     }
 }

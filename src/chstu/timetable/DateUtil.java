@@ -20,7 +20,7 @@ public class DateUtil {
     private DBAdapter dataBase;
 
     public String getCurrentDate() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         return dateFormat.format(currentDate);
     }
 
@@ -54,15 +54,20 @@ public class DateUtil {
     }
 
     public long getTimeToNextLesson(){
-        long timeToNExtLesson = -1; //In position where method called, should be verification about not -1. It`s mean an error statement!
+        long timeToNextLesson = -1; //In position where method called, should be verification about not -1. It`s mean an error statement!
+        int maxLessonInDay = 0;
 
         for(LessonTimetable endOfLesson : lessonTimetables){
-            if(getCurrentTimeMS() < convertTimeInMS(endOfLesson.getEndLesson())){
-                timeToNExtLesson = convertTimeInMS(endOfLesson.getEndLesson()) - getCurrentTimeMS();
+            if(getCurrentTimeMS() < convertTimeInMS(endOfLesson.getEndLesson()) && maxLessonInDay < dataBase.getLessonsInDay(getCurrentDate()).size()){
+                timeToNextLesson = convertTimeInMS(endOfLesson.getEndLesson()) - getCurrentTimeMS();
             }
         }
 
-        return  timeToNExtLesson;
+        return  timeToNextLesson;
+    }
+
+    public long getTimeToNextDayLesson(){
+        return convertTimeInMS("23:59:59") - getCurrentTimeMS() + convertTimeInMS("08:30:01");
     }
 
 }
