@@ -4,13 +4,9 @@ import chstu.db.DBAdapter;
 import chstu.db.LessonTimetable;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created by Ar-Krav on 14.05.2017.
- */
 public class DateUtil {
     public DateUtil() {
         dataBase = DBAdapter.getInstance();
@@ -19,18 +15,18 @@ public class DateUtil {
         lessonTimetables = dataBase.getLessonTimetable();
     }
 
-    Date currentDate;
-    List<LessonTimetable> lessonTimetables;
-    DBAdapter dataBase;
+    private Date currentDate;
+    private List<LessonTimetable> lessonTimetables;
+    private DBAdapter dataBase;
 
     public String getCurrentDate() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         return dateFormat.format(currentDate);
     }
 
-    public long getCurrentTime(){
+    public long getCurrentTimeMS(){
         currentDate = new Date();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("kk:mm:ss");
         long currentTimeDate = -1;
 
         try {
@@ -61,8 +57,8 @@ public class DateUtil {
         long timeToNExtLesson = -1; //In position where method called, should be verification about not -1. It`s mean an error statement!
 
         for(LessonTimetable endOfLesson : lessonTimetables){
-            if(getCurrentTime() < convertTimeInMS(endOfLesson.getEndLesson())){
-                timeToNExtLesson = convertTimeInMS(endOfLesson.getEndLesson()) - getCurrentTime();
+            if(getCurrentTimeMS() < convertTimeInMS(endOfLesson.getEndLesson())){
+                timeToNExtLesson = convertTimeInMS(endOfLesson.getEndLesson()) - getCurrentTimeMS();
             }
         }
 

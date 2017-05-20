@@ -5,7 +5,6 @@ import chstu.db.Labs;
 import chstu.db.LessonTimetable;
 import chstu.db.Timetable;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -46,7 +45,7 @@ public class Bot {
         List<LessonTimetable> endOfLessons = dataBase.getLessonTimetable();
 
         for(Timetable lesson : lessonForPass){
-            if(dateUtil.getCurrentTime() >= dateUtil.convertTimeInMS(endOfLessons.get(lesson.getNumberLesson()).getEndLesson())){
+            if(dateUtil.getCurrentTimeMS() >= dateUtil.convertTimeInMS(endOfLessons.get(lesson.getNumberLesson()).getEndLesson())){
                 for(Labs lab : labsForPassToday){
                     if (lab.getIdSubject() == lesson.getIdSubject() && lab.getStatus() == inProcess) {
                         dataBase.updateLabStatus(debt,lab.getIdSubject(),lab.getLabNumber());
