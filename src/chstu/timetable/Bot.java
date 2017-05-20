@@ -24,7 +24,7 @@ public class Bot {
 
 
     private void checkUserDutyForToday() {
-        subjectsForPassToday = dataBase.getSubjectsForPass(dateUtil.getCurrentDate());
+        /*subjectsForPassToday = dataBase.getSubjectsForPass(dateUtil.getCurrentDate());
         numberLessonsOfSubjectForPass = new ArrayList<>();
 
         if (subjectsForPassToday.size() == 0) {
@@ -37,11 +37,11 @@ public class Bot {
              for (int j = 0; i < numbersOfLessonsForOneSubject.size(); j++){
                  numberLessonsOfSubjectForPass.add(numbersOfLessonsForOneSubject.get(j));
              }
-        }
+        }*/
     }
 
     public void checkLabsStatys(){
-        ArrayList<Long> endOfLessons = dataBase.getEndOfLessons();
+        /*ArrayList<Long> endOfLessons = dataBase.getEndOfLessons();
         for (int i = 0; i < numberLessonsOfSubjectForPass.size(); i++){
             int subject = dataBase.getSubjectByLessonNuberAtDay(numberLessonsOfSubjectForPass.get(i),dateUtil.getCurrentDate());
             if (dateUtil.getCurrentTime() >= endOfLessons.get(numberLessonsOfSubjectForPass.get(i)-1)){
@@ -49,7 +49,7 @@ public class Bot {
             }
         }
 
-        if(dateUtil.isMoreLessonsToday(dataBase)) startBotTimer();
+        if(dateUtil.isMoreLessonsToday(dataBase)) startBotTimer();*/
     }
 
     public void startBotTimer(){

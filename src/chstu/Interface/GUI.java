@@ -81,7 +81,7 @@ public class GUI {
         leftPanel.setBackground(Color.BLACK);
         projectFrame.add(leftPanel);
 
-        ArrayList<String>arrayList = dataBase.getNamesOfSubjects();
+        ArrayList<String>arrayList = null;//dataBase.getNamesOfSubjects();
         JButton[] btn = new JButton[arrayList.size()];
         for (int i = 0; i < arrayList.size(); i++) {
             btn[i] = new JButton(arrayList.get(i)+"");
@@ -133,7 +133,7 @@ public class GUI {
 
         DateUtil dates = new DateUtil();
         String strDate = dates.getCurrentDate();
-        ArrayList<ArrayList<String>> nextDaySubjects = dataBase.getAllLessonsOfDay(strDate);
+        ArrayList<ArrayList<String>> nextDaySubjects = null;//dataBase.getAllLessonsOfDay(strDate);
 
         JLabel [] nextDayTimetableLable = new JLabel[nextDaySubjects.size()];
         for (int i = 0; i < nextDaySubjects.size(); i++){
@@ -169,7 +169,7 @@ public class GUI {
     }
 
     public void drawLabs(int subject){
-        JPanel BottomCenterPanel = new JPanel();
+       /* JPanel BottomCenterPanel = new JPanel();
         BottomCenterPanel.setBounds(250,190,650,500);
         BottomCenterPanel.setBackground(Color.LIGHT_GRAY);
         projectFrame.add(BottomCenterPanel);
@@ -210,7 +210,7 @@ public class GUI {
             labs[i].add(txField);
             labs[i].add(statBox);
             BottomCenterPanel.add(labs[i]);
-        }
+        }*/
 
 
     }
