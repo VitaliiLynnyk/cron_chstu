@@ -1,25 +1,26 @@
 package chstu.Interface;
 
 import chstu.db.DBAdapter;
+import chstu.db.Labs;
+import chstu.db.Subjects;
+import chstu.db.Timetable;
 import chstu.timetable.DateUtil;
-
-import javafx.scene.control.DatePicker;
-import org.jdatepicker.JDatePicker;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
-import sun.font.TextLabel;
 
+
+import javax.security.auth.Subject;
 import javax.swing.*;
-import javax.swing.text.DateFormatter;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Properties;
+
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.*;
+import java.util.List;
 
 /**
  * Created by linni on 5/13/2017.
@@ -88,10 +89,10 @@ public class GUI {
         leftPanel.setBackground(Color.BLACK);
         projectFrame.add(leftPanel);
 
-        ArrayList<String>arrayList = dataBase.getNamesOfSubjects();
+        List<Subjects> arrayList= dataBase.getAllSubjects();
         ArrayList<JButton>btn = new ArrayList<>();
         for (int i = 0; i < arrayList.size(); i++) {
-            btn.add(i,new JButton(arrayList.get(i)+""));
+            btn.add(i,new JButton(arrayList.get(i).getName()+""));
             btn.get(i).setPreferredSize(new Dimension(100,100));
             leftPanel.setLayout(new GridLayout(0,1));
             btn.get(i).setFont(new Font("Calibri", Font.ITALIC, 26));
@@ -115,7 +116,7 @@ public class GUI {
         projectFrame.add(labelSubjectName);
 
 
-        btn.get(1).setBackground(new Color(100, 148, 26));
+
 
 //CENTER PANEL
         JPanel TopCenterPanel = new JPanel();
@@ -137,16 +138,27 @@ public class GUI {
 
         JDatePanelImpl datePanel = new JDatePanelImpl(model,p);
         datePanel.setPreferredSize(new Dimension(300,200));
-        datePanel.setBounds(900,30,300,200);
+        datePanel.setBounds(900,30,300,100);
         topRightPanel.add(datePanel);
 
         JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new Calendars());
         topRightPanel.add(datePicker);
 
 
-        System.out.println(datePicker.getJFormattedTextField().getText());
 
-        Date selectedDates = (Date) datePicker.getModel().getValue();
+        JButton button = new JButton("Enter");
+        button.setBounds(900,200,100,100);
+        topRightPanel.add(button);
+
+        button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println(datePicker.getJFormattedTextField().getText());
+            }
+        });
+
+
+
 
 
 
@@ -159,13 +171,13 @@ public class GUI {
 
         DateUtil dates = new DateUtil();
         String strDate = dates.getCurrentDate();
-        ArrayList<ArrayList<String>> nextDaySubjects = dataBase.getAllLessonsOfDay(strDate);
+        List <Timetable> nextDaySubjects = dataBase.getLessonsInDay(strDate);
 
         JLabel [] nextDayTimetableLable = new JLabel[nextDaySubjects.size()];
         for (int i = 0; i < nextDaySubjects.size(); i++){
             nextDayTimetableLable[i] = new JLabel();
             nextDayTimetableLable[i].setPreferredSize(new Dimension(300,50));
-            nextDayTimetableLable[i].setText(nextDaySubjects.get(i).get(0) + " | " + nextDaySubjects.get(i).get(1) + " | " + nextDaySubjects.get(i).get(2));
+            nextDayTimetableLable[i].setText(nextDaySubjects.get(0).getNumberLesson() + " | " + nextDaySubjects.get(1).getLessonDate() + " | " + nextDaySubjects.get(2).getNumberLesson());
             nextDayTimetableLable[i].setForeground(new Color(32, 16, 58));
             nextDayTimetableLable[i].setVerticalAlignment(JLabel.CENTER);
             nextDayTimetableLable[i].setFont(new Font("Calibri", Font.ITALIC, 26));
@@ -200,12 +212,12 @@ public class GUI {
         BottomCenterPanel.setBackground(Color.LIGHT_GRAY);
         projectFrame.add(BottomCenterPanel);
 
-        GridLayout gbl = new GridLayout(dataBase.getAlllabsBySubject(subject).size(),1);
+        GridLayout gbl = new GridLayout(dataBase.getLabsBySubject(subject).size(),1);
         BottomCenterPanel.setLayout(gbl);
 
-        JPanel labs [] = new JPanel[dataBase.getAlllabsBySubject(subject).size()];
+        JPanel labs [] = new JPanel[dataBase.getLabsBySubject(subject).size()];
 
-        ArrayList<ArrayList<String>> ar = dataBase.getAlllabsBySubject(subject);
+        List <Labs> ar = dataBase.getLabsBySubject(subject);
 
         for(int i=0; i<ar.size(); i++) {
             labs[i] = new JPanel();
@@ -223,14 +235,14 @@ public class GUI {
             JTextArea textArea = new JTextArea();
                 textArea.setLineWrap(true);
                 textArea.setWrapStyleWord(true);
-                if(ar.get(i).get(1) != null) textArea.setText(ar.get(i).get(1));
+                if(ar.get(1) != null) textArea.setText(ar.get(1).toString());
                 else textArea.setText("Додайте свій коментар");
                 textArea.setFont(new Font("Times New Roman", Font.ITALIC, 30));
                 textArea.setBackground(new Color(113, 74, 176));
 
                 textArea.setPreferredSize(new Dimension(200,80));
 
-            JTextField txField = new JTextField(ar.get(i).get(2));
+            JTextField txField = new JTextField(ar.get(i).toString());
                 txField.setFont(new Font("Times New Roman", Font.ITALIC, 30));
                 txField.setBackground(new Color(113, 74, 176));
 
