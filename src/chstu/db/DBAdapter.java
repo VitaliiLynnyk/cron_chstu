@@ -238,7 +238,8 @@ public class DBAdapter {
         int countOfLessons = 0;
 
         String sqlTask = "SELECT COUNT(id) AS num FROM timetable" +
-                         " WHERE lesson_date = '" + dayDate + "' AND id_subject = " + subject + ";";
+                         " WHERE lesson_date = '" + dayDate + "' AND id_subject = " + subject +
+                         " AND type_lesson = (SELECT id FROM type_lesson WHERE name = \"Лекція\");";
 
         try{
             ResultSet result = statement.executeQuery(sqlTask);
