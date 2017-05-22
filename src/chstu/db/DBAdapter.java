@@ -110,6 +110,12 @@ public class DBAdapter {
         return getListOfLabs(sqlTask);
     }
 
+    public List<Labs> getDebtLabs(){
+        String sqlTask = "SELECT * FROM labs" +
+                " WHERE status = 2;";
+        return getListOfLabs(sqlTask);
+    }
+
     public List<Labs> getLabsByDaySubject(String deadline, int subject){
         String sqlTask = "SELECT * FROM labs" +
                 " WHERE deadline = '" + deadline + "' AND id_subject = " + subject +";";
@@ -214,6 +220,29 @@ public class DBAdapter {
         return getTimetable(sqlTask);
     }
 
+    public List<Lesson> getLessonsToShow(String dayDate){
+        List<Lesson> lessonsForShow = new ArrayList<>();
+        String sqlTask = "SELECT number_lesson, subjects.name AS sName, type_lesson.name AS tlName FROM timetable" +
+                         " INNER JOIN subjects ON timetable.id_subject = subjects.ID" +
+                         " INNER JOIN type_lesson ON timetable.type_lesson = type_lesson.id" +
+                         " WHERE lesson_date = '" + dayDate + "';";
+
+        try{
+            ResultSet result = statement.executeQuery(sqlTask);
+            while (result.next()){
+                int numberLesson = result.getInt("number_lesson");
+                String lessoonSubject = result.getString("sName");
+                String typeLesson = result.getString("tlName");
+
+                lessonsForShow.add(new Lesson(numberLesson,lessoonSubject,typeLesson));
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            System.out.println("Impossible get lessons to show for input date.");
+        }
+        return lessonsForShow;
+    }
     private List<Timetable> getTimetable(String sqlTask){
         List<Timetable> timetableList = new ArrayList<>();
 
