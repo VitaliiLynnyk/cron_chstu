@@ -3,7 +3,6 @@ package chstu.db;
 import java.sql.*;
 import java.util.*;
 
-
 public class DBAdapter {
     public  DBAdapter() {
         try{
@@ -112,19 +111,19 @@ public class DBAdapter {
 
     public List<Labs> getLabsByDaySubject(String deadline, int subject){
         String sqlTask = "SELECT * FROM labs" +
-                " WHERE deadline = " + deadline + " AND id_subject = " + subject +";";
+                " WHERE deadline = '" + deadline + "' AND id_subject = " + subject +";";
         return getListOfLabs(sqlTask);
     }
 
     public List<Labs> getLabsByDay(String deadline){
         String sqlTask = "SELECT * FROM labs" +
-                         " WHERE deadline = " + deadline + ";";
+                " WHERE deadline = '" + deadline + "';";
         return getListOfLabs(sqlTask);
     }
 
     public List<Labs> getLabsBySubject(int subject){
         String sqlTask = "SELECT * FROM labs" +
-                " WHERE id_subject = " + subject + ";";
+                " WHERE id_subject = '" + subject + "';";
         return getListOfLabs(sqlTask);
     }
 
@@ -154,7 +153,7 @@ public class DBAdapter {
 
     public void setNewLab(int id, int idSubject, int labNumber, String comment, String deadline, int status){
         String sqlTask = "INSERT INTO labs" +
-                         " VALUES (" + id + ", " + idSubject + ", " + labNumber + ", '" + comment + "', '" + deadline + "', " + status + ");";
+                " VALUES (" + id + ", " + idSubject + ", " + labNumber + ", '" + comment + "', '" + deadline + "', " + status + ");";
 
         try{
             statement.executeUpdate(sqlTask);
@@ -168,8 +167,8 @@ public class DBAdapter {
 
     public void updateLabComment(String newComment, int idSubject, int labNumber){
         String sqlTask = "UPDATE labs" +
-                         " SET comment = " + newComment +
-                         " WHERE id_subject = " + idSubject + " AND lab_number = " + labNumber + ";";
+                " SET comment = " + newComment +
+                " WHERE id_subject = " + idSubject + " AND lab_number = " + labNumber + ";";
         updateLabInfo(sqlTask);
     }
 
@@ -204,13 +203,13 @@ public class DBAdapter {
 
     public List<Timetable> getLessonsForSubjectInDay(int subject, String dayDate){
         String sqlTask = "SELECT * FROM timetable" +
-                         " WHERE id_subject = " + subject + " AND lesson_date = " + dayDate + ";";
+                " WHERE id_subject = " + subject + " AND lesson_date = '" + dayDate + "';";
         return getTimetable(sqlTask);
     }
 
     public List<Timetable> getLessonsInDay(String dayDate){
         String sqlTask = "SELECT * FROM timetable" +
-                " WHERE lesson_date = " + dayDate + ";";
+                " WHERE lesson_date = '" + dayDate + "';";
         return getTimetable(sqlTask);
     }
 
@@ -243,8 +242,8 @@ public class DBAdapter {
         int countOfLessons = 0;
 
         String sqlTask = "SELECT COUNT(id) AS num FROM timetable" +
-                         " WHERE lesson_date = '" + dayDate + "' AND id_subject = " + subject +
-                         " AND type_lesson = (SELECT id FROM type_lesson WHERE name = \"Лабораторні\");";
+                " WHERE lesson_date = '" + dayDate + "' AND id_subject = " + subject +
+                " AND type_lesson = (SELECT id FROM type_lesson WHERE name = \"Лабораторні\");";
 
         try{
             ResultSet result = statement.executeQuery(sqlTask);

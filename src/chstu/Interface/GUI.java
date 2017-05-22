@@ -123,7 +123,7 @@ public class GUI {
 //RIGHT PANEL
 
         JPanel topRightPanel = new JPanel();
-        topRightPanel.setBounds(900,-5,300,320);
+        topRightPanel.setBounds(900,-5,300,207);
         topRightPanel.setBackground(new Color(113, 74, 176));
         projectFrame.add(topRightPanel);
         UtilDateModel model = new UtilDateModel();
@@ -139,44 +139,84 @@ public class GUI {
 
         JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new Calendars());
 
+
+
+
+        JLabel lbSelectSubject = new JLabel("Розклад  ");
+        lbSelectSubject.setForeground(new Color(137, 114, 176));
+        lbSelectSubject.setBounds(900,190 ,300,50);
+        lbSelectSubject.setFont(new Font("Times new roman", Font.BOLD, 25));
+        projectFrame.add(lbSelectSubject);
+
+
+        JPanel panelSubjectInSelectDate = new JPanel();
+        panelSubjectInSelectDate.setBounds(900,233,300,180);
+        panelSubjectInSelectDate.setBackground(new Color(137, 114, 176));
+        projectFrame.add(panelSubjectInSelectDate);
+
+
+
+
+
+
         datePanel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String selectedDate = datePicker.getJFormattedTextField().getText();
-                System.out.println(selectedDate);
 
-                System.out.println(dataBase.getLessonsInDay(selectedDate));
+                lbSelectSubject.setText("Розклад на "+selectedDate);
 
+                //System.out.println(dataBase.getLessonsInDay(selectedDate));
+                List<Timetable> subjectInSelectDate = dataBase.getLessonsInDay(selectedDate);
+                JLabel [] selectDayTimetableLable = new JLabel[subjectInSelectDate.size()];
+                for (int i = 0; i < subjectInSelectDate.size(); i++){
+                    selectDayTimetableLable[i] = new JLabel();
+                    selectDayTimetableLable[i].setPreferredSize(new Dimension(300,80));
+                    selectDayTimetableLable[i].setText(subjectInSelectDate.get(i).getNumberLesson() +" | " + subjectInSelectDate.get(i).getTypeLesson() + " | " + subjectInSelectDate.get(i).getLessonDate());
+                    selectDayTimetableLable[i].setFont(new Font("Calibri", Font.ITALIC, 26));
+                    panelSubjectInSelectDate.add(selectDayTimetableLable[i]);
+                }
+                JScrollPane jScrollPaneRightBottomPanel = new JScrollPane(panelSubjectInSelectDate,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+                        JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+                jScrollPaneRightBottomPanel.getVerticalScrollBar().setPreferredSize(new Dimension(0,0));
+                jScrollPaneRightBottomPanel.setBounds(900,233,300,170);
+                projectFrame.add(jScrollPaneRightBottomPanel);
             }
         });
 
 
-        System.out.println();
         JPanel bottomRightPanel = new JPanel();
-        bottomRightPanel.setLayout(new GridLayout(0,1));
-        bottomRightPanel.setBounds(900,300,300,400);
-        bottomRightPanel.setBackground(new Color(177, 148, 226));  //NEED TO CHANGE
+        bottomRightPanel.setLayout(null);
+        bottomRightPanel.setLayout(new GridLayout(3,1));
+        bottomRightPanel.setBounds(900,452,300,220);
+        bottomRightPanel.setBackground(new Color(177, 148, 226));
         projectFrame.add(bottomRightPanel);
 
         DateUtil dates = new DateUtil();
         String strDate = dates.getCurrentDate();
-        List <Timetable> nextDaySubjects = dataBase.getLessonsInDay(strDate);
 
+        JLabel lbSubjectNextDay = new JLabel("Розклад на сьогодні");
+        lbSubjectNextDay.setForeground(new Color(137, 114, 176));
+        lbSubjectNextDay.setBounds(900,380 ,300,100);
+        lbSubjectNextDay.setFont(new Font("Times new roman", Font.BOLD, 25));
+        projectFrame.add(lbSubjectNextDay);
+
+        List <Timetable> nextDaySubjects = dataBase.getLessonsInDay(strDate);
         JLabel [] nextDayTimetableLable = new JLabel[nextDaySubjects.size()];
         for (int i = 0; i < nextDaySubjects.size(); i++){
             nextDayTimetableLable[i] = new JLabel();
-            nextDayTimetableLable[i].setPreferredSize(new Dimension(300,50));
+            nextDayTimetableLable[i].setPreferredSize(new Dimension(300,80));
             nextDayTimetableLable[i].setText(nextDaySubjects.get(i).getNumberLesson() +" | " + nextDaySubjects.get(i).getTypeLesson() + " | " + nextDaySubjects.get(i).getLessonDate());
             nextDayTimetableLable[i].setForeground(new Color(32, 16, 58));
             nextDayTimetableLable[i].setVerticalAlignment(JLabel.CENTER);
             nextDayTimetableLable[i].setFont(new Font("Calibri", Font.ITALIC, 26));
             bottomRightPanel.add(nextDayTimetableLable[i]);
         }
-        JScrollPane jScrollPaneRightPanel = new JScrollPane(bottomRightPanel,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+        JScrollPane jScrollPaneRightBottomPanel = new JScrollPane(bottomRightPanel,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                 JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        jScrollPaneRightPanel.getVerticalScrollBar().setPreferredSize(new Dimension(0,0));
-        jScrollPaneRightPanel.setBounds(900,300,300,400);
-        projectFrame.add(jScrollPaneRightPanel);
+        jScrollPaneRightBottomPanel.getVerticalScrollBar().setPreferredSize(new Dimension(0,0));
+        jScrollPaneRightBottomPanel.setBounds(900,452,300,220);
+        projectFrame.add(jScrollPaneRightBottomPanel);
 
         projectFrame.setVisible(true);
     }
