@@ -10,15 +10,11 @@ import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
 
-import javax.security.auth.Subject;
 import javax.swing.*;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.*;
 import java.util.List;
 
@@ -142,22 +138,14 @@ public class GUI {
         topRightPanel.add(datePanel);
 
         JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new Calendars());
-        topRightPanel.add(datePicker);
 
 
-
-        JButton button = new JButton("Enter");
-        button.setBounds(900,200,100,100);
-        topRightPanel.add(button);
-
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println(datePicker.getJFormattedTextField().getText());
-            }
-        });
-
-
+       datePanel.addActionListener(new ActionListener() {
+           @Override
+           public void actionPerformed(ActionEvent e) {
+               System.out.println(datePicker.getJFormattedTextField().getText());
+           }
+       });
 
 
 
@@ -206,52 +194,50 @@ public class GUI {
         return action;
     }
 
-    private void drawLabs(int subject){
+    public void drawLabs(int subject) {
         JPanel BottomCenterPanel = new JPanel();
-        BottomCenterPanel.setBounds(250,190,650,500);
+        BottomCenterPanel.setBounds(250, 190, 650, 400);
         BottomCenterPanel.setBackground(Color.LIGHT_GRAY);
         projectFrame.add(BottomCenterPanel);
 
-        GridLayout gbl = new GridLayout(dataBase.getLabsBySubject(subject).size(),1);
+        GridLayout gbl = new GridLayout(dataBase.getLabsBySubject(subject).size(), 1);
         BottomCenterPanel.setLayout(gbl);
+        JPanel labs[] = new JPanel[dataBase.getLabsBySubject(subject).size()];
 
-        JPanel labs [] = new JPanel[dataBase.getLabsBySubject(subject).size()];
+        List<Labs> ar = dataBase.getLabsBySubject(subject);
 
-        List <Labs> ar = dataBase.getLabsBySubject(subject);
-
-        for(int i=0; i<ar.size(); i++) {
+        for (int i = 0; i < ar.size(); i++) {
             labs[i] = new JPanel();
-          //  labs[i].setPreferredSize(new Dimension(300,50));
-           GridLayout g = new GridLayout(1,4);
-           labs[i].setLayout(g);
+            GridLayout g = new GridLayout(1, 4);
+            labs[i].setLayout(g);
+            labs[i].setBackground(new Color(154, 104, 176));
+            JLabel lb = new JLabel("" + ar.get(i).getLabNumber());
 
-            JLabel lb = new JLabel(i + 1 + "");
+            lb.setPreferredSize(new Dimension(100,100));
+
             lb.setFont(new Font("Times New Roman", Font.ITALIC, 30));
-                lb.setOpaque(true);
-                lb.setBackground(new Color(113, 74, 176));
-
-                lb.setPreferredSize(new Dimension(150,80));
-
+            lb.setOpaque(true);
+            lb.setBackground(new Color(113, 74, 176));
             JTextArea textArea = new JTextArea();
-                textArea.setLineWrap(true);
-                textArea.setWrapStyleWord(true);
-                if(ar.get(1) != null) textArea.setText(ar.get(1).toString());
-                else textArea.setText("Додайте свій коментар");
-                textArea.setFont(new Font("Times New Roman", Font.ITALIC, 30));
-                textArea.setBackground(new Color(113, 74, 176));
+            textArea.setLineWrap(true);
+            textArea.setWrapStyleWord(true);
+            if (!ar.get(i).getComment().equals("")) textArea.setText(ar.get(i).getComment());
+            else textArea.setText("Додайте свій коментар");
+            textArea.setFont(new Font("Times New Roman", Font.ITALIC, 30));
+            textArea.setBackground(new Color(113, 74, 176));
 
-                textArea.setPreferredSize(new Dimension(200,80));
+            textArea.setPreferredSize(new Dimension(200,100));
 
-            JTextField txField = new JTextField(ar.get(i).toString());
-                txField.setFont(new Font("Times New Roman", Font.ITALIC, 30));
-                txField.setBackground(new Color(113, 74, 176));
+            JTextField txField = new JTextField(ar.get(i).getDeadline());
+            txField.setFont(new Font("Times New Roman", Font.ITALIC, 30));
+            txField.setBackground(new Color(113, 74, 176));
 
-                txField.setPreferredSize(new Dimension(150,80));
+            txField.setPreferredSize(new Dimension(200,100));
 
             JCheckBox statBox = new JCheckBox();
-                statBox.setBackground(new Color(113, 74, 176));
+            statBox.setBackground(new Color(113, 74, 176));
 
-                statBox.setPreferredSize(new Dimension(50,80));
+            statBox.setPreferredSize(new Dimension(100,100));
 
             labs[i].add(lb);
             labs[i].add(textArea);
@@ -259,7 +245,11 @@ public class GUI {
             labs[i].add(statBox);
             BottomCenterPanel.add(labs[i]);
         }
-
+        JScrollPane jScrollPaneCenterBottomPanel = new JScrollPane(BottomCenterPanel,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        jScrollPaneCenterBottomPanel.getVerticalScrollBar().setPreferredSize(new Dimension(0,0));
+        jScrollPaneCenterBottomPanel.setBounds(250, 190, 650, 500);
+        projectFrame.add(jScrollPaneCenterBottomPanel);
 
     }
 }
