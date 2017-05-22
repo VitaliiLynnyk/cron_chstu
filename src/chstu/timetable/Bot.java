@@ -43,7 +43,7 @@ public class Bot {
         return true;
     }
 
-    public void checkLabsStatys(){
+    public void startBot(){
         if (!haveUserDutyForToday()){
             startTimer(dateUtil.getTimeToNextDayLesson());
             return;
