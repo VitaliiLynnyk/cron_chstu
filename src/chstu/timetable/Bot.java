@@ -1,9 +1,6 @@
 package chstu.timetable;
 
-import chstu.db.DBAdapter;
-import chstu.db.Labs;
-import chstu.db.LessonTimetable;
-import chstu.db.Timetable;
+import chstu.db.*;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -32,15 +29,14 @@ public class Bot {
             return;
         }
 
-        remindDebts();
-
         for(Timetable lesson : lessonForPass){
             if(dateUtil.getCurrentTimeMS() >= getLessonTimeInMS(lesson.getNumberLesson())){
                 System.out.println(getLessonTimeInMS(lesson.getNumberLesson()));
                 for(Labs lab : labsForPassToday){
                     if (lab.getIdSubject() == lesson.getIdSubject() && lab.getStatus() == inProcess) {
                         dataBase.updateLabStatus(debt,lab.getIdSubject(),lab.getLabNumber());
-                        showNotification("Сьогодні мала бути здана лабораторна робота №" + lab.getLabNumber(), TrayIcon.MessageType.INFO);
+                        showNotification("Сьогодні мала бути здана лабораторна робота!" +
+                                                  "\n" + getLabSubjectName(lab) + " | №" + lab.getLabNumber(), TrayIcon.MessageType.INFO);
                     }
                 }
             }
@@ -83,6 +79,18 @@ public class Bot {
         return lessonTime;
     }
 
+    private String getLabSubjectName(Labs lab){
+        List<Subjects> subjectsList = dataBase.getAllSubjects();
+
+        for (Subjects subject : subjectsList){
+            if (lab.getIdSubject() == subject.getId()){
+                    return subject.getName();
+            }
+        }
+
+        return "";
+    }
+
     private void showNotification(String message, TrayIcon.MessageType messageType){
         if (!SystemTray.isSupported()){
             return;
@@ -101,15 +109,15 @@ public class Bot {
         trayIcon.displayMessage("CRON_CHSTU", message, messageType);
     }
 
-    private void remindDebts(){
-        if (dataBase.getDebtLabs().size() > 0){
-            showNotification("Ви маєте заборговані предмети!\nПеревірте які саме та починайте здавати борги!", TrayIcon.MessageType.WARNING);
-        }
-    }
-
     private void startTimer(long delay){
         Timer timer = new Timer();
         BotCronTask botCronTask = new BotCronTask(timer);
         timer.schedule(botCronTask,delay);
+    }
+
+    public void remindDebts(){
+        if (dataBase.getDebtLabs().size() > 0){
+            showNotification("Ви маєте заборговані предмети!\nПеревірте які саме та починайте здавати борги!", TrayIcon.MessageType.WARNING);
+        }
     }
 }
