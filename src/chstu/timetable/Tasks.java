@@ -38,7 +38,6 @@ public class Tasks {
             }
         }
         arrayDates.clear();
-
     }
 
     private String convertIntToDate(int day){
@@ -47,15 +46,15 @@ public class Tasks {
 
     private int maxIdLabs(){
         int max;
-        if (dbAdapter.getListOfLabs().size()>0) {
-            max = dbAdapter.getListOfLabs().get(0).getId();
+        if (dbAdapter.getAllLabs().size()>0) {
+            max = dbAdapter.getAllLabs().get(0).getId();
         }
         else {
             max = -1;
         }
-        for (int i = 0; i < dbAdapter.getListOfLabs().size(); i++) {
-            if (dbAdapter.getListOfLabs().get(i).getId() >= max){
-                max = dbAdapter.getListOfLabs().get(i).getId();
+        for (int i = 0; i < dbAdapter.getAllLabs().size(); i++) {
+            if (dbAdapter.getAllLabs().get(i).getId() >= max){
+                max = dbAdapter.getAllLabs().get(i).getId();
             }
         }
         return (max+1);
