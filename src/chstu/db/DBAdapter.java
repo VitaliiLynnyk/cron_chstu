@@ -15,7 +15,7 @@ public class DBAdapter {
         }
         catch (Exception e){
             e.printStackTrace();
-            System.out.println("Connection to DB faild");
+            System.out.println("Connection to DB failed");
         }
     }
 
@@ -239,7 +239,7 @@ public class DBAdapter {
 
         String sqlTask = "SELECT COUNT(id) AS num FROM timetable" +
                          " WHERE lesson_date = '" + dayDate + "' AND id_subject = " + subject +
-                         " AND type_lesson = (SELECT id FROM type_lesson WHERE name = \"Лекція\");";
+                         " AND type_lesson = (SELECT id FROM type_lesson WHERE name = \"Лабораторні\");";
 
         try{
             ResultSet result = statement.executeQuery(sqlTask);
@@ -247,7 +247,7 @@ public class DBAdapter {
         }
         catch(Exception e){
             e.printStackTrace();
-            System.out.println("CAn`t read date of subject in a day.");
+            System.out.println("Can`t read date of subject in a day.");
         }
 
         return countOfLessons;
