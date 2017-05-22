@@ -1,4 +1,6 @@
-package chstu.db;
+package chstu.timetable;
+
+import chstu.db.DBAdapter;
 
 import java.util.ArrayList;
 

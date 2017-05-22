@@ -1,7 +1,6 @@
 package chstu;
 
-import chstu.Interface.GUI;
-import chstu.db.Tasks;
+import chstu.timetable.Tasks;
 
 
 public class Main {
