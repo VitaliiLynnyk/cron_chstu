@@ -14,8 +14,6 @@ public class Bot {
     public Bot() {
         currentDate = new Date();
         dataBase = DBAdapter.getInstance();
-
-        haveUserDutyForToday();
     }
 
     Date currentDate;
@@ -49,10 +47,9 @@ public class Bot {
             return;
         }
 
-        List<LessonTimetable> endOfLessons = dataBase.getLessonTimetable();
-
         for(Timetable lesson : lessonForPass){
-            if(dateUtil.getCurrentTimeMS() >= dateUtil.convertTimeInMS(endOfLessons.get(lesson.getNumberLesson()).getEndLesson())){
+            if(dateUtil.getCurrentTimeMS() >= getLessonTimeInMS(lesson.getNumberLesson())){
+                System.out.println(getLessonTimeInMS(lesson.getNumberLesson()));
                 for(Labs lab : labsForPassToday){
                     if (lab.getIdSubject() == lesson.getIdSubject() && lab.getStatus() == inProcess) {
                         dataBase.updateLabStatus(debt,lab.getIdSubject(),lab.getLabNumber());
@@ -67,6 +64,19 @@ public class Bot {
         else{
             startTimer(dateUtil.getTimeToNextDayLesson());
         }
+    }
+
+    private long getLessonTimeInMS(int numberLesson){
+        long lessonTime = -1;
+        List<LessonTimetable> endOfLessons = dataBase.getLessonTimetable();
+
+        for (LessonTimetable timetable : endOfLessons){
+            if (timetable.getId() == numberLesson){
+                lessonTime = dateUtil.convertTimeInMS(timetable.getEndLesson());
+            }
+        }
+
+        return lessonTime;
     }
 
     private void startTimer(long delay){

@@ -112,19 +112,19 @@ public class DBAdapter {
 
     public List<Labs> getLabsByDaySubject(String deadline, int subject){
         String sqlTask = "SELECT * FROM labs" +
-                " WHERE deadline = " + deadline + " AND id_subject = " + subject +";";
+                " WHERE deadline = '" + deadline + "' AND id_subject = " + subject +";";
         return getListOfLabs(sqlTask);
     }
 
     public List<Labs> getLabsByDay(String deadline){
         String sqlTask = "SELECT * FROM labs" +
-                         " WHERE deadline = " + deadline + ";";
+                         " WHERE deadline = '" + deadline + "';";
         return getListOfLabs(sqlTask);
     }
 
     public List<Labs> getLabsBySubject(int subject){
         String sqlTask = "SELECT * FROM labs" +
-                " WHERE id_subject = " + subject + ";";
+                " WHERE id_subject = '" + subject + "';";
         return getListOfLabs(sqlTask);
     }
 
@@ -204,13 +204,13 @@ public class DBAdapter {
 
     public List<Timetable> getLessonsForSubjectInDay(int subject, String dayDate){
         String sqlTask = "SELECT * FROM timetable" +
-                         " WHERE id_subject = " + subject + " AND lesson_date = " + dayDate + ";";
+                         " WHERE id_subject = " + subject + " AND lesson_date = '" + dayDate + "';";
         return getTimetable(sqlTask);
     }
 
     public List<Timetable> getLessonsInDay(String dayDate){
         String sqlTask = "SELECT * FROM timetable" +
-                " WHERE lesson_date = " + dayDate + ";";
+                " WHERE lesson_date = '" + dayDate + "';";
         return getTimetable(sqlTask);
     }
 
