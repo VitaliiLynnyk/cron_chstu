@@ -14,7 +14,7 @@ public class BotCronTask extends TimerTask {
     Timer timer;
 
     public void run(){
-        robot.checkLabsStatys();
+        robot.startBot();
         timer.cancel();
     }
 }
