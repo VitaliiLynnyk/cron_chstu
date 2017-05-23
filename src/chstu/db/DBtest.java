@@ -2,13 +2,13 @@ package chstu.db;
 
 
 import chstu.timetable.Bot;
+import chstu.timetable.DateUtil;
+
+import java.util.*;
 
 public class DBtest {
     public static void main(String[] args) {
-        Bot bt = new Bot();
-
-        System.out.println("all good");
-        //bt.startBot();
-        System.out.println("");
+        Bot bot = new Bot();
+        bot.startBot();
     }
 }

@@ -34,9 +34,9 @@ public class DateUtilTest {
 
     @Test
     public void convertTimeInMS() throws Exception {
-        Date testDate = new Date(dateUtil.convertTimeInMS("11:20:00"));
-        SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
-        assertEquals("Convertion is not correct","11:20:00",dateFormat.format(testDate));
+        Date testDate = new Date(dateUtil.convertTimeInMS("16:20:00"));
+        SimpleDateFormat dateFormat = new SimpleDateFormat("kk:mm:ss");
+        assertEquals("Convertion is not correct","16:20:00",dateFormat.format(testDate));
         System.out.println("-convertTimeInMS: " + dateFormat.format(testDate));
     }
 
@@ -64,5 +64,12 @@ public class DateUtilTest {
         SimpleDateFormat dateFormat = new SimpleDateFormat("kk:mm:ss");
 
         System.out.println("-getTimeToNextDayLesson: " + dateFormat.format(testDate));
+    }
+
+    @Test
+    public void convertMSinTome(){
+        Date date = new Date(67200000);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("kk:mm:ss");
+        System.out.println(dateFormat.format(date));
     }
 }
