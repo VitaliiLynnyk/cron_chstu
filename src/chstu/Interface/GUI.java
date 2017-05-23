@@ -144,13 +144,14 @@ public class GUI {
 
         JLabel lbSelectSubject = new JLabel("Розклад  ");
         lbSelectSubject.setForeground(new Color(137, 114, 176));
-        lbSelectSubject.setBounds(900,190 ,300,50);
+        lbSelectSubject.setBounds(900,193 ,300,43);
         lbSelectSubject.setFont(new Font("Times new roman", Font.BOLD, 25));
         projectFrame.add(lbSelectSubject);
 
 
         JPanel panelSubjectInSelectDate = new JPanel();
-        panelSubjectInSelectDate.setBounds(900,233,300,180);
+        panelSubjectInSelectDate.setLayout(new GridLayout(3,1));
+        panelSubjectInSelectDate.setBounds(900,235,300,170);
         panelSubjectInSelectDate.setBackground(new Color(137, 114, 176));
         projectFrame.add(panelSubjectInSelectDate);
 
@@ -163,7 +164,7 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String selectedDate = datePicker.getJFormattedTextField().getText();
-
+                panelSubjectInSelectDate.removeAll();
                 lbSelectSubject.setText("Розклад на "+selectedDate);
 
                 //System.out.println(dataBase.getLessonsInDay(selectedDate));
@@ -176,10 +177,14 @@ public class GUI {
                     selectDayTimetableLable[i].setFont(new Font("Calibri", Font.ITALIC, 26));
                     panelSubjectInSelectDate.add(selectDayTimetableLable[i]);
                 }
+                if(selectDayTimetableLable.size() = 0){
+
+                }
+
                 JScrollPane jScrollPaneRightBottomPanel = new JScrollPane(panelSubjectInSelectDate,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                         JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
                 jScrollPaneRightBottomPanel.getVerticalScrollBar().setPreferredSize(new Dimension(0,0));
-                jScrollPaneRightBottomPanel.setBounds(900,233,300,170);
+                jScrollPaneRightBottomPanel.setBounds(900,235,300,170);
                 projectFrame.add(jScrollPaneRightBottomPanel);
             }
         });
