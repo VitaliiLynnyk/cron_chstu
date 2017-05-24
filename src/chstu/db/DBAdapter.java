@@ -268,6 +268,7 @@ public class DBAdapter {
 
 
 
+
     public int getCountLessonsOfSubject(int subject, String dayDate){
         int countOfLessons = 0;
 
@@ -285,5 +286,5 @@ public class DBAdapter {
         }
 
         return countOfLessons;
-    }
-}
+    }}
+
