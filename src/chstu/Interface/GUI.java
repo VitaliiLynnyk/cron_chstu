@@ -2,6 +2,7 @@ package chstu.Interface;
 
 import chstu.db.*;
 import chstu.timetable.DateUtil;
+import chstu.timetable.Tasks;
 import jdk.nashorn.internal.ir.Labels;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
@@ -25,6 +26,8 @@ import java.util.List;
 public class GUI {
     JFrame projectFrame = new JFrame();
     DBAdapter dataBase = DBAdapter.getInstance();
+    private int subjectId = 0;
+    private JLabel namePickedSubject;
 
     public void makeForm(){
         projectFrame.setSize(1200,700);
@@ -62,23 +65,32 @@ public class GUI {
 
         JLabel comment = new JLabel();
         comment.setText("введіть кількість лаб");
-        comment.setBounds(300,0,150,40);
+        comment.setBounds(170,0,150,40);
         centerTopMenu.add(comment);
 
-        JLabel namePickedSubject = new JLabel();
+        namePickedSubject = new JLabel();
         namePickedSubject.setText("NAME OF SUBJECT");
         namePickedSubject.setBounds(10,0,150,40);
         centerTopMenu.add(namePickedSubject);
 
 
 
-        JTextField numberOfSubject = new JTextField();
-        numberOfSubject.setBounds(170,10,100,20);
-        centerTopMenu.add(numberOfSubject);
+        JTextField numberOfLabs = new JTextField();
+        numberOfLabs.setBounds(300,10,100,20);
+        centerTopMenu.add(numberOfLabs);
 
-        JButton btnOkey = new JButton("OK");
+        JButton btnOkey = new JButton("Додати");
         btnOkey.setBounds(500,10,100,20);
         centerTopMenu.add(btnOkey);
+        btnOkey.addActionListener(new ActionListener()
+                                  {
+                                      public void actionPerformed(ActionEvent e)
+                                      {
+                                          Tasks tasks = new Tasks();
+                                          tasks.setLabs(subjectId,Integer.parseInt(numberOfLabs.getText()));
+                                      }
+                                  }
+        );
 //LEFT PANEL
 
         JPanel leftPanel = new JPanel();
@@ -337,6 +349,9 @@ public class GUI {
             public void actionPerformed(ActionEvent e) {
                 drawLabs(subject);
                 System.out.println(subject);
+                subjectId = subject;
+
+                namePickedSubject.setText(dataBase.getAllSubjects().get(subject-1).getName());
                 projectFrame.validate();
             }
         };
@@ -350,9 +365,9 @@ public class GUI {
         Border border = BorderFactory.createLineBorder(new Color(177, 148, 226),1);
 
         JPanel BottomCenterPanel = new JPanel(null);
-            BottomCenterPanel.setBounds(250,190,0,0);
-            BottomCenterPanel.setPreferredSize(new Dimension(650,100*labsForSubject.size()));
-            BottomCenterPanel.setBackground(Color.LIGHT_GRAY);
+        BottomCenterPanel.setBounds(250,190,0,0);
+        BottomCenterPanel.setPreferredSize(new Dimension(650,100*labsForSubject.size()));
+        BottomCenterPanel.setBackground(Color.LIGHT_GRAY);
 
         JPanel labPanel [] = new JPanel[labsForSubject.size()];
 
@@ -362,40 +377,40 @@ public class GUI {
             labPanel[labNumber].setBounds(0,panelHeight,650,100);
 
             JLabel labelNumberLab = new JLabel("" + labwork.getLabNumber());
-                labelNumberLab.setBorder(border);
-                labelNumberLab.setBounds(0,0,35,100);
-                labelNumberLab.setVerticalAlignment(JLabel.CENTER);
-                labelNumberLab.setHorizontalAlignment(JLabel.CENTER);
-                labelNumberLab.setFont(new Font("Times New Roman", Font.ITALIC, 30));
-                labelNumberLab.setOpaque(true);
-                labelNumberLab.setBackground(backgroundColor);
+            labelNumberLab.setBorder(border);
+            labelNumberLab.setBounds(0,0,35,100);
+            labelNumberLab.setVerticalAlignment(JLabel.CENTER);
+            labelNumberLab.setHorizontalAlignment(JLabel.CENTER);
+            labelNumberLab.setFont(new Font("Times New Roman", Font.ITALIC, 30));
+            labelNumberLab.setOpaque(true);
+            labelNumberLab.setBackground(backgroundColor);
 
             JTextArea labCommentArea = new JTextArea();
-                labCommentArea.setFont(new Font("Times New Roman", Font.ITALIC, 30));
-                labCommentArea.setBorder(border);
-                labCommentArea.setBackground(backgroundColor);
-                labCommentArea.setBounds(35,0,365,100);
-                labCommentArea.setLineWrap(true);
-                labCommentArea.setWrapStyleWord(true);
-                if(labwork.getComment() == null) labCommentArea.setText(" Додайте свій коментар");
-                else labCommentArea.setText(labwork.getComment());
-                labCommentArea.getDocument().addDocumentListener(createCommentAreaListener(labCommentArea,labwork));
+            labCommentArea.setFont(new Font("Times New Roman", Font.ITALIC, 30));
+            labCommentArea.setBorder(border);
+            labCommentArea.setBackground(backgroundColor);
+            labCommentArea.setBounds(35,0,365,100);
+            labCommentArea.setLineWrap(true);
+            labCommentArea.setWrapStyleWord(true);
+            if(labwork.getComment() == null) labCommentArea.setText(" Додайте свій коментар");
+            else labCommentArea.setText(labwork.getComment());
+            labCommentArea.getDocument().addDocumentListener(createCommentAreaListener(labCommentArea,labwork));
 
             JTextField deadlineField = new JTextField(labwork.getDeadline());
-                deadlineField.setBounds(400,0,200,100);
-                deadlineField.setFont(new Font("Times New Roman", Font.ITALIC, 30));
-                deadlineField.setBackground(backgroundColor);
-                deadlineField.setPreferredSize(new Dimension(25,100));
+            deadlineField.setBounds(400,0,200,100);
+            deadlineField.setFont(new Font("Times New Roman", Font.ITALIC, 30));
+            deadlineField.setBackground(backgroundColor);
+            deadlineField.setPreferredSize(new Dimension(25,100));
 
             JCheckBox statBox = new JCheckBox();
-                statBox.setBorder(border);
-                statBox.setBackground(backgroundColor);
-                statBox.setVerticalAlignment(SwingConstants.CENTER);
+            statBox.setBorder(border);
+            statBox.setBackground(backgroundColor);
+            statBox.setVerticalAlignment(SwingConstants.CENTER);
             statBox.setHorizontalAlignment(SwingConstants.CENTER);
-                statBox.setBounds(600,0,50,100);
-                statBox.setSelected(labwork.getStatus() == 1);
-                statBox.setBackground(getColorForLabStatus(labwork));
-                statBox.addItemListener(getCheckBoxEvent(statBox,labwork));
+            statBox.setBounds(600,0,50,100);
+            statBox.setSelected(labwork.getStatus() == 1);
+            statBox.setBackground(getColorForLabStatus(labwork));
+            statBox.addItemListener(getCheckBoxEvent(statBox,labwork));
 
 
             labPanel[labNumber].add(labelNumberLab);
