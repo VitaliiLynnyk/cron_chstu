@@ -9,6 +9,7 @@ import org.jdatepicker.impl.UtilDateModel;
 
 
 import javax.swing.*;
+import javax.swing.border.Border;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -100,6 +101,7 @@ public class GUI {
 
         JScrollPane jScrollPaneLeftPanel = new JScrollPane(leftPanel,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                 JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        jScrollPaneLeftPanel.getVerticalScrollBar().setUnitIncrement(13);
         jScrollPaneLeftPanel.getVerticalScrollBar().setPreferredSize(new Dimension(0,0));
         jScrollPaneLeftPanel.setBounds(0,80,250,600);
         projectFrame.add(jScrollPaneLeftPanel);
@@ -239,6 +241,7 @@ public class GUI {
                 JScrollPane jScrollPaneRightBottomPanel = new JScrollPane(panelSubjectInSelectDate,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                         JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
                 jScrollPaneRightBottomPanel.getVerticalScrollBar().setPreferredSize(new Dimension(0,0));
+                jScrollPaneRightBottomPanel.getVerticalScrollBar().setUnitIncrement(13);
                 jScrollPaneRightBottomPanel.setBounds(900,270,300,190);
                 panelSubjectInSelectDate.revalidate();
                 projectFrame.add(jScrollPaneRightBottomPanel);
@@ -340,71 +343,89 @@ public class GUI {
     }
 
     private void drawLabs(int subject){
-        JPanel BottomCenterPanel = new JPanel();
-            BottomCenterPanel.setBounds(250,190,650,500);
-            BottomCenterPanel.setBackground(Color.LIGHT_GRAY);
-            projectFrame.add(BottomCenterPanel);
-            BottomCenterPanel.setLayout(new GridLayout(dataBase.getLabsBySubject(subject).size(),5));
-
-        JPanel labPanel [] = new JPanel[dataBase.getLabsBySubject(subject).size()];
-        Color backgroundColor = new Color(113, 74, 176);
-
         List <Labs> labsForSubject = dataBase.getLabsBySubject(subject);
+        Color backgroundColor = new Color(113, 74, 176);
+        Border border = BorderFactory.createLineBorder(new Color(177, 148, 226),1);
 
-        for(int i=0; i<labsForSubject.size(); i++) {
-            labPanel[i] = new JPanel();
-            System.out.println(labPanel[i].getHeight());
-            labPanel[i].setLayout(new GridLayout(0,4));
+        JPanel BottomCenterPanel = new JPanel(null);
+            BottomCenterPanel.setBounds(250,190,0,0);
+            BottomCenterPanel.setPreferredSize(new Dimension(650,100*labsForSubject.size()));
+            BottomCenterPanel.setBackground(Color.LIGHT_GRAY);
 
-            JLabel labelNumberLab = new JLabel("" + labsForSubject.get(i).getLabNumber());
+        JPanel labPanel [] = new JPanel[labsForSubject.size()];
+
+        for(int labNumber = 0, panelHeight = 0; labNumber<labsForSubject.size(); labNumber++, panelHeight += 100) {
+            labPanel[labNumber] = new JPanel(null);
+            labPanel[labNumber].setBounds(0,panelHeight,650,100);
+
+            JLabel labelNumberLab = new JLabel("" + labsForSubject.get(labNumber).getLabNumber());
+                labelNumberLab.setBorder(border);
+                labelNumberLab.setBounds(0,0,35,100);
                 labelNumberLab.setVerticalAlignment(JLabel.CENTER);
                 labelNumberLab.setHorizontalAlignment(JLabel.CENTER);
                 labelNumberLab.setFont(new Font("Times New Roman", Font.ITALIC, 30));
                 labelNumberLab.setOpaque(true);
                 labelNumberLab.setBackground(backgroundColor);
-                labelNumberLab.setPreferredSize(new Dimension(25,100));
 
             JTextArea labCommentArea = new JTextArea();
+                labCommentArea.setBorder(border);
+                labCommentArea.setBounds(35,0,365,100);
                 labCommentArea.setLineWrap(true);
                 labCommentArea.setWrapStyleWord(true);
-                if(labsForSubject.get(i).getComment() == null) labCommentArea.setText("Додайте свій коментар");
-                else labCommentArea.setText(labsForSubject.get(i).getComment());
+                if(labsForSubject.get(labNumber).getComment() == null) labCommentArea.setText(" Додайте свій коментар");
+                else labCommentArea.setText(labsForSubject.get(labNumber).getComment());
                 labCommentArea.setFont(new Font("Times New Roman", Font.ITALIC, 30));
                 labCommentArea.setBackground(backgroundColor);
-                labCommentArea.setPreferredSize(new Dimension(25,100));
 
-            JTextField deadlineField = new JTextField(labsForSubject.get(i).getDeadline());
+            JTextField deadlineField = new JTextField(labsForSubject.get(labNumber).getDeadline());
+                deadlineField.setBounds(400,0,200,100);
                 deadlineField.setFont(new Font("Times New Roman", Font.ITALIC, 30));
                 deadlineField.setBackground(backgroundColor);
                 deadlineField.setPreferredSize(new Dimension(25,100));
 
             JCheckBox statBox = new JCheckBox();
+                statBox.setBorder(border);
                 statBox.setBackground(backgroundColor);
                 statBox.setVerticalAlignment(SwingConstants.CENTER);
             statBox.setHorizontalAlignment(SwingConstants.CENTER);
-                statBox.setPreferredSize(new Dimension(50,100));
-                statBox.setSelected(labsForSubject.get(i).getStatus() == 1);
-                statBox.setBackground(getColorForLabStatus(labsForSubject.get(i)));
-                statBox.addItemListener(new ItemListener() {
-                    @Override
-                    public void itemStateChanged(ItemEvent e) {
-                        if (statBox.isSelected()) System.out.println("selected");
-                        else System.out.println("not selected");
-                    }
-                });
+                statBox.setBounds(600,0,50,100);
+                statBox.setSelected(labsForSubject.get(labNumber).getStatus() == 1);
+                statBox.setBackground(getColorForLabStatus(labsForSubject.get(labNumber)));
+                statBox.addItemListener(getCheckBoxEvent(statBox,labsForSubject.get(labNumber)));
 
 
-            labPanel[i].add(labelNumberLab);
-            labPanel[i].add(labCommentArea);
-            labPanel[i].add(deadlineField);
-            labPanel[i].add(statBox);
-            BottomCenterPanel.add(labPanel[i]);
+            labPanel[labNumber].add(labelNumberLab);
+            labPanel[labNumber].add(labCommentArea);
+            labPanel[labNumber].add(deadlineField);
+            labPanel[labNumber].add(statBox);
+            BottomCenterPanel.add(labPanel[labNumber]);
         }
         JScrollPane jScrollPanelCenterBottomPanel = new JScrollPane(BottomCenterPanel,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                 JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        jScrollPanelCenterBottomPanel.getVerticalScrollBar().setUnitIncrement(13);
         jScrollPanelCenterBottomPanel.getVerticalScrollBar().setPreferredSize(new Dimension(0,0));
         jScrollPanelCenterBottomPanel.setBounds(250,190,650,500);
         projectFrame.add(jScrollPanelCenterBottomPanel);
+    }
+
+    private ItemListener getCheckBoxEvent(JCheckBox jCheckBox ,Labs lab){
+        return  new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (jCheckBox.isSelected()) {
+                    System.out.println("selected");
+                    dataBase.updateLabStatus(1,lab.getIdSubject(),lab.getLabNumber());
+                    jCheckBox.setBackground(Color.GREEN);
+                }
+                else {
+                    System.out.println("not selected");
+                    dataBase.updateLabStatus(0,lab.getIdSubject(),lab.getLabNumber());
+                    jCheckBox.setBackground(new Color(113, 74, 176));
+                }
+                //jCheckBox.setBackground(getColorForLabStatus(lab));
+                projectFrame.validate();
+            }
+        };
     }
 
     private Color getColorForLabStatus(Labs lab){
