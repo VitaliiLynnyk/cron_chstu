@@ -43,6 +43,7 @@ public class GUI {
 
     JScrollPane jScrollPanelCenterBottomPanel;
     JPanel BottomCenterPanel;
+    JLabel progress;
 
     private int subjectId = 0;
     private JLabel namePickedSubject;
@@ -104,8 +105,20 @@ public class GUI {
                                   {
                                       public void actionPerformed(ActionEvent e)
                                       {
+                                          int completed = 0;
+                                          int debts = 0;
+                                          DBAdapter db = DBAdapter.getInstance();
+                                          for (Labs lab : db.getAllLabs()){
+                                              if(lab.getStatus() == 1 ){
+                                                  completed++;
+                                              }
+                                              if(lab.getStatus() == 2 ){
+                                                  debts++;
+                                              }
+                                          }
                                           Tasks tasks = new Tasks();
                                           tasks.setLabs(subjectId,Integer.parseInt(numberOfLabs.getText()));
+                                          progress.setText("Всі лабораторні:"+db.getAllLabs().size()+" Виконані:"+completed+" В боргах:"+debts);
                                           drawLabs(subjectId);
                                       }
                                   }
@@ -148,9 +161,23 @@ public class GUI {
 
 
 //CENTER PANEL
+        int completed = 0;
+        int debts = 0;
+        DBAdapter db = DBAdapter.getInstance();
+        for (Labs lab : db.getAllLabs()){
+            if(lab.getStatus() == 1 ){
+                completed++;
+            }
+            if(lab.getStatus() == 2 ){
+                debts++;
+            }
+        }
+
+        progress = new JLabel("Всі лабораторні:"+db.getAllLabs().size()+" Виконані:"+completed+" В боргах:"+debts);
         JPanel TopCenterPanel = new JPanel();
         TopCenterPanel.setBounds(250,40,650,100);
         TopCenterPanel.setBackground(new Color(214, 195, 244));
+        TopCenterPanel.add(progress);
         projectFrame.add(TopCenterPanel);
 
         JLabel labelSubjectNumber = new JLabel("Номер Лаб");
