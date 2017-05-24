@@ -3,6 +3,7 @@ package chstu.Interface;
 import chstu.db.*;
 import chstu.timetable.DateUtil;
 import jdk.nashorn.internal.ir.Labels;
+import org.jdatepicker.JDatePicker;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
@@ -13,6 +14,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
 
@@ -369,13 +373,53 @@ public class GUI {
             textArea.setFont(new Font("Times New Roman", Font.ITALIC, 30));
             textArea.setBackground(new Color(113, 74, 176));
 
-            textArea.setPreferredSize(new Dimension(200,100));
+            textArea.setPreferredSize(new Dimension(200,50));
 
-            JTextField txField = new JTextField(ar.get(i).getDeadline());
-            txField.setFont(new Font("Times New Roman", Font.ITALIC, 30));
-            txField.setBackground(new Color(113, 74, 176));
+            //JTextField txField = new JTextField(ar.get(i).getDeadline());
 
-            txField.setPreferredSize(new Dimension(200,100));
+            UtilDateModel model = new UtilDateModel();
+            model.setSelected(true);
+            Properties p = new Properties();
+            p.put("text.today", "Today");
+            p.put("text.month", "Month");
+            p.put("text.year", "Year");
+
+            JDatePanelImpl datePanel = new JDatePanelImpl(model,p);
+            datePanel.setPreferredSize(new Dimension(300,200));
+            datePanel.setBackground(new Color(113, 74, 176));
+
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
+
+            Calendar calendar = new GregorianCalendar();
+            try {
+
+                Date date = sdf.parse( ar.get(i).getDeadline());
+                calendar.setTime(date);
+                int year = calendar.get(Calendar.YEAR);
+
+                int month = calendar.get(Calendar.MONTH) + 1;
+                int day = calendar.get(Calendar.DAY_OF_MONTH);
+                model.setDate(year,month,day);
+                System.out.println(date);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new Calendars());
+            datePicker.setBackground(new Color(113, 74, 176));
+            datePicker.setPreferredSize(new Dimension(200,50));
+            datePicker.setToolTipText(ar.get(i).getDeadline());
+
+
+            datePicker.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    String selectedDate = datePicker.getJFormattedTextField().getText();
+                    System.out.println(selectedDate);
+                }
+            });
+
 
             JCheckBox statBox = new JCheckBox();
             statBox.setBackground(new Color(113, 74, 176));
@@ -391,7 +435,7 @@ public class GUI {
 
             labs[i].add(lb);
             labs[i].add(textArea);
-            labs[i].add(txField);
+            labs[i].add(datePicker);
             labs[i].add(statBox);
             BottomCenterPanel.add(labs[i]);
         }
