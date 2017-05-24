@@ -10,6 +10,8 @@ import org.jdatepicker.impl.UtilDateModel;
 
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -355,10 +357,11 @@ public class GUI {
         JPanel labPanel [] = new JPanel[labsForSubject.size()];
 
         for(int labNumber = 0, panelHeight = 0; labNumber<labsForSubject.size(); labNumber++, panelHeight += 100) {
+            Labs labwork = labsForSubject.get(labNumber);
             labPanel[labNumber] = new JPanel(null);
             labPanel[labNumber].setBounds(0,panelHeight,650,100);
 
-            JLabel labelNumberLab = new JLabel("" + labsForSubject.get(labNumber).getLabNumber());
+            JLabel labelNumberLab = new JLabel("" + labwork.getLabNumber());
                 labelNumberLab.setBorder(border);
                 labelNumberLab.setBounds(0,0,35,100);
                 labelNumberLab.setVerticalAlignment(JLabel.CENTER);
@@ -368,16 +371,17 @@ public class GUI {
                 labelNumberLab.setBackground(backgroundColor);
 
             JTextArea labCommentArea = new JTextArea();
+                labCommentArea.setFont(new Font("Times New Roman", Font.ITALIC, 30));
                 labCommentArea.setBorder(border);
+                labCommentArea.setBackground(backgroundColor);
                 labCommentArea.setBounds(35,0,365,100);
                 labCommentArea.setLineWrap(true);
                 labCommentArea.setWrapStyleWord(true);
-                if(labsForSubject.get(labNumber).getComment() == null) labCommentArea.setText(" Додайте свій коментар");
-                else labCommentArea.setText(labsForSubject.get(labNumber).getComment());
-                labCommentArea.setFont(new Font("Times New Roman", Font.ITALIC, 30));
-                labCommentArea.setBackground(backgroundColor);
+                if(labwork.getComment() == null) labCommentArea.setText(" Додайте свій коментар");
+                else labCommentArea.setText(labwork.getComment());
+                labCommentArea.getDocument().addDocumentListener(createCommentAreaListener(labCommentArea,labwork));
 
-            JTextField deadlineField = new JTextField(labsForSubject.get(labNumber).getDeadline());
+            JTextField deadlineField = new JTextField(labwork.getDeadline());
                 deadlineField.setBounds(400,0,200,100);
                 deadlineField.setFont(new Font("Times New Roman", Font.ITALIC, 30));
                 deadlineField.setBackground(backgroundColor);
@@ -389,9 +393,9 @@ public class GUI {
                 statBox.setVerticalAlignment(SwingConstants.CENTER);
             statBox.setHorizontalAlignment(SwingConstants.CENTER);
                 statBox.setBounds(600,0,50,100);
-                statBox.setSelected(labsForSubject.get(labNumber).getStatus() == 1);
-                statBox.setBackground(getColorForLabStatus(labsForSubject.get(labNumber)));
-                statBox.addItemListener(getCheckBoxEvent(statBox,labsForSubject.get(labNumber)));
+                statBox.setSelected(labwork.getStatus() == 1);
+                statBox.setBackground(getColorForLabStatus(labwork));
+                statBox.addItemListener(getCheckBoxEvent(statBox,labwork));
 
 
             labPanel[labNumber].add(labelNumberLab);
@@ -422,8 +426,26 @@ public class GUI {
                     dataBase.updateLabStatus(0,lab.getIdSubject(),lab.getLabNumber());
                     jCheckBox.setBackground(new Color(113, 74, 176));
                 }
-                //jCheckBox.setBackground(getColorForLabStatus(lab));
                 projectFrame.validate();
+            }
+        };
+    }
+
+    private DocumentListener createCommentAreaListener(JTextArea commentArea, Labs lab){
+        return new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                dataBase.updateLabComment(commentArea.getText(),lab.getIdSubject(),lab.getLabNumber());
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                dataBase.updateLabComment(commentArea.getText(),lab.getIdSubject(),lab.getLabNumber());
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                dataBase.updateLabComment(commentArea.getText(),lab.getIdSubject(),lab.getLabNumber());
             }
         };
     }
