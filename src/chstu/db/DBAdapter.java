@@ -59,7 +59,7 @@ public class DBAdapter {
 
     public List<Subjects> getAllSubjects(){
         List<Subjects> subjectsList = new ArrayList<>();
-        String sqlTask = "SELECT * FROM subjects;";
+        String sqlTask = "SELECT * FROM subjects ORDER BY id;";
 
         try{
             ResultSet result = statement.executeQuery(sqlTask);
@@ -130,7 +130,8 @@ public class DBAdapter {
 
     public List<Labs> getLabsBySubject(int subject){
         String sqlTask = "SELECT * FROM labs" +
-                " WHERE id_subject = '" + subject + "';";
+                " WHERE id_subject = '" + subject + "'" +
+                " ORDER BY lab_number;";
         return getListOfLabs(sqlTask);
     }
 

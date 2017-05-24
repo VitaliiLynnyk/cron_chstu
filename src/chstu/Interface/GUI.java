@@ -341,65 +341,81 @@ public class GUI {
 
     private void drawLabs(int subject){
         JPanel BottomCenterPanel = new JPanel();
-        BottomCenterPanel.setBounds(250,190,650,500);
-        BottomCenterPanel.setBackground(Color.LIGHT_GRAY);
-        projectFrame.add(BottomCenterPanel);
-        GridLayout gbl = new GridLayout(dataBase.getLabsBySubject(subject).size(),5);
-        BottomCenterPanel.setLayout(gbl);
+            BottomCenterPanel.setBounds(250,190,650,500);
+            BottomCenterPanel.setBackground(Color.LIGHT_GRAY);
+            projectFrame.add(BottomCenterPanel);
+            BottomCenterPanel.setLayout(new GridLayout(dataBase.getLabsBySubject(subject).size(),5));
 
-        JPanel labs [] = new JPanel[dataBase.getLabsBySubject(subject).size()];
+        JPanel labPanel [] = new JPanel[dataBase.getLabsBySubject(subject).size()];
+        Color backgroundColor = new Color(113, 74, 176);
 
-        List <Labs> ar = dataBase.getLabsBySubject(subject);
+        List <Labs> labsForSubject = dataBase.getLabsBySubject(subject);
 
-        for(int i=0; i<ar.size(); i++) {
-            labs[i] = new JPanel();
-            labs[i].setLayout(new GridLayout(0,4));
+        for(int i=0; i<labsForSubject.size(); i++) {
+            labPanel[i] = new JPanel();
+            System.out.println(labPanel[i].getHeight());
+            labPanel[i].setLayout(new GridLayout(0,4));
 
-            JLabel lb = new JLabel("             " + ar.get(i).getLabNumber());
-            lb.setFont(new Font("Times New Roman", Font.ITALIC, 30));
-            lb.setOpaque(true);
-            lb.setBackground(new Color(113, 74, 176));
-            lb.setPreferredSize(new Dimension(100,100));
+            JLabel labelNumberLab = new JLabel("" + labsForSubject.get(i).getLabNumber());
+                labelNumberLab.setVerticalAlignment(JLabel.CENTER);
+                labelNumberLab.setHorizontalAlignment(JLabel.CENTER);
+                labelNumberLab.setFont(new Font("Times New Roman", Font.ITALIC, 30));
+                labelNumberLab.setOpaque(true);
+                labelNumberLab.setBackground(backgroundColor);
+                labelNumberLab.setPreferredSize(new Dimension(25,100));
 
-            JTextArea textArea = new JTextArea();
-            textArea.setLineWrap(true);
-            textArea.setWrapStyleWord(true);
-            if(ar.get(i).getComment() == null) textArea.setText("Додайте свій коментар");
-            else textArea.setText(ar.get(i).getComment());
-            textArea.setFont(new Font("Times New Roman", Font.ITALIC, 30));
-            textArea.setBackground(new Color(113, 74, 176));
+            JTextArea labCommentArea = new JTextArea();
+                labCommentArea.setLineWrap(true);
+                labCommentArea.setWrapStyleWord(true);
+                if(labsForSubject.get(i).getComment() == null) labCommentArea.setText("Додайте свій коментар");
+                else labCommentArea.setText(labsForSubject.get(i).getComment());
+                labCommentArea.setFont(new Font("Times New Roman", Font.ITALIC, 30));
+                labCommentArea.setBackground(backgroundColor);
+                labCommentArea.setPreferredSize(new Dimension(25,100));
 
-            textArea.setPreferredSize(new Dimension(200,100));
-
-            JTextField txField = new JTextField(ar.get(i).getDeadline());
-            txField.setFont(new Font("Times New Roman", Font.ITALIC, 30));
-            txField.setBackground(new Color(113, 74, 176));
-
-            txField.setPreferredSize(new Dimension(200,100));
+            JTextField deadlineField = new JTextField(labsForSubject.get(i).getDeadline());
+                deadlineField.setFont(new Font("Times New Roman", Font.ITALIC, 30));
+                deadlineField.setBackground(backgroundColor);
+                deadlineField.setPreferredSize(new Dimension(25,100));
 
             JCheckBox statBox = new JCheckBox();
-            statBox.setBackground(new Color(113, 74, 176));
-            statBox.setVerticalAlignment(SwingConstants.CENTER);
-            statBox.setPreferredSize(new Dimension(50,100));
+                statBox.setBackground(backgroundColor);
+                statBox.setVerticalAlignment(SwingConstants.CENTER);
+            statBox.setHorizontalAlignment(SwingConstants.CENTER);
+                statBox.setPreferredSize(new Dimension(50,100));
+                statBox.setSelected(labsForSubject.get(i).getStatus() == 1);
+                statBox.setBackground(getColorForLabStatus(labsForSubject.get(i)));
+                statBox.addItemListener(new ItemListener() {
+                    @Override
+                    public void itemStateChanged(ItemEvent e) {
+                        if (statBox.isSelected()) System.out.println("selected");
+                        else System.out.println("not selected");
+                    }
+                });
 
-            statBox.addItemListener(new ItemListener() {
-                @Override
-                public void itemStateChanged(ItemEvent e) {
 
-                }
-            });
-
-            labs[i].add(lb);
-            labs[i].add(textArea);
-            labs[i].add(txField);
-            labs[i].add(statBox);
-            BottomCenterPanel.add(labs[i]);
+            labPanel[i].add(labelNumberLab);
+            labPanel[i].add(labCommentArea);
+            labPanel[i].add(deadlineField);
+            labPanel[i].add(statBox);
+            BottomCenterPanel.add(labPanel[i]);
         }
         JScrollPane jScrollPanelCenterBottomPanel = new JScrollPane(BottomCenterPanel,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                 JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         jScrollPanelCenterBottomPanel.getVerticalScrollBar().setPreferredSize(new Dimension(0,0));
         jScrollPanelCenterBottomPanel.setBounds(250,190,650,500);
         projectFrame.add(jScrollPanelCenterBottomPanel);
+    }
 
+    private Color getColorForLabStatus(Labs lab){
+        Color statusColor = null;
+
+        switch (lab.getStatus()){
+            case 0: statusColor = new Color(113, 74, 176); break;
+            case 1: statusColor = Color.green; break;
+            case 2: statusColor = Color.red;
+        }
+
+        return statusColor;
     }
 }
