@@ -175,14 +175,14 @@ public class DBAdapter {
 
     public void updateLabComment(String newComment, int idSubject, int labNumber){
         String sqlTask = "UPDATE labs" +
-                         " SET comment = " + newComment +
+                         " SET comment = '" + newComment + "'" +
                          " WHERE id_subject = " + idSubject + " AND lab_number = " + labNumber + ";";
         updateLabInfo(sqlTask);
     }
 
     public void updateLabDeadline(String newDeadline, int idSubject, int labNumber){
         String sqlTask = "UPDATE labs" +
-                " SET deadline = " + newDeadline +
+                " SET deadline = '" + newDeadline + "'" +
                 " WHERE id_subject = " + idSubject + " AND lab_number = " + labNumber + ";";
         updateLabInfo(sqlTask);
     }
