@@ -90,6 +90,7 @@ public class GUI {
                                       {
                                           Tasks tasks = new Tasks();
                                           tasks.setLabs(subjectId,Integer.parseInt(numberOfLabs.getText()));
+                                          drawLabs(subjectId);
                                       }
                                   }
         );
@@ -350,7 +351,6 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 drawLabs(subject);
-                System.out.println(subject);
                 subjectId = subject;
 
                 namePickedSubject.setText(dataBase.getAllSubjects().get(subject-1).getName());
