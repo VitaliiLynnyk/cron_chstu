@@ -69,6 +69,6 @@ public class Tasks {
             if (lab.getLabNumber() >= maxLabNumber) maxLabNumber = lab.getLabNumber();
         }
 
-        return maxLabNumber;
+        return maxLabNumber + 1;
     }
 }

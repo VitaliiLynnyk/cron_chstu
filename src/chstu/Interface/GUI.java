@@ -26,8 +26,24 @@ import java.util.List;
  * Created by linni on 5/13/2017.
  */
 public class GUI {
+    public GUI() {
+        BottomCenterPanel = new JPanel(null);
+
+        jScrollPanelCenterBottomPanel = new JScrollPane(BottomCenterPanel);
+        jScrollPanelCenterBottomPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        jScrollPanelCenterBottomPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        jScrollPanelCenterBottomPanel.getVerticalScrollBar().setUnitIncrement(13);
+        jScrollPanelCenterBottomPanel.getVerticalScrollBar().setPreferredSize(new Dimension(0,0));
+        jScrollPanelCenterBottomPanel.setBounds(250,190,650,500);
+        projectFrame.add(jScrollPanelCenterBottomPanel);
+    }
+
     JFrame projectFrame = new JFrame();
     DBAdapter dataBase = DBAdapter.getInstance();
+
+    JScrollPane jScrollPanelCenterBottomPanel;
+    JPanel BottomCenterPanel;
+
     private int subjectId = 0;
     private JLabel namePickedSubject;
 
@@ -361,13 +377,18 @@ public class GUI {
         return action;
     }
 
+    boolean isFirstShowInSession = true;
     private void drawLabs(int subject){
+        if (isFirstShowInSession) {
+            isFirstShowInSession = false;
+        }
+        else {
+            BottomCenterPanel.removeAll();
+        }
         List <Labs> labsForSubject = dataBase.getLabsBySubject(subject);
         Color backgroundColor = new Color(113, 74, 176);
         Border border = BorderFactory.createLineBorder(new Color(177, 148, 226),1);
 
-        JPanel BottomCenterPanel = new JPanel(null);
-        BottomCenterPanel.setBounds(250,190,0,0);
         BottomCenterPanel.setPreferredSize(new Dimension(650,100*labsForSubject.size()));
         BottomCenterPanel.setBackground(Color.LIGHT_GRAY);
 
@@ -446,12 +467,6 @@ public class GUI {
             labPanel[labNumber].add(statBox);
             BottomCenterPanel.add(labPanel[labNumber]);
         }
-        JScrollPane jScrollPanelCenterBottomPanel = new JScrollPane(BottomCenterPanel,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        jScrollPanelCenterBottomPanel.getVerticalScrollBar().setUnitIncrement(13);
-        jScrollPanelCenterBottomPanel.getVerticalScrollBar().setPreferredSize(new Dimension(0,0));
-        jScrollPanelCenterBottomPanel.setBounds(250,190,650,500);
-        projectFrame.add(jScrollPanelCenterBottomPanel);
     }
 
     private ItemListener getCheckBoxEvent(JCheckBox jCheckBox ,Labs lab){
