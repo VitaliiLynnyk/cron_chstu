@@ -1,11 +1,14 @@
 package chstu.db;
 
 
-import javax.swing.*;
-import java.awt.event.ActionListener;
+import chstu.timetable.Bot;
+import chstu.timetable.DateUtil;
+
+import java.util.*;
 
 public class DBtest {
     public static void main(String[] args) {
-        DBAdapter db = DBAdapter.getInstance();
+        Bot bot = new Bot();
+        bot.startBot();
     }
 }

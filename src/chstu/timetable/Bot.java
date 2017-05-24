@@ -1,10 +1,8 @@
 package chstu.timetable;
 
-import chstu.db.DBAdapter;
-import chstu.db.Labs;
-import chstu.db.LessonTimetable;
-import chstu.db.Timetable;
+import chstu.db.*;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -14,18 +12,43 @@ public class Bot {
     public Bot() {
         currentDate = new Date();
         dataBase = DBAdapter.getInstance();
-
-        haveUserDutyForToday();
     }
 
-    Date currentDate;
-    DBAdapter dataBase;
-    DateUtil dateUtil = new DateUtil();
+    private Date currentDate;
+    private DBAdapter dataBase;
+    private DateUtil dateUtil = new DateUtil();
 
-    List<Labs> labsForPassToday;
-    List<Timetable> lessonForPass;
-    int inProcess = 0, debt = 2;
+    private List<Labs> labsForPassToday;
+    private List<Timetable> lessonForPass;
+    private int inProcess = 0, debt = 2;
 
+
+    public void startBot(){
+        if (!haveUserDutyForToday()){
+            startTimer(dateUtil.getTimeToNextDayLesson());
+            return;
+        }
+
+        for(Timetable lesson : lessonForPass){
+            if(dateUtil.getCurrentTimeMS() >= getLessonTimeInMS(lesson.getNumberLesson())){
+                System.out.println(getLessonTimeInMS(lesson.getNumberLesson()));
+                for(Labs lab : labsForPassToday){
+                    if (lab.getIdSubject() == lesson.getIdSubject() && lab.getStatus() == inProcess) {
+                        dataBase.updateLabStatus(debt,lab.getIdSubject(),lab.getLabNumber());
+                        showNotification("Сьогодні мала бути здана лабораторна робота!" +
+                                                  "\n" + getLabSubjectName(lab) + " | №" + lab.getLabNumber(), TrayIcon.MessageType.INFO);
+                    }
+                }
+            }
+        }
+
+        if(dateUtil.getTimeToNextLesson() > 0) {
+            startTimer(dateUtil.getTimeToNextLesson());
+        }
+        else{
+            startTimer(dateUtil.getTimeToNextDayLesson());
+        }
+    }
 
     private boolean haveUserDutyForToday() {
         labsForPassToday = dataBase.getLabsByDay(dateUtil.getCurrentDate());
@@ -43,35 +66,58 @@ public class Bot {
         return true;
     }
 
-    public void checkLabsStatys(){
-        if (!haveUserDutyForToday()){
-            startTimer(dateUtil.getTimeToNextDayLesson());
-            return;
-        }
-
+    private long getLessonTimeInMS(int numberLesson){
+        long lessonTime = -1;
         List<LessonTimetable> endOfLessons = dataBase.getLessonTimetable();
 
-        for(Timetable lesson : lessonForPass){
-            if(dateUtil.getCurrentTimeMS() >= dateUtil.convertTimeInMS(endOfLessons.get(lesson.getNumberLesson()).getEndLesson())){
-                for(Labs lab : labsForPassToday){
-                    if (lab.getIdSubject() == lesson.getIdSubject() && lab.getStatus() == inProcess) {
-                        dataBase.updateLabStatus(debt,lab.getIdSubject(),lab.getLabNumber());
-                    }
-                }
+        for (LessonTimetable timetable : endOfLessons){
+            if (timetable.getId() == numberLesson){
+                lessonTime = dateUtil.convertTimeInMS(timetable.getEndLesson());
             }
         }
 
-        if(dateUtil.getTimeToNextLesson() > 0) {
-            startTimer(dateUtil.getTimeToNextLesson());
+        return lessonTime;
+    }
+
+    private String getLabSubjectName(Labs lab){
+        List<Subjects> subjectsList = dataBase.getAllSubjects();
+
+        for (Subjects subject : subjectsList){
+            if (lab.getIdSubject() == subject.getId()){
+                    return subject.getName();
+            }
         }
-        else{
-            startTimer(dateUtil.getTimeToNextDayLesson());
+
+        return "";
+    }
+
+    private void showNotification(String message, TrayIcon.MessageType messageType){
+        if (!SystemTray.isSupported()){
+            return;
         }
+
+        SystemTray tray = SystemTray.getSystemTray();
+
+        java.awt.Image image = Toolkit.getDefaultToolkit().getImage("images/tray.gif");
+        TrayIcon trayIcon = new TrayIcon(image);
+        try {
+            tray.add(trayIcon);
+        } catch (AWTException e) {
+            e.printStackTrace();
+        }
+
+        trayIcon.displayMessage("CRON_CHSTU", message, messageType);
     }
 
     private void startTimer(long delay){
         Timer timer = new Timer();
         BotCronTask botCronTask = new BotCronTask(timer);
         timer.schedule(botCronTask,delay);
+    }
+
+    public void remindDebts(){
+        if (dataBase.getDebtLabs().size() > 0){
+            showNotification("Ви маєте заборговані предмети!\nПеревірте які саме та починайте здавати борги!", TrayIcon.MessageType.WARNING);
+        }
     }
 }
