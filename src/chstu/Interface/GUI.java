@@ -17,6 +17,8 @@ import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
 
@@ -377,45 +379,81 @@ public class GUI {
             labPanel[labNumber].setBounds(0,panelHeight,650,100);
 
             JLabel labelNumberLab = new JLabel("" + labwork.getLabNumber());
-            labelNumberLab.setBorder(border);
-            labelNumberLab.setBounds(0,0,35,100);
-            labelNumberLab.setVerticalAlignment(JLabel.CENTER);
-            labelNumberLab.setHorizontalAlignment(JLabel.CENTER);
-            labelNumberLab.setFont(new Font("Times New Roman", Font.ITALIC, 30));
-            labelNumberLab.setOpaque(true);
-            labelNumberLab.setBackground(backgroundColor);
+                labelNumberLab.setBorder(border);
+                labelNumberLab.setBounds(0,0,35,100);
+                labelNumberLab.setVerticalAlignment(JLabel.CENTER);
+                labelNumberLab.setHorizontalAlignment(JLabel.CENTER);
+                labelNumberLab.setFont(new Font("Times New Roman", Font.ITALIC, 30));
+                labelNumberLab.setOpaque(true);
+                labelNumberLab.setBackground(backgroundColor);
 
             JTextArea labCommentArea = new JTextArea();
-            labCommentArea.setFont(new Font("Times New Roman", Font.ITALIC, 30));
-            labCommentArea.setBorder(border);
-            labCommentArea.setBackground(backgroundColor);
-            labCommentArea.setBounds(35,0,365,100);
-            labCommentArea.setLineWrap(true);
-            labCommentArea.setWrapStyleWord(true);
-            if(labwork.getComment() == null) labCommentArea.setText(" Додайте свій коментар");
-            else labCommentArea.setText(labwork.getComment());
-            labCommentArea.getDocument().addDocumentListener(createCommentAreaListener(labCommentArea,labwork));
+                labCommentArea.setFont(new Font("Times New Roman", Font.ITALIC, 30));
+                labCommentArea.setBorder(border);
+                labCommentArea.setBackground(backgroundColor);
+                labCommentArea.setBounds(35,0,365,100);
+                labCommentArea.setLineWrap(true);
+                labCommentArea.setWrapStyleWord(true);
+                if(labwork.getComment() == null) labCommentArea.setText(" Додайте свій коментар");
+                else labCommentArea.setText(labwork.getComment());
+                labCommentArea.getDocument().addDocumentListener(createCommentAreaListener(labCommentArea,labwork));
 
-            JTextField deadlineField = new JTextField(labwork.getDeadline());
-            deadlineField.setBounds(400,0,200,100);
-            deadlineField.setFont(new Font("Times New Roman", Font.ITALIC, 30));
-            deadlineField.setBackground(backgroundColor);
-            deadlineField.setPreferredSize(new Dimension(25,100));
+            UtilDateModel model = new UtilDateModel();
+            model.setSelected(true);
+            Properties p = new Properties();
+            p.put("text.today", "Today");
+            p.put("text.month", "Month");
+            p.put("text.year", "Year");
+
+            JDatePanelImpl datePanel = new JDatePanelImpl(model,p);
+            datePanel.setPreferredSize(new Dimension(300,200));
+            datePanel.setBackground(new Color(113, 74, 176));
+
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
+            Calendar calendar = new GregorianCalendar();
+            try {
+
+                Date date = sdf.parse( labwork.getDeadline());
+                calendar.setTime(date);
+                int year = calendar.get(Calendar.YEAR);
+
+                int month = calendar.get(Calendar.MONTH) + 1;
+                int day = calendar.get(Calendar.DAY_OF_MONTH);
+                model.setDate(year,month,day);
+                System.out.println(date);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new Calendars());
+                datePicker.setBackground(new Color(113, 74, 176));
+                datePicker.setBounds(400,0,200,100);
+                datePicker.setToolTipText(labwork.getDeadline());
+
+
+                datePicker.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        String selectedDate = datePicker.getJFormattedTextField().getText();
+                        System.out.println(selectedDate);
+                    }
+                });
 
             JCheckBox statBox = new JCheckBox();
-            statBox.setBorder(border);
-            statBox.setBackground(backgroundColor);
-            statBox.setVerticalAlignment(SwingConstants.CENTER);
-            statBox.setHorizontalAlignment(SwingConstants.CENTER);
-            statBox.setBounds(600,0,50,100);
-            statBox.setSelected(labwork.getStatus() == 1);
-            statBox.setBackground(getColorForLabStatus(labwork));
-            statBox.addItemListener(getCheckBoxEvent(statBox,labwork));
+                statBox.setBorder(border);
+                statBox.setBackground(backgroundColor);
+                statBox.setVerticalAlignment(SwingConstants.CENTER);
+                statBox.setHorizontalAlignment(SwingConstants.CENTER);
+                statBox.setBounds(600,0,50,100);
+                statBox.setSelected(labwork.getStatus() == 1);
+                statBox.setBackground(getColorForLabStatus(labwork));
+                statBox.addItemListener(getCheckBoxEvent(statBox,labwork));
 
 
             labPanel[labNumber].add(labelNumberLab);
             labPanel[labNumber].add(labCommentArea);
-            labPanel[labNumber].add(deadlineField);
+            labPanel[labNumber].add(datePicker);
             labPanel[labNumber].add(statBox);
             BottomCenterPanel.add(labPanel[labNumber]);
         }
