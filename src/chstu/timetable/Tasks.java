@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class Tasks {
     final int startDate = 15;
     final int finishDate = 26;
-    DBAdapter dbAdapter = new DBAdapter();
+    DBAdapter dbAdapter = DBAdapter.getInstance();
     ArrayList<String> arrayDates = new ArrayList<>();
 
     private int getNumberLessons(int subject){

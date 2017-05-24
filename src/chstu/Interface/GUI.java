@@ -2,19 +2,21 @@ package chstu.Interface;
 
 import chstu.db.*;
 import chstu.timetable.DateUtil;
+import chstu.timetable.Tasks;
 import jdk.nashorn.internal.ir.Labels;
-import org.jdatepicker.JDatePicker;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import java.awt.*;
 import java.awt.event.*;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -26,6 +28,8 @@ import java.util.List;
 public class GUI {
     JFrame projectFrame = new JFrame();
     DBAdapter dataBase = DBAdapter.getInstance();
+    private int subjectId = 0;
+    private JLabel namePickedSubject;
 
     public void makeForm(){
         projectFrame.setSize(1200,700);
@@ -63,23 +67,32 @@ public class GUI {
 
         JLabel comment = new JLabel();
         comment.setText("введіть кількість лаб");
-        comment.setBounds(300,0,150,40);
+        comment.setBounds(170,0,150,40);
         centerTopMenu.add(comment);
 
-        JLabel namePickedSubject = new JLabel();
+        namePickedSubject = new JLabel();
         namePickedSubject.setText("NAME OF SUBJECT");
         namePickedSubject.setBounds(10,0,150,40);
         centerTopMenu.add(namePickedSubject);
 
 
 
-        JTextField numberOfSubject = new JTextField();
-        numberOfSubject.setBounds(170,10,100,20);
-        centerTopMenu.add(numberOfSubject);
+        JTextField numberOfLabs = new JTextField();
+        numberOfLabs.setBounds(300,10,100,20);
+        centerTopMenu.add(numberOfLabs);
 
-        JButton btnOkey = new JButton("OK");
+        JButton btnOkey = new JButton("Додати");
         btnOkey.setBounds(500,10,100,20);
         centerTopMenu.add(btnOkey);
+        btnOkey.addActionListener(new ActionListener()
+                                  {
+                                      public void actionPerformed(ActionEvent e)
+                                      {
+                                          Tasks tasks = new Tasks();
+                                          tasks.setLabs(subjectId,Integer.parseInt(numberOfLabs.getText()));
+                                      }
+                                  }
+        );
 //LEFT PANEL
 
         JPanel leftPanel = new JPanel();
@@ -104,6 +117,7 @@ public class GUI {
 
         JScrollPane jScrollPaneLeftPanel = new JScrollPane(leftPanel,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                 JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        jScrollPaneLeftPanel.getVerticalScrollBar().setUnitIncrement(13);
         jScrollPaneLeftPanel.getVerticalScrollBar().setPreferredSize(new Dimension(0,0));
         jScrollPaneLeftPanel.setBounds(0,80,250,600);
         projectFrame.add(jScrollPaneLeftPanel);
@@ -243,6 +257,7 @@ public class GUI {
                 JScrollPane jScrollPaneRightBottomPanel = new JScrollPane(panelSubjectInSelectDate,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                         JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
                 jScrollPaneRightBottomPanel.getVerticalScrollBar().setPreferredSize(new Dimension(0,0));
+                jScrollPaneRightBottomPanel.getVerticalScrollBar().setUnitIncrement(13);
                 jScrollPaneRightBottomPanel.setBounds(900,270,300,190);
                 panelSubjectInSelectDate.revalidate();
                 projectFrame.add(jScrollPaneRightBottomPanel);
@@ -336,6 +351,9 @@ public class GUI {
             public void actionPerformed(ActionEvent e) {
                 drawLabs(subject);
                 System.out.println(subject);
+                subjectId = subject;
+
+                namePickedSubject.setText(dataBase.getAllSubjects().get(subject-1).getName());
                 projectFrame.validate();
             }
         };
@@ -344,38 +362,41 @@ public class GUI {
     }
 
     private void drawLabs(int subject){
-        JPanel BottomCenterPanel = new JPanel();
-        BottomCenterPanel.setBounds(250,190,650,500);
+        List <Labs> labsForSubject = dataBase.getLabsBySubject(subject);
+        Color backgroundColor = new Color(113, 74, 176);
+        Border border = BorderFactory.createLineBorder(new Color(177, 148, 226),1);
+
+        JPanel BottomCenterPanel = new JPanel(null);
+        BottomCenterPanel.setBounds(250,190,0,0);
+        BottomCenterPanel.setPreferredSize(new Dimension(650,100*labsForSubject.size()));
         BottomCenterPanel.setBackground(Color.LIGHT_GRAY);
-        projectFrame.add(BottomCenterPanel);
-        GridLayout gbl = new GridLayout(dataBase.getLabsBySubject(subject).size(),5);
-        BottomCenterPanel.setLayout(gbl);
 
-        JPanel labs [] = new JPanel[dataBase.getLabsBySubject(subject).size()];
+        JPanel labPanel [] = new JPanel[labsForSubject.size()];
 
-        List <Labs> ar = dataBase.getLabsBySubject(subject);
+        for(int labNumber = 0, panelHeight = 0; labNumber<labsForSubject.size(); labNumber++, panelHeight += 100) {
+            Labs labwork = labsForSubject.get(labNumber);
+            labPanel[labNumber] = new JPanel(null);
+            labPanel[labNumber].setBounds(0,panelHeight,650,100);
 
-        for(int i=0; i<ar.size(); i++) {
-            labs[i] = new JPanel();
-            labs[i].setLayout(new GridLayout(0,4));
+            JLabel labelNumberLab = new JLabel("" + labwork.getLabNumber());
+                labelNumberLab.setBorder(border);
+                labelNumberLab.setBounds(0,0,35,100);
+                labelNumberLab.setVerticalAlignment(JLabel.CENTER);
+                labelNumberLab.setHorizontalAlignment(JLabel.CENTER);
+                labelNumberLab.setFont(new Font("Times New Roman", Font.ITALIC, 30));
+                labelNumberLab.setOpaque(true);
+                labelNumberLab.setBackground(backgroundColor);
 
-            JLabel lb = new JLabel("             " + ar.get(i).getLabNumber());
-            lb.setFont(new Font("Times New Roman", Font.ITALIC, 30));
-            lb.setOpaque(true);
-            lb.setBackground(new Color(113, 74, 176));
-            lb.setPreferredSize(new Dimension(100,100));
-
-            JTextArea textArea = new JTextArea();
-            textArea.setLineWrap(true);
-            textArea.setWrapStyleWord(true);
-            if(ar.get(i).getComment() == null) textArea.setText("Додайте свій коментар");
-            else textArea.setText(ar.get(i).getComment());
-            textArea.setFont(new Font("Times New Roman", Font.ITALIC, 30));
-            textArea.setBackground(new Color(113, 74, 176));
-
-            textArea.setPreferredSize(new Dimension(200,50));
-
-            //JTextField txField = new JTextField(ar.get(i).getDeadline());
+            JTextArea labCommentArea = new JTextArea();
+                labCommentArea.setFont(new Font("Times New Roman", Font.ITALIC, 30));
+                labCommentArea.setBorder(border);
+                labCommentArea.setBackground(backgroundColor);
+                labCommentArea.setBounds(35,0,365,100);
+                labCommentArea.setLineWrap(true);
+                labCommentArea.setWrapStyleWord(true);
+                if(labwork.getComment() == null) labCommentArea.setText(" Додайте свій коментар");
+                else labCommentArea.setText(labwork.getComment());
+                labCommentArea.getDocument().addDocumentListener(createCommentAreaListener(labCommentArea,labwork));
 
             UtilDateModel model = new UtilDateModel();
             model.setSelected(true);
@@ -390,11 +411,10 @@ public class GUI {
 
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
-
             Calendar calendar = new GregorianCalendar();
             try {
 
-                Date date = sdf.parse( ar.get(i).getDeadline());
+                Date date = sdf.parse( labwork.getDeadline());
                 calendar.setTime(date);
                 int year = calendar.get(Calendar.YEAR);
 
@@ -407,43 +427,91 @@ public class GUI {
             }
 
             JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new Calendars());
-            datePicker.setBackground(new Color(113, 74, 176));
-            datePicker.setPreferredSize(new Dimension(200,50));
-            datePicker.setToolTipText(ar.get(i).getDeadline());
+                datePicker.setBackground(new Color(113, 74, 176));
+                datePicker.setBounds(400,0,200,100);
+                datePicker.setToolTipText(labwork.getDeadline());
 
 
-            datePicker.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    String selectedDate = datePicker.getJFormattedTextField().getText();
-                    System.out.println(selectedDate);
-                }
-            });
-
+                datePicker.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        String selectedDate = datePicker.getJFormattedTextField().getText();
+                        System.out.println(selectedDate);
+                    }
+                });
 
             JCheckBox statBox = new JCheckBox();
-            statBox.setBackground(new Color(113, 74, 176));
-            statBox.setVerticalAlignment(SwingConstants.CENTER);
-            statBox.setPreferredSize(new Dimension(50,100));
+                statBox.setBorder(border);
+                statBox.setBackground(backgroundColor);
+                statBox.setVerticalAlignment(SwingConstants.CENTER);
+                statBox.setHorizontalAlignment(SwingConstants.CENTER);
+                statBox.setBounds(600,0,50,100);
+                statBox.setSelected(labwork.getStatus() == 1);
+                statBox.setBackground(getColorForLabStatus(labwork));
+                statBox.addItemListener(getCheckBoxEvent(statBox,labwork));
 
-            statBox.addItemListener(new ItemListener() {
-                @Override
-                public void itemStateChanged(ItemEvent e) {
 
-                }
-            });
-
-            labs[i].add(lb);
-            labs[i].add(textArea);
-            labs[i].add(datePicker);
-            labs[i].add(statBox);
-            BottomCenterPanel.add(labs[i]);
+            labPanel[labNumber].add(labelNumberLab);
+            labPanel[labNumber].add(labCommentArea);
+            labPanel[labNumber].add(datePicker);
+            labPanel[labNumber].add(statBox);
+            BottomCenterPanel.add(labPanel[labNumber]);
         }
         JScrollPane jScrollPanelCenterBottomPanel = new JScrollPane(BottomCenterPanel,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                 JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        jScrollPanelCenterBottomPanel.getVerticalScrollBar().setUnitIncrement(13);
         jScrollPanelCenterBottomPanel.getVerticalScrollBar().setPreferredSize(new Dimension(0,0));
         jScrollPanelCenterBottomPanel.setBounds(250,190,650,500);
         projectFrame.add(jScrollPanelCenterBottomPanel);
+    }
 
+    private ItemListener getCheckBoxEvent(JCheckBox jCheckBox ,Labs lab){
+        return  new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (jCheckBox.isSelected()) {
+                    System.out.println("selected");
+                    dataBase.updateLabStatus(1,lab.getIdSubject(),lab.getLabNumber());
+                    jCheckBox.setBackground(Color.GREEN);
+                }
+                else {
+                    System.out.println("not selected");
+                    dataBase.updateLabStatus(0,lab.getIdSubject(),lab.getLabNumber());
+                    jCheckBox.setBackground(new Color(113, 74, 176));
+                }
+                projectFrame.validate();
+            }
+        };
+    }
+
+    private DocumentListener createCommentAreaListener(JTextArea commentArea, Labs lab){
+        return new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                dataBase.updateLabComment(commentArea.getText(),lab.getIdSubject(),lab.getLabNumber());
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                dataBase.updateLabComment(commentArea.getText(),lab.getIdSubject(),lab.getLabNumber());
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                dataBase.updateLabComment(commentArea.getText(),lab.getIdSubject(),lab.getLabNumber());
+            }
+        };
+    }
+
+    private Color getColorForLabStatus(Labs lab){
+        Color statusColor = null;
+
+        switch (lab.getStatus()){
+            case 0: statusColor = new Color(113, 74, 176); break;
+            case 1: statusColor = Color.green; break;
+            case 2: statusColor = Color.red;
+        }
+
+        return statusColor;
     }
 }
