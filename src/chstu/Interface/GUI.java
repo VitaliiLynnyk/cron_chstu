@@ -90,6 +90,7 @@ public class GUI {
                                       {
                                           Tasks tasks = new Tasks();
                                           tasks.setLabs(subjectId,Integer.parseInt(numberOfLabs.getText()));
+                                          drawLabs(subjectId);
                                       }
                                   }
         );
@@ -350,7 +351,6 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 drawLabs(subject);
-                System.out.println(subject);
                 subjectId = subject;
 
                 namePickedSubject.setText(dataBase.getAllSubjects().get(subject-1).getName());
@@ -394,7 +394,7 @@ public class GUI {
                 labCommentArea.setBounds(35,0,365,100);
                 labCommentArea.setLineWrap(true);
                 labCommentArea.setWrapStyleWord(true);
-                if(labwork.getComment() == null) labCommentArea.setText(" Додайте свій коментар");
+                if(labwork.getComment().equals("")) labCommentArea.setText(" Додайте свій коментар");
                 else labCommentArea.setText(labwork.getComment());
                 labCommentArea.getDocument().addDocumentListener(createCommentAreaListener(labCommentArea,labwork));
 
@@ -409,11 +409,9 @@ public class GUI {
             datePanel.setPreferredSize(new Dimension(300,200));
             datePanel.setBackground(new Color(113, 74, 176));
 
-
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
             Calendar calendar = new GregorianCalendar();
             try {
-
                 Date date = sdf.parse( labwork.getDeadline());
                 calendar.setTime(date);
                 int year = calendar.get(Calendar.YEAR);
@@ -421,7 +419,6 @@ public class GUI {
                 int month = calendar.get(Calendar.MONTH) + 1;
                 int day = calendar.get(Calendar.DAY_OF_MONTH);
                 model.setDate(year,month,day);
-                System.out.println(date);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -430,15 +427,7 @@ public class GUI {
                 datePicker.setBackground(new Color(113, 74, 176));
                 datePicker.setBounds(400,0,200,100);
                 datePicker.setToolTipText(labwork.getDeadline());
-
-
-                datePicker.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        String selectedDate = datePicker.getJFormattedTextField().getText();
-                        System.out.println(selectedDate);
-                    }
-                });
+                datePicker.addActionListener(createDatePickerListener(datePicker,labwork));
 
             JCheckBox statBox = new JCheckBox();
                 statBox.setBorder(border);
@@ -480,6 +469,15 @@ public class GUI {
                     jCheckBox.setBackground(new Color(113, 74, 176));
                 }
                 projectFrame.validate();
+            }
+        };
+    }
+
+    private ActionListener createDatePickerListener(JDatePickerImpl datePicker ,Labs lab){
+        return  new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dataBase.updateLabDeadline(datePicker.getJFormattedTextField().getText(),lab.getIdSubject(),lab.getLabNumber());
             }
         };
     }
