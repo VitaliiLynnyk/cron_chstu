@@ -1,6 +1,7 @@
 package chstu.timetable;
 
 import chstu.db.DBAdapter;
+import chstu.db.Labs;
 
 import java.util.ArrayList;
 
@@ -27,8 +28,7 @@ public class Tasks {
 
     public void setLabs(int subject, int numberLabs){
         int interval = getNumberLessons(subject)/numberLabs;
-        System.out.println(interval);
-        int id = 0;
+        int id = maxIdLabs();
         int count = numberLabs;
         for (int i = 0; i < arrayDates.size(); i+=interval){
             if (count > 0){
@@ -38,10 +38,25 @@ public class Tasks {
             }
         }
         arrayDates.clear();
-
     }
 
     private String convertIntToDate(int day){
         return "2017-05-"+day;
+    }
+
+    private int maxIdLabs(){
+        int max;
+        if (dbAdapter.getAllLabs().size()>0) {
+            max = dbAdapter.getAllLabs().get(0).getId();
+        }
+        else {
+            max = -1;
+        }
+        for (int i = 0; i < dbAdapter.getAllLabs().size(); i++) {
+            if (dbAdapter.getAllLabs().get(i).getId() >= max){
+                max = dbAdapter.getAllLabs().get(i).getId();
+            }
+        }
+        return (max+1);
     }
 }
