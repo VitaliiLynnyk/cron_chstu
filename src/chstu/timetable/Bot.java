@@ -3,10 +3,8 @@ package chstu.timetable;
 import chstu.db.*;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.*;
 import java.util.List;
-import java.util.Timer;
 
 public class Bot {
     public Bot() {
@@ -118,6 +116,19 @@ public class Bot {
     public void remindDebts(){
         if (dataBase.getDebtLabs().size() > 0){
             showNotification("Ви маєте заборговані предмети!\nПеревірте які саме та починайте здавати борги!", TrayIcon.MessageType.WARNING);
+        }
+    }
+
+    public void checkPreviousDates(){
+        List<Labs> allLAbs = dataBase.getAllLabs();
+        Calendar currentDate = dateUtil.convertStringInDate(dateUtil.getCurrentDate());
+        Calendar labDate;
+
+        for(Labs lab : allLAbs){
+            labDate = dateUtil.convertStringInDate(lab.getDeadline());
+            if (currentDate.after(labDate) && lab.getStatus() != 1){
+                dataBase.updateLabStatus(2,lab.getIdSubject(),lab.getLabNumber());
+            }
         }
     }
 }
