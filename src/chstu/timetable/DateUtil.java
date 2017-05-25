@@ -3,8 +3,11 @@ package chstu.timetable;
 import chstu.db.DBAdapter;
 import chstu.db.LessonTimetable;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 public class DateUtil {
@@ -68,6 +71,19 @@ public class DateUtil {
 
     public long getTimeToNextDayLesson(){
         return convertTimeInMS("23:59:59") - getCurrentTimeMS() + convertTimeInMS("08:30:01");
+    }
+
+    public GregorianCalendar convertStringInDate(String dateToConvert){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
+        GregorianCalendar calendar = new GregorianCalendar();
+        try {
+            Date date = sdf.parse(dateToConvert);
+            calendar.setTime(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return calendar;
     }
 
 }

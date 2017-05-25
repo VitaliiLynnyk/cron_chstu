@@ -445,29 +445,20 @@ public class GUI {
                 labCommentArea.getDocument().addDocumentListener(createCommentAreaListener(labCommentArea,labwork));
 
             UtilDateModel model = new UtilDateModel();
-            model.setSelected(true);
-            Properties p = new Properties();
-            p.put("text.today", "Today");
-            p.put("text.month", "Month");
-            p.put("text.year", "Year");
-
-            JDatePanelImpl datePanel = new JDatePanelImpl(model,p);
-            datePanel.setPreferredSize(new Dimension(300,200));
-            datePanel.setBackground(new Color(113, 74, 176));
-
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
-            Calendar calendar = new GregorianCalendar();
-            try {
-                Date date = sdf.parse( labwork.getDeadline());
-                calendar.setTime(date);
+                model.setSelected(true);
+                Properties p = new Properties();
+                p.put("text.today", "Today");
+                p.put("text.month", "Month");
+                p.put("text.year", "Year");
+                DateUtil dateUtil = new DateUtil();
+                Calendar calendar = dateUtil.convertStringInDate(labwork.getDeadline());
                 int year = calendar.get(Calendar.YEAR);
-
                 int month = calendar.get(Calendar.MONTH) + 1;
                 int day = calendar.get(Calendar.DAY_OF_MONTH);
                 model.setDate(year,month,day);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+
+            JDatePanelImpl datePanel = new JDatePanelImpl(model,p);
+                datePanel.setBackground(new Color(113, 74, 176));
 
             JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new Calendars());
                 datePicker.setBackground(new Color(113, 74, 176));

@@ -11,8 +11,9 @@ public class Main {
         GUI form = new GUI();
             form.makeForm();
 
-        /*Bot bot = new Bot();
+        Bot bot = new Bot();
+            bot.checkPreviousDates();
             bot.remindDebts();
-            bot.startBot();*/
+            bot.startBot();
     }
 }
