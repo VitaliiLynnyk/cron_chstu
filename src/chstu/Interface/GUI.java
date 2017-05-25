@@ -104,7 +104,7 @@ public class GUI {
                                           int completed = 0;
                                           int debts = 0;
                                           String numbers="1234567890";
-                                          if(numbers.contains(numberOfLabs.toString())){
+                                          if(numbers.contains(numberOfLabs.getText())){
                                               DBAdapter db = DBAdapter.getInstance();
                                               for (Labs lab : db.getAllLabs()){
                                                   if(lab.getStatus() == 1 ){
@@ -117,6 +117,9 @@ public class GUI {
                                               Tasks tasks = new Tasks();
                                               tasks.setLabs(subjectId,Integer.parseInt(numberOfLabs.getText()));
                                               progressAllLabs.setText("Всі лабораторні:"+db.getAllLabs().size());
+                                              progressСompleted = new JLabel(" Виконані:"+completed);
+                                              progressDebt = new JLabel(" В боргах:"+debts);
+
                                               drawLabs(subjectId);
                                               panelSubjectInSelectDate.repaint();
                                           }else {
