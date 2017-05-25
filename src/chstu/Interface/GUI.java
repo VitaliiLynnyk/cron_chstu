@@ -3,7 +3,6 @@ package chstu.Interface;
 import chstu.db.*;
 import chstu.timetable.DateUtil;
 import chstu.timetable.Tasks;
-import jdk.nashorn.internal.ir.Labels;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
@@ -27,9 +26,9 @@ import java.util.List;
  */
 public class GUI {
     public GUI() {
-        BottomCenterPanel = new JPanel(null);
+        bottomCenterPanel = new JPanel(null);
 
-        jScrollPanelCenterBottomPanel = new JScrollPane(BottomCenterPanel);
+        jScrollPanelCenterBottomPanel = new JScrollPane(bottomCenterPanel);
         jScrollPanelCenterBottomPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         jScrollPanelCenterBottomPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         jScrollPanelCenterBottomPanel.getVerticalScrollBar().setUnitIncrement(13);
@@ -42,7 +41,7 @@ public class GUI {
     DBAdapter dataBase = DBAdapter.getInstance();
 
     JScrollPane jScrollPanelCenterBottomPanel;
-    JPanel BottomCenterPanel;
+    JPanel bottomCenterPanel;
 
     private int subjectId = 0;
     private JLabel namePickedSubject;
@@ -153,78 +152,79 @@ public class GUI {
         TopCenterPanel.setBackground(new Color(214, 195, 244));
         projectFrame.add(TopCenterPanel);
 
-        JLabel labelSubjectNumber = new JLabel("Номер Лаб");
-        labelSubjectNumber.setBounds(265,140,200,50);
-        labelSubjectNumber.setFont(new Font("Times New Roman", Font.BOLD, 30));
-        labelSubjectNumber.setForeground(new Color(113, 74, 176));
-        projectFrame.add(labelSubjectNumber);
+        JLabel labelSubjectNumber = new JLabel("№");
+            labelSubjectNumber.setVerticalAlignment(JLabel.CENTER);
+            labelSubjectNumber.setHorizontalAlignment(JLabel.CENTER);
+            labelSubjectNumber.setBounds(250,140,35,50);
+            labelSubjectNumber.setFont(new Font("Times New Roman", Font.BOLD, 30));
+            labelSubjectNumber.setForeground(new Color(113, 74, 176));
+            projectFrame.add(labelSubjectNumber);
 
 
         JLabel labelSubjectComment = new JLabel("Коментар");
-        labelSubjectComment.setBounds(470,140,300,50);
-        labelSubjectComment.setFont(new Font("Times New Roman", Font.BOLD, 30));
-        labelSubjectComment.setForeground(new Color(113, 74, 176));
-        projectFrame.add(labelSubjectComment);
+            labelSubjectComment.setBounds(285,140,365,50);
+            labelSubjectComment.setVerticalAlignment(JLabel.CENTER);
+            labelSubjectComment.setHorizontalAlignment(JLabel.CENTER);
+            labelSubjectComment.setFont(new Font("Times New Roman", Font.BOLD, 30));
+            labelSubjectComment.setForeground(new Color(113, 74, 176));
+            projectFrame.add(labelSubjectComment);
 
         JLabel labelSubjectDate = new JLabel("Дата сдачі");
-        labelSubjectDate.setBounds(670,140,300,50);
-        labelSubjectDate.setFont(new Font("Times New Roman", Font.BOLD, 30));
-        labelSubjectDate.setForeground(new Color(113, 74, 176));
-        projectFrame.add(labelSubjectDate);
+            labelSubjectDate.setVerticalAlignment(JLabel.CENTER);
+            labelSubjectDate.setHorizontalAlignment(JLabel.CENTER);
+            labelSubjectDate.setBounds(650,140,200,50);
+            labelSubjectDate.setFont(new Font("Times New Roman", Font.BOLD, 30));
+            labelSubjectDate.setForeground(new Color(113, 74, 176));
+            projectFrame.add(labelSubjectDate);
 
 //RIGHT PANEL
 
         JPanel topRightPanel = new JPanel();
-        topRightPanel.setBounds(900,-5,300,207);
-        topRightPanel.setBackground(new Color(113, 74, 176));
-        projectFrame.add(topRightPanel);
-        UtilDateModel model = new UtilDateModel();
-        Properties p = new Properties();
-        p.put("text.today", "Today");
-        p.put("text.month", "Month");
-        p.put("text.year", "Year");
+            topRightPanel.setBounds(900,-5,300,207);
+            topRightPanel.setBackground(new Color(113, 74, 176));
+            projectFrame.add(topRightPanel);
+            UtilDateModel model = new UtilDateModel();
+            Properties p = new Properties();
+            p.put("text.today", "Today");
+            p.put("text.month", "Month");
+            p.put("text.year", "Year");
 
         JDatePanelImpl datePanel = new JDatePanelImpl(model,p);
-        datePanel.setPreferredSize(new Dimension(300,200));
-        datePanel.setBounds(900,30,300,100);
-        topRightPanel.add(datePanel);
+            datePanel.setPreferredSize(new Dimension(300,200));
+            datePanel.setBounds(900,30,300,100);
+            topRightPanel.add(datePanel);
 
         JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new Calendars());
 
-
-
-
         JLabel lbSelectSubject = new JLabel("Розклад  ");
-        lbSelectSubject.setForeground(new Color(137, 114, 176));
-        lbSelectSubject.setBounds(900,193 ,300,43);
-        lbSelectSubject.setFont(new Font("Times new roman", Font.BOLD, 25));
-        projectFrame.add(lbSelectSubject);
-
+            lbSelectSubject.setForeground(new Color(137, 114, 176));
+            lbSelectSubject.setBounds(900,193 ,300,43);
+            lbSelectSubject.setFont(new Font("Times new roman", Font.BOLD, 25));
+            projectFrame.add(lbSelectSubject);
 
         JPanel panelSubjectInSelectDate = new JPanel();
-        panelSubjectInSelectDate.setLayout(new GridLayout(5,1));
-        panelSubjectInSelectDate.setBounds(900,270,300,190);
-        panelSubjectInSelectDate.setBackground(new Color(137, 114, 176));
-        projectFrame.add(panelSubjectInSelectDate);
-
+            panelSubjectInSelectDate.setLayout(new GridLayout(5,1));
+            panelSubjectInSelectDate.setBounds(900,270,300,190);
+            panelSubjectInSelectDate.setBackground(new Color(137, 114, 176));
+            projectFrame.add(panelSubjectInSelectDate);
 
         JLabel lbSelectSubjectRightPanel = new JLabel("№");
-        lbSelectSubjectRightPanel.setForeground(new Color(137, 114, 176));
-        lbSelectSubjectRightPanel.setBounds(900,230 ,300,43);
-        lbSelectSubjectRightPanel.setFont(new Font("Times new roman", Font.BOLD, 25));
-        projectFrame.add(lbSelectSubjectRightPanel);
+            lbSelectSubjectRightPanel.setForeground(new Color(137, 114, 176));
+            lbSelectSubjectRightPanel.setBounds(900,230 ,300,43);
+            lbSelectSubjectRightPanel.setFont(new Font("Times new roman", Font.BOLD, 25));
+            projectFrame.add(lbSelectSubjectRightPanel);
 
         JLabel lbSelectNameRightPanel = new JLabel("Назва");
-        lbSelectNameRightPanel.setForeground(new Color(137, 114, 176));
-        lbSelectNameRightPanel.setBounds(1000,230 ,300,43);
-        lbSelectNameRightPanel.setFont(new Font("Times new roman", Font.BOLD, 25));
-        projectFrame.add(lbSelectNameRightPanel);
+            lbSelectNameRightPanel.setForeground(new Color(137, 114, 176));
+            lbSelectNameRightPanel.setBounds(1000,230 ,300,43);
+            lbSelectNameRightPanel.setFont(new Font("Times new roman", Font.BOLD, 25));
+            projectFrame.add(lbSelectNameRightPanel);
 
         JLabel lbSelectTypeRightPanel = new JLabel("Тип");
-        lbSelectTypeRightPanel.setForeground(new Color(137, 114, 176));
-        lbSelectTypeRightPanel.setBounds(1100,230 ,300,43);
-        lbSelectTypeRightPanel.setFont(new Font("Times new roman", Font.BOLD, 25));
-        projectFrame.add(lbSelectTypeRightPanel);
+            lbSelectTypeRightPanel.setForeground(new Color(137, 114, 176));
+            lbSelectTypeRightPanel.setBounds(1100,230 ,300,43);
+            lbSelectTypeRightPanel.setFont(new Font("Times new roman", Font.BOLD, 25));
+            projectFrame.add(lbSelectTypeRightPanel);
 
 
 
@@ -254,16 +254,16 @@ public class GUI {
                     labelNumberOfSubject.setText(subjectInSelectDate.get(i).getNumberLesson() + "");
 
                     JLabel labelNameOfSubject = new JLabel();
-                    labelNameOfSubject.setPreferredSize(new Dimension(100,30));
-                    labelNameOfSubject.setText(selectLabs.get(i).getName()+"");
-                    labelNameOfSubject.setFont(new Font("Calibri", Font.ITALIC, 26));
-                    labelNameOfSubject.setForeground(new Color(32, 16, 58));
+                        labelNameOfSubject.setPreferredSize(new Dimension(100,30));
+                        labelNameOfSubject.setText(selectLabs.get(i).getName()+"");
+                        labelNameOfSubject.setFont(new Font("Calibri", Font.ITALIC, 26));
+                        labelNameOfSubject.setForeground(new Color(32, 16, 58));
 
                     JLabel labelTypeOfSubject = new JLabel();
-                    labelTypeOfSubject.setPreferredSize(new Dimension(50,30));
-                    labelTypeOfSubject.setText(selectLabs.get(i).getType().substring(0,3)+"");
-                    labelTypeOfSubject.setFont(new Font("Calibri", Font.ITALIC, 26));
-                    labelTypeOfSubject.setForeground(new Color(32, 16, 58));
+                        labelTypeOfSubject.setPreferredSize(new Dimension(50,30));
+                        labelTypeOfSubject.setText(selectLabs.get(i).getType().substring(0,3)+"");
+                        labelTypeOfSubject.setFont(new Font("Calibri", Font.ITALIC, 26));
+                        labelTypeOfSubject.setForeground(new Color(32, 16, 58));
 
                     subjects[i].add(labelNumberOfSubject);
                     subjects[i].add(labelNameOfSubject);
@@ -283,41 +283,41 @@ public class GUI {
 
 
         JLabel lbSelectSubjectRightBottomPanel = new JLabel("№");
-        lbSelectSubjectRightBottomPanel.setForeground(new Color(137, 114, 176));
-        lbSelectSubjectRightBottomPanel.setBounds(900,490 ,300,43);
-        lbSelectSubjectRightBottomPanel.setFont(new Font("Times new roman", Font.BOLD, 25));
-        projectFrame.add(lbSelectSubjectRightBottomPanel);
+            lbSelectSubjectRightBottomPanel.setForeground(new Color(137, 114, 176));
+            lbSelectSubjectRightBottomPanel.setBounds(900,490 ,300,43);
+            lbSelectSubjectRightBottomPanel.setFont(new Font("Times new roman", Font.BOLD, 25));
+            projectFrame.add(lbSelectSubjectRightBottomPanel);
 
         JLabel lbSelectNameRightBottomPanel = new JLabel("Назва");
-        lbSelectNameRightBottomPanel.setForeground(new Color(137, 114, 176));
-        lbSelectNameRightBottomPanel.setBounds(1000,490 ,300,43);
-        lbSelectNameRightBottomPanel.setFont(new Font("Times new roman", Font.BOLD, 25));
-        projectFrame.add(lbSelectNameRightBottomPanel);
+            lbSelectNameRightBottomPanel.setForeground(new Color(137, 114, 176));
+            lbSelectNameRightBottomPanel.setBounds(1000,490 ,300,43);
+            lbSelectNameRightBottomPanel.setFont(new Font("Times new roman", Font.BOLD, 25));
+            projectFrame.add(lbSelectNameRightBottomPanel);
 
         JLabel lbSelectTypeRightBottomPanel = new JLabel("Тип");
-        lbSelectTypeRightBottomPanel.setForeground(new Color(137, 114, 176));
-        lbSelectTypeRightBottomPanel.setBounds(1100,490 ,300,43);
-        lbSelectTypeRightBottomPanel.setFont(new Font("Times new roman", Font.BOLD, 25));
-        projectFrame.add(lbSelectTypeRightBottomPanel);
+            lbSelectTypeRightBottomPanel.setForeground(new Color(137, 114, 176));
+            lbSelectTypeRightBottomPanel.setBounds(1100,490 ,300,43);
+            lbSelectTypeRightBottomPanel.setFont(new Font("Times new roman", Font.BOLD, 25));
+            projectFrame.add(lbSelectTypeRightBottomPanel);
 
 
 
 
         JPanel bottomRightPanel = new JPanel();
-        bottomRightPanel.setLayout(null);
-        bottomRightPanel.setLayout(new GridLayout(5,1));
-        bottomRightPanel.setBounds(900,530,300,200);
-        bottomRightPanel.setBackground(new Color(177, 148, 226));
-        projectFrame.add(bottomRightPanel);
+            bottomRightPanel.setLayout(null);
+            bottomRightPanel.setLayout(new GridLayout(5,1));
+            bottomRightPanel.setBounds(900,530,300,200);
+            bottomRightPanel.setBackground(new Color(177, 148, 226));
+            projectFrame.add(bottomRightPanel);
 
         DateUtil dates = new DateUtil();
         String strDate = dates.getCurrentDate();
 
         JLabel lbSubjectNextDay = new JLabel("Розклад на сьогодні");
-        lbSubjectNextDay.setForeground(new Color(137, 114, 176));
-        lbSubjectNextDay.setBounds(900,450 ,300,50);
-        lbSubjectNextDay.setFont(new Font("Times new roman", Font.BOLD, 25));
-        projectFrame.add(lbSubjectNextDay);
+            lbSubjectNextDay.setForeground(new Color(137, 114, 176));
+            lbSubjectNextDay.setBounds(900,450 ,300,50);
+            lbSubjectNextDay.setFont(new Font("Times new roman", Font.BOLD, 25));
+            projectFrame.add(lbSubjectNextDay);
 
         List <Timetable> nextDaySubjects = dataBase.getLessonsInDay(strDate);
         List<Lesson> selectLabs = dataBase.getLessonsToShow(strDate);
@@ -336,16 +336,16 @@ public class GUI {
             labelNumberOfSubject.setText(nextDaySubjects.get(i).getNumberLesson() + "");
 
             JLabel labelNameOfSubject = new JLabel();
-            labelNameOfSubject.setPreferredSize(new Dimension(100,30));
-            labelNameOfSubject.setText(selectLabs.get(i).getName()+"");
-            labelNameOfSubject.setFont(new Font("Calibri", Font.ITALIC, 26));
-            labelNameOfSubject.setForeground(new Color(32, 16, 58));
+                labelNameOfSubject.setPreferredSize(new Dimension(100,30));
+                labelNameOfSubject.setText(selectLabs.get(i).getName()+"");
+                labelNameOfSubject.setFont(new Font("Calibri", Font.ITALIC, 26));
+                labelNameOfSubject.setForeground(new Color(32, 16, 58));
 
             JLabel labelTypeOfSubject = new JLabel();
-            labelTypeOfSubject.setPreferredSize(new Dimension(50,30));
-            labelTypeOfSubject.setText(selectLabs.get(i).getType().substring(0,3)+"");
-            labelTypeOfSubject.setFont(new Font("Calibri", Font.ITALIC, 26));
-            labelTypeOfSubject.setForeground(new Color(32, 16, 58));
+                labelTypeOfSubject.setPreferredSize(new Dimension(50,30));
+                labelTypeOfSubject.setText(selectLabs.get(i).getType().substring(0,3)+"");
+                labelTypeOfSubject.setFont(new Font("Calibri", Font.ITALIC, 26));
+                labelTypeOfSubject.setForeground(new Color(32, 16, 58));
 
             subjects[i].add(labelNumberOfSubject);
             subjects[i].add(labelNameOfSubject);
@@ -383,14 +383,14 @@ public class GUI {
             isFirstShowInSession = false;
         }
         else {
-            BottomCenterPanel.removeAll();
+            bottomCenterPanel.removeAll();
         }
         List <Labs> labsForSubject = dataBase.getLabsBySubject(subject);
         Color backgroundColor = new Color(113, 74, 176);
         Border border = BorderFactory.createLineBorder(new Color(177, 148, 226),1);
 
-        BottomCenterPanel.setPreferredSize(new Dimension(650,100*labsForSubject.size()));
-        BottomCenterPanel.setBackground(Color.LIGHT_GRAY);
+        bottomCenterPanel.setPreferredSize(new Dimension(650,100*labsForSubject.size()));
+        bottomCenterPanel.setBackground(Color.LIGHT_GRAY);
 
         JPanel labPanel [] = new JPanel[labsForSubject.size()];
 
@@ -465,7 +465,7 @@ public class GUI {
             labPanel[labNumber].add(labCommentArea);
             labPanel[labNumber].add(datePicker);
             labPanel[labNumber].add(statBox);
-            BottomCenterPanel.add(labPanel[labNumber]);
+            bottomCenterPanel.add(labPanel[labNumber]);
         }
     }
 
@@ -521,8 +521,8 @@ public class GUI {
 
         switch (lab.getStatus()){
             case 0: statusColor = new Color(113, 74, 176); break;
-            case 1: statusColor = Color.green; break;
-            case 2: statusColor = Color.red;
+            case 1: statusColor = new Color(63, 171, 57); break;
+            case 2: statusColor = new Color(211, 81, 71);
         }
 
         return statusColor;
