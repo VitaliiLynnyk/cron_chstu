@@ -8,7 +8,6 @@ import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
-
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.event.DocumentEvent;
@@ -21,14 +20,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
-
 /**
  * Created by linni on 5/13/2017.
  */
 public class GUI {
     public GUI() {
         BottomCenterPanel = new JPanel(null);
-
         jScrollPanelCenterBottomPanel = new JScrollPane(BottomCenterPanel);
         jScrollPanelCenterBottomPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         jScrollPanelCenterBottomPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -37,14 +34,15 @@ public class GUI {
         jScrollPanelCenterBottomPanel.setBounds(250,190,650,500);
         projectFrame.add(jScrollPanelCenterBottomPanel);
     }
-
     JFrame projectFrame = new JFrame();
     DBAdapter dataBase = DBAdapter.getInstance();
 
     JScrollPane jScrollPanelCenterBottomPanel;
     JPanel BottomCenterPanel;
-    JLabel progress;
-
+    JLabel progressAllLabs;
+    JLabel progressСompleted;
+    JLabel progressDebt;
+    JPanel panelSubjectInSelectDate;
     private int subjectId = 0;
     private JLabel namePickedSubject;
 
@@ -72,27 +70,24 @@ public class GUI {
         programName.setFont(new Font("Chiller", Font.ITALIC, 30));
         leftTopMenu.add(programName);
 
-
-
-
-
         JPanel centerTopMenu = new JPanel();
         centerTopMenu.setLayout(null);
         centerTopMenu.setBounds(251,0,648,40);
         projectFrame.add(centerTopMenu);
 
-
         JLabel comment = new JLabel();
         comment.setText("введіть кількість лаб");
-        comment.setBounds(170,0,150,40);
+        comment.setBounds(140,0,150,40);
+        comment.setForeground(new Color(113, 74, 176));
+        comment.setFont(new Font("Times New Roman", Font.BOLD, 15));
         centerTopMenu.add(comment);
 
         namePickedSubject = new JLabel();
-        namePickedSubject.setText("NAME OF SUBJECT");
+        namePickedSubject.setText("Назва предмета");
         namePickedSubject.setBounds(10,0,150,40);
+        namePickedSubject.setForeground(new Color(113, 74, 176));
+        namePickedSubject.setFont(new Font("Times New Roman", Font.BOLD, 15));
         centerTopMenu.add(namePickedSubject);
-
-
 
         JTextField numberOfLabs = new JTextField();
         numberOfLabs.setBounds(300,10,100,20);
@@ -101,30 +96,37 @@ public class GUI {
         JButton btnOkey = new JButton("Додати");
         btnOkey.setBounds(500,10,100,20);
         centerTopMenu.add(btnOkey);
+
         btnOkey.addActionListener(new ActionListener()
                                   {
                                       public void actionPerformed(ActionEvent e)
                                       {
                                           int completed = 0;
                                           int debts = 0;
-                                          DBAdapter db = DBAdapter.getInstance();
-                                          for (Labs lab : db.getAllLabs()){
-                                              if(lab.getStatus() == 1 ){
-                                                  completed++;
+                                          String numbers="1234567890";
+                                          if(numbers.contains(numberOfLabs.toString())){
+                                              DBAdapter db = DBAdapter.getInstance();
+                                              for (Labs lab : db.getAllLabs()){
+                                                  if(lab.getStatus() == 1 ){
+                                                      completed++;
+                                                  }
+                                                  if(lab.getStatus() == 2 ){
+                                                      debts++;
+                                                  }
                                               }
-                                              if(lab.getStatus() == 2 ){
-                                                  debts++;
-                                              }
+                                              Tasks tasks = new Tasks();
+                                              tasks.setLabs(subjectId,Integer.parseInt(numberOfLabs.getText()));
+                                              progressAllLabs.setText("Всі лабораторні:"+db.getAllLabs().size());
+                                              drawLabs(subjectId);
+                                              panelSubjectInSelectDate.repaint();
+                                          }else {
+                                              numberOfLabs.setBackground(new Color(211, 81, 71));
+                                              numberOfLabs.setText("1-9");
                                           }
-                                          Tasks tasks = new Tasks();
-                                          tasks.setLabs(subjectId,Integer.parseInt(numberOfLabs.getText()));
-                                          progress.setText("Всі лабораторні:"+db.getAllLabs().size()+" Виконані:"+completed+" В боргах:"+debts);
-                                          drawLabs(subjectId);
                                       }
                                   }
         );
 //LEFT PANEL
-
         JPanel leftPanel = new JPanel();
         leftPanel.setBounds(0,80,250,600);
         leftPanel.setBackground(Color.BLACK);
@@ -157,9 +159,6 @@ public class GUI {
         labelSubjectName.setFont(new Font("Times New Roman", Font.BOLD, 30));
         projectFrame.add(labelSubjectName);
 
-
-
-
 //CENTER PANEL
         int completed = 0;
         int debts = 0;
@@ -173,11 +172,28 @@ public class GUI {
             }
         }
 
-        progress = new JLabel("Всі лабораторні:"+db.getAllLabs().size()+" Виконані:"+completed+" В боргах:"+debts);
+        progressAllLabs = new JLabel("Всі лабораторні:"+db.getAllLabs().size());
+        progressAllLabs.setFont(new Font("Times New Roman", Font.BOLD, 30));
+        progressAllLabs.setForeground(new Color(113, 74, 176));
+        progressAllLabs.setBounds(40,0,300,100);
+
+        progressСompleted = new JLabel(" Виконані:"+completed);
+        progressСompleted.setFont(new Font("Times New Roman", Font.BOLD, 30));
+        progressСompleted.setForeground(new Color(63, 171, 57));
+        progressСompleted.setBounds(300,0,300,100);
+
+        progressDebt = new JLabel(" В боргах:"+debts);
+        progressDebt.setFont(new Font("Times New Roman", Font.BOLD, 30));
+        progressDebt.setForeground(new Color(211, 81, 71));
+        progressDebt.setBounds(465,0,300,100);
+
         JPanel TopCenterPanel = new JPanel();
         TopCenterPanel.setBounds(250,40,650,100);
         TopCenterPanel.setBackground(new Color(214, 195, 244));
-        TopCenterPanel.add(progress);
+        TopCenterPanel.setLayout(null);
+        TopCenterPanel.add(progressAllLabs);
+        TopCenterPanel.add(progressСompleted);
+        TopCenterPanel.add(progressDebt);
         projectFrame.add(TopCenterPanel);
 
         JLabel labelSubjectNumber = new JLabel("Номер Лаб");
@@ -185,7 +201,6 @@ public class GUI {
         labelSubjectNumber.setFont(new Font("Times New Roman", Font.BOLD, 30));
         labelSubjectNumber.setForeground(new Color(113, 74, 176));
         projectFrame.add(labelSubjectNumber);
-
 
         JLabel labelSubjectComment = new JLabel("Коментар");
         labelSubjectComment.setBounds(470,140,300,50);
@@ -198,9 +213,7 @@ public class GUI {
         labelSubjectDate.setFont(new Font("Times New Roman", Font.BOLD, 30));
         labelSubjectDate.setForeground(new Color(113, 74, 176));
         projectFrame.add(labelSubjectDate);
-
 //RIGHT PANEL
-
         JPanel topRightPanel = new JPanel();
         topRightPanel.setBounds(900,-5,300,207);
         topRightPanel.setBackground(new Color(113, 74, 176));
@@ -218,22 +231,17 @@ public class GUI {
 
         JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new Calendars());
 
-
-
-
         JLabel lbSelectSubject = new JLabel("Розклад  ");
         lbSelectSubject.setForeground(new Color(137, 114, 176));
         lbSelectSubject.setBounds(900,193 ,300,43);
         lbSelectSubject.setFont(new Font("Times new roman", Font.BOLD, 25));
         projectFrame.add(lbSelectSubject);
 
-
-        JPanel panelSubjectInSelectDate = new JPanel();
+        panelSubjectInSelectDate = new JPanel();
         panelSubjectInSelectDate.setLayout(new GridLayout(5,1));
         panelSubjectInSelectDate.setBounds(900,270,300,190);
         panelSubjectInSelectDate.setBackground(new Color(137, 114, 176));
         projectFrame.add(panelSubjectInSelectDate);
-
 
         JLabel lbSelectSubjectRightPanel = new JLabel("№");
         lbSelectSubjectRightPanel.setForeground(new Color(137, 114, 176));
@@ -252,8 +260,6 @@ public class GUI {
         lbSelectTypeRightPanel.setBounds(1100,230 ,300,43);
         lbSelectTypeRightPanel.setFont(new Font("Times new roman", Font.BOLD, 25));
         projectFrame.add(lbSelectTypeRightPanel);
-
-
 
         datePanel.addActionListener(new ActionListener() {
             @Override
@@ -307,8 +313,6 @@ public class GUI {
                 projectFrame.add(jScrollPaneRightBottomPanel);
             }
         });
-
-
         JLabel lbSelectSubjectRightBottomPanel = new JLabel("№");
         lbSelectSubjectRightBottomPanel.setForeground(new Color(137, 114, 176));
         lbSelectSubjectRightBottomPanel.setBounds(900,490 ,300,43);
@@ -326,9 +330,6 @@ public class GUI {
         lbSelectTypeRightBottomPanel.setBounds(1100,490 ,300,43);
         lbSelectTypeRightBottomPanel.setFont(new Font("Times new roman", Font.BOLD, 25));
         projectFrame.add(lbSelectTypeRightBottomPanel);
-
-
-
 
         JPanel bottomRightPanel = new JPanel();
         bottomRightPanel.setLayout(null);
@@ -388,7 +389,6 @@ public class GUI {
 
         projectFrame.setVisible(true);
     }
-
     private ActionListener getActionForButtons(int subject){
         ActionListener action = new ActionListener() {
             @Override
@@ -400,10 +400,8 @@ public class GUI {
                 projectFrame.validate();
             }
         };
-
         return action;
     }
-
     boolean isFirstShowInSession = true;
     private void drawLabs(int subject){
         if (isFirstShowInSession) {
@@ -487,7 +485,6 @@ public class GUI {
                 statBox.setBackground(getColorForLabStatus(labwork));
                 statBox.addItemListener(getCheckBoxEvent(statBox,labwork));
 
-
             labPanel[labNumber].add(labelNumberLab);
             labPanel[labNumber].add(labCommentArea);
             labPanel[labNumber].add(datePicker);
@@ -495,7 +492,6 @@ public class GUI {
             BottomCenterPanel.add(labPanel[labNumber]);
         }
     }
-
     private ItemListener getCheckBoxEvent(JCheckBox jCheckBox ,Labs lab){
         return  new ItemListener() {
             @Override
@@ -503,12 +499,12 @@ public class GUI {
                 if (jCheckBox.isSelected()) {
                     System.out.println("selected");
                     dataBase.updateLabStatus(1,lab.getIdSubject(),lab.getLabNumber());
-                    jCheckBox.setBackground(Color.GREEN);
+                    jCheckBox.setBackground(new Color(63, 171, 57));
                 }
                 else {
                     System.out.println("not selected");
                     dataBase.updateLabStatus(0,lab.getIdSubject(),lab.getLabNumber());
-                    jCheckBox.setBackground(new Color(113, 74, 176));
+                    jCheckBox.setBackground(new Color( 211, 81, 71));
                 }
                 projectFrame.validate();
             }
@@ -548,8 +544,8 @@ public class GUI {
 
         switch (lab.getStatus()){
             case 0: statusColor = new Color(113, 74, 176); break;
-            case 1: statusColor = Color.green; break;
-            case 2: statusColor = Color.red;
+            case 1: statusColor = new Color(63, 171, 57); break;
+            case 2: statusColor = new Color(211, 81, 71 );
         }
 
         return statusColor;
