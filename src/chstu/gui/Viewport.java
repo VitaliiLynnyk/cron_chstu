@@ -5,6 +5,8 @@ import chstu.db.entity.Laboratory;
 import chstu.db.entity.Lesson;
 import chstu.db.entity.LessonTimetable;
 import chstu.db.entity.Subjects;
+import chstu.gui.utils.ViewportElements;
+import chstu.gui.utils.ViewportStyle;
 import chstu.timetable.DateUtil;
 import chstu.timetable.Tasks;
 import org.jdatepicker.impl.JDatePanelImpl;
@@ -37,6 +39,8 @@ public class Viewport {
     }
     JFrame projectFrame = new JFrame();
     DBAdapter dataBase = DBAdapter.getInstance();
+    ViewportElements vElements = new ViewportElements();
+    ViewportStyle vStyle = ViewportStyle.getInstance();
 
     JScrollPane jScrollPanelCenterBottomPanel;
     JPanel bottomCenterPanel;
@@ -66,7 +70,7 @@ public class Viewport {
 
         JLabel programName = new JLabel();
         programName.setText("CRON_CHSTU");
-        programName.setForeground(Color.yellow);
+        programName.setForeground(vStyle.colorNameYellow);
         programName.setBounds(45,0,150,40);
         programName.setFont(new Font("Chiller", Font.ITALIC, 30));
         leftTopMenu.add(programName);
@@ -418,8 +422,6 @@ public class Viewport {
             bottomCenterPanel.removeAll();
         }
         List <Laboratory> laboratoryForSubject = dataBase.getLabsBySubject(subject);
-        Color backgroundColor = new Color(113, 74, 176);
-        Border border = BorderFactory.createLineBorder(new Color(177, 148, 226),1);
 
         bottomCenterPanel.setPreferredSize(new Dimension(650,100* laboratoryForSubject.size()));
         bottomCenterPanel.setBackground(Color.LIGHT_GRAY);
@@ -428,27 +430,17 @@ public class Viewport {
 
         for(int labNumber = 0, panelHeight = 0; labNumber< laboratoryForSubject.size(); labNumber++, panelHeight += 100) {
             Laboratory labwork = laboratoryForSubject.get(labNumber);
-            labPanel[labNumber] = new JPanel(null);
-            labPanel[labNumber].setBounds(0,panelHeight,650,100);
+            labPanel[labNumber] = vElements.getPanel(null,new Rectangle(0,panelHeight,650,100),null);
 
-            JLabel labelNumberLab = new JLabel("" + labwork.getLabNumber(),SwingConstants.CENTER);
-                labelNumberLab.setBorder(border);
-                labelNumberLab.setBounds(0,0,35,100);
-                //labelNumberLab.setVerticalAlignment(SwingConstants.CENTER);
-                //labelNumberLab.setHorizontalAlignment(SwingConstants.CENTER);
-                labelNumberLab.setFont(new Font("Times New Roman", Font.ITALIC, 30));
+            JLabel labelNumberLab = new JLabel("" + labwork.getLabNumber(), SwingConstants.CENTER);
                 labelNumberLab.setOpaque(true);
-                labelNumberLab.setBackground(backgroundColor);
+                vElements.setJComponentExtendedParametr(labelNumberLab,vStyle.tnrI30,new Rectangle(0,0,35,100),vStyle.violet5,vStyle.violet1);
 
             JTextArea labCommentArea = new JTextArea();
-                labCommentArea.setFont(new Font("Times New Roman", Font.ITALIC, 30));
-                labCommentArea.setBorder(border);
-                labCommentArea.setBackground(backgroundColor);
-                labCommentArea.setBounds(35,0,365,100);
+                vElements.setJComponentExtendedParametr(labCommentArea,vStyle.tnrI30,new Rectangle(35,0,365,100),vStyle.violet5,vStyle.violet1);
                 labCommentArea.setLineWrap(true);
                 labCommentArea.setWrapStyleWord(true);
-                if(labwork.getComment().equals("")) labCommentArea.setText(" Додайте свій коментар");
-                else labCommentArea.setText(labwork.getComment());
+                labCommentArea.setText(labwork.getComment().isEmpty() ? " Додайте свій коментар" : labwork.getComment());
                 labCommentArea.getDocument().addDocumentListener(createCommentAreaListener(labCommentArea,labwork));
 
             UtilDateModel model = new UtilDateModel();
@@ -465,8 +457,6 @@ public class Viewport {
                 model.setDate(year,month,day);
 
             JDatePanelImpl datePanel = new JDatePanelImpl(model,p);
-                datePanel.setBackground(new Color(113, 74, 176));
-
             JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new Calendars());
                 datePicker.setBackground(new Color(113, 74, 176));
                 datePicker.setBounds(400,0,200,100);
@@ -474,14 +464,10 @@ public class Viewport {
                 datePicker.addActionListener(createDatePickerListener(datePicker,labwork));
 
             JCheckBox statBox = new JCheckBox();
-                statBox.setBorder(border);
-                statBox.setBackground(backgroundColor);
+                vElements.setJComponentExtendedParametr(statBox,null,new Rectangle(600,0,50,100),null,getColorForLabStatus(labwork));
                 statBox.setVerticalAlignment(SwingConstants.CENTER);
                 statBox.setHorizontalAlignment(SwingConstants.CENTER);
-                statBox.setBounds(600,0,50,100);
                 statBox.setSelected(labwork.getStatus() == 1);
-                statBox.setBackground(getColorForLabStatus(labwork));
-                statBox.setForeground(Color.RED);
                 statBox.addItemListener(getCheckBoxEvent(statBox,labwork));
 
             labPanel[labNumber].add(labelNumberLab);

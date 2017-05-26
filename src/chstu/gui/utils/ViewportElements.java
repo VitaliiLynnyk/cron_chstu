@@ -1,5 +1,7 @@
 package chstu.gui.utils;
 
+import chstu.gui.Viewport;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -7,6 +9,10 @@ import java.awt.*;
  * Created by Ar-Krav on 26.05.2017.
  */
 public class ViewportElements {
+    public ViewportElements() {
+
+    }
+    ViewportStyle vStyle = ViewportStyle.getInstance();
 
     public JPanel getPanel(LayoutManager layout, Rectangle boundsValue, Color backgroundColor){
         JPanel panel = new JPanel(layout);
@@ -17,9 +23,7 @@ public class ViewportElements {
 
     public JLabel getLable(String text, Font font, Rectangle boundsValue, Color foregroundColor){
         JLabel label = new JLabel(text,SwingConstants.CENTER);
-            label.setBounds(boundsValue);
-            label.setForeground(foregroundColor);
-            label.setFont(font);
+            setJComponentCommonParametr(label,font,boundsValue,foregroundColor);
         return label;
     }
 
@@ -31,10 +35,15 @@ public class ViewportElements {
         return scrollPane;
     }
 
-    public void setJComponentCommonParametr(JComponent component, Font font, Rectangle boundsValue, Color foregroundColor, Color backgroundColor){
+    public void setJComponentExtendedParametr(JComponent component, Font font, Rectangle boundsValue, Color foregroundColor, Color backgroundColor){
+        setJComponentCommonParametr(component,font,boundsValue,foregroundColor);
+        component.setBorder(vStyle.border);
+        component.setBackground(backgroundColor);
+    }
+
+    public void setJComponentCommonParametr(JComponent component, Font font, Rectangle boundsValue, Color foregroundColor){
         component.setBounds(boundsValue);
         component.setForeground(foregroundColor);
-        component.setBackground(backgroundColor);
         component.setFont(font);
     }
 }
