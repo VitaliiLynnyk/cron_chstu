@@ -1,14 +1,13 @@
 package chstu;
 
-import chstu.Interface.GUI;
+import chstu.gui.Viewport;
 import chstu.timetable.Bot;
-import chstu.timetable.Tasks;
 
 
 public class CronChstu {
 
     public static void main(String[] args) {
-        GUI form = new GUI();
+        Viewport form = new Viewport();
             form.makeForm();
 
         Bot bot = new Bot();

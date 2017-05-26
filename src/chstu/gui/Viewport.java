@@ -1,4 +1,4 @@
-package chstu.Interface;
+package chstu.gui;
 
 import chstu.db.*;
 import chstu.db.entity.Laboratory;
@@ -24,10 +24,10 @@ import java.util.List;
 /**
  * Created by linni on 5/13/2017.
  */
-public class GUI {
-    public GUI() {
-        BottomCenterPanel = new JPanel(null);
-        jScrollPanelCenterBottomPanel = new JScrollPane(BottomCenterPanel);
+public class Viewport {
+    public Viewport() {
+        bottomCenterPanel = new JPanel(null);
+        jScrollPanelCenterBottomPanel = new JScrollPane(bottomCenterPanel);
         jScrollPanelCenterBottomPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         jScrollPanelCenterBottomPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         jScrollPanelCenterBottomPanel.getVerticalScrollBar().setUnitIncrement(13);
@@ -39,7 +39,7 @@ public class GUI {
     DBAdapter dataBase = DBAdapter.getInstance();
 
     JScrollPane jScrollPanelCenterBottomPanel;
-    JPanel BottomCenterPanel;
+    JPanel bottomCenterPanel;
     JLabel progressAllLabs;
     JLabel progressСompleted;
     JLabel progressDebt;
@@ -197,21 +197,27 @@ public class GUI {
         TopCenterPanel.add(progressDebt);
         projectFrame.add(TopCenterPanel);
 
-        JLabel labelSubjectNumber = new JLabel("Номер Лаб");
-        labelSubjectNumber.setBounds(265,140,200,50);
+        JLabel labelSubjectNumber = new JLabel("№");
+        labelSubjectNumber.setBounds(250,140,35,50);
+        labelSubjectNumber.setVerticalAlignment(JLabel.CENTER);
+        labelSubjectNumber.setHorizontalAlignment(JLabel.CENTER);
         labelSubjectNumber.setFont(new Font("Times New Roman", Font.BOLD, 30));
         labelSubjectNumber.setForeground(new Color(113, 74, 176));
         projectFrame.add(labelSubjectNumber);
 
         JLabel labelSubjectComment = new JLabel("Коментар");
-        labelSubjectComment.setBounds(470,140,300,50);
+        labelSubjectComment.setBounds(285,140,365,50);
         labelSubjectComment.setFont(new Font("Times New Roman", Font.BOLD, 30));
+        labelSubjectComment.setVerticalAlignment(JLabel.CENTER);
+        labelSubjectComment.setHorizontalAlignment(JLabel.CENTER);
         labelSubjectComment.setForeground(new Color(113, 74, 176));
         projectFrame.add(labelSubjectComment);
 
         JLabel labelSubjectDate = new JLabel("Дата сдачі");
-        labelSubjectDate.setBounds(670,140,300,50);
+        labelSubjectDate.setBounds(650,140,200,50);
         labelSubjectDate.setFont(new Font("Times New Roman", Font.BOLD, 30));
+        labelSubjectDate.setVerticalAlignment(JLabel.CENTER);
+        labelSubjectDate.setHorizontalAlignment(JLabel.CENTER);
         labelSubjectDate.setForeground(new Color(113, 74, 176));
         projectFrame.add(labelSubjectDate);
 //RIGHT PANEL
@@ -409,14 +415,14 @@ public class GUI {
             isFirstShowInSession = false;
         }
         else {
-            BottomCenterPanel.removeAll();
+            bottomCenterPanel.removeAll();
         }
         List <Laboratory> laboratoryForSubject = dataBase.getLabsBySubject(subject);
         Color backgroundColor = new Color(113, 74, 176);
         Border border = BorderFactory.createLineBorder(new Color(177, 148, 226),1);
 
-        BottomCenterPanel.setPreferredSize(new Dimension(650,100* laboratoryForSubject.size()));
-        BottomCenterPanel.setBackground(Color.LIGHT_GRAY);
+        bottomCenterPanel.setPreferredSize(new Dimension(650,100* laboratoryForSubject.size()));
+        bottomCenterPanel.setBackground(Color.LIGHT_GRAY);
 
         JPanel labPanel [] = new JPanel[laboratoryForSubject.size()];
 
@@ -481,7 +487,7 @@ public class GUI {
             labPanel[labNumber].add(labCommentArea);
             labPanel[labNumber].add(datePicker);
             labPanel[labNumber].add(statBox);
-            BottomCenterPanel.add(labPanel[labNumber]);
+            bottomCenterPanel.add(labPanel[labNumber]);
         }
     }
     private ItemListener getCheckBoxEvent(JCheckBox jCheckBox ,Laboratory lab){
@@ -496,7 +502,7 @@ public class GUI {
                 else {
                     System.out.println("not selected");
                     dataBase.updateLabStatus(0,lab.getIdSubject(),lab.getLabNumber());
-                    jCheckBox.setBackground(new Color( 211, 81, 71));
+                    jCheckBox.setBackground(new Color( 113, 74, 176));
                 }
                 projectFrame.validate();
             }
