@@ -431,11 +431,11 @@ public class Viewport {
             labPanel[labNumber] = new JPanel(null);
             labPanel[labNumber].setBounds(0,panelHeight,650,100);
 
-            JLabel labelNumberLab = new JLabel("" + labwork.getLabNumber());
+            JLabel labelNumberLab = new JLabel("" + labwork.getLabNumber(),SwingConstants.CENTER);
                 labelNumberLab.setBorder(border);
                 labelNumberLab.setBounds(0,0,35,100);
-                labelNumberLab.setVerticalAlignment(JLabel.CENTER);
-                labelNumberLab.setHorizontalAlignment(JLabel.CENTER);
+                //labelNumberLab.setVerticalAlignment(SwingConstants.CENTER);
+                //labelNumberLab.setHorizontalAlignment(SwingConstants.CENTER);
                 labelNumberLab.setFont(new Font("Times New Roman", Font.ITALIC, 30));
                 labelNumberLab.setOpaque(true);
                 labelNumberLab.setBackground(backgroundColor);
