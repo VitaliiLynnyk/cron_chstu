@@ -8,16 +8,33 @@ import java.awt.*;
  */
 public class ViewportElements {
 
-    public JLabel getLable(String text, Font font, BoundValue boundsValue, Color foregroundColor){
+    public JPanel getPanel(LayoutManager layout, Rectangle boundsValue, Color backgroundColor){
+        JPanel panel = new JPanel(layout);
+            panel.setBounds(boundsValue);
+            panel.setBackground(backgroundColor);
+        return panel;
+    }
+
+    public JLabel getLable(String text, Font font, Rectangle boundsValue, Color foregroundColor){
         JLabel label = new JLabel(text,SwingConstants.CENTER);
-            label.setBounds(boundsValue.getX(),boundsValue.getY(),boundsValue.getWidth(),boundsValue.getHeight());
+            label.setBounds(boundsValue);
             label.setForeground(foregroundColor);
-            label.setBounds(boundsValue.getX(),boundsValue.getY(),boundsValue.getWidth(),boundsValue.getHeight());
             label.setFont(font);
         return label;
     }
 
-    /*public JTextArea getTextArea(){
+    public JScrollPane getScrollPane(Component component, Rectangle boundsValue){
+        JScrollPane scrollPane = new JScrollPane(component,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+            scrollPane.getVerticalScrollBar().setUnitIncrement(13);
+            scrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(0,0));
+            scrollPane.setBounds(boundsValue);
+        return scrollPane;
+    }
 
-    }*/
+    public void setJComponentCommonParametr(JComponent component, Font font, Rectangle boundsValue, Color foregroundColor, Color backgroundColor){
+        component.setBounds(boundsValue);
+        component.setForeground(foregroundColor);
+        component.setBackground(backgroundColor);
+        component.setFont(font);
+    }
 }

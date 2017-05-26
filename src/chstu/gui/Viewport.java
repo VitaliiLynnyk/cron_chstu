@@ -140,7 +140,7 @@ public class Viewport {
             btn.get(i).setPreferredSize(new Dimension(100,100));
             leftPanel.setLayout(new GridLayout(0,1));
             btn.get(i).setFont(new Font("Calibri", Font.ITALIC, 26));
-            btn.get(i).setVerticalAlignment(JLabel.CENTER);
+            btn.get(i).setVerticalAlignment(SwingConstants.CENTER);
             btn.get(i).setBorderPainted(false);
             btn.get(i).setFocusPainted(false);
             btn.get(i).setBackground(new Color(177, 148, 226));
@@ -481,6 +481,7 @@ public class Viewport {
                 statBox.setBounds(600,0,50,100);
                 statBox.setSelected(labwork.getStatus() == 1);
                 statBox.setBackground(getColorForLabStatus(labwork));
+                statBox.setForeground(Color.RED);
                 statBox.addItemListener(getCheckBoxEvent(statBox,labwork));
 
             labPanel[labNumber].add(labelNumberLab);
