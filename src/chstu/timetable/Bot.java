@@ -1,6 +1,10 @@
 package chstu.timetable;
 
 import chstu.db.*;
+import chstu.db.entity.Laboratory;
+import chstu.db.entity.BellsTimetable;
+import chstu.db.entity.Subjects;
+import chstu.db.entity.LessonTimetable;
 
 import java.awt.*;
 import java.util.*;
@@ -16,8 +20,8 @@ public class Bot {
     private DBAdapter dataBase;
     private DateUtil dateUtil = new DateUtil();
 
-    private List<Labs> labsForPassToday;
-    private List<Timetable> lessonForPass;
+    private List<Laboratory> laboratoryForPassToday;
+    private List<LessonTimetable> lessonForPass;
     private int inProcess = 0, debt = 2;
 
 
@@ -27,10 +31,10 @@ public class Bot {
             return;
         }
 
-        for(Timetable lesson : lessonForPass){
+        for(LessonTimetable lesson : lessonForPass){
             if(dateUtil.getCurrentTimeMS() >= getLessonTimeInMS(lesson.getNumberLesson())){
                 System.out.println(getLessonTimeInMS(lesson.getNumberLesson()));
-                for(Labs lab : labsForPassToday){
+                for(Laboratory lab : laboratoryForPassToday){
                     if (lab.getIdSubject() == lesson.getIdSubject() && lab.getStatus() == inProcess) {
                         dataBase.updateLabStatus(debt,lab.getIdSubject(),lab.getLabNumber());
                         showNotification("Сьогодні мала бути здана лабораторна робота!" +
@@ -49,15 +53,15 @@ public class Bot {
     }
 
     private boolean haveUserDutyForToday() {
-        labsForPassToday = dataBase.getLabsByDay(dateUtil.getCurrentDate());
+        laboratoryForPassToday = dataBase.getLabsByDay(dateUtil.getCurrentDate());
         lessonForPass = new ArrayList<>();
 
-        if (labsForPassToday.size() == 0) {
+        if (laboratoryForPassToday.size() == 0) {
             System.out.println("No subject for pass today!");
             return false;
         }
 
-        for(Labs lab : labsForPassToday){
+        for(Laboratory lab : laboratoryForPassToday){
             lessonForPass.addAll(dataBase.getLessonsForSubjectInDay(lab.getIdSubject(),lab.getDeadline()));
         }
 
@@ -66,9 +70,9 @@ public class Bot {
 
     private long getLessonTimeInMS(int numberLesson){
         long lessonTime = -1;
-        List<LessonTimetable> endOfLessons = dataBase.getLessonTimetable();
+        List<BellsTimetable> endOfLessons = dataBase.getLessonTimetable();
 
-        for (LessonTimetable timetable : endOfLessons){
+        for (BellsTimetable timetable : endOfLessons){
             if (timetable.getId() == numberLesson){
                 lessonTime = dateUtil.convertTimeInMS(timetable.getEndLesson());
             }
@@ -77,7 +81,7 @@ public class Bot {
         return lessonTime;
     }
 
-    private String getLabSubjectName(Labs lab){
+    private String getLabSubjectName(Laboratory lab){
         List<Subjects> subjectsList = dataBase.getAllSubjects();
 
         for (Subjects subject : subjectsList){
@@ -120,11 +124,11 @@ public class Bot {
     }
 
     public void checkPreviousDates(){
-        List<Labs> allLAbs = dataBase.getAllLabs();
+        List<Laboratory> allLAbs = dataBase.getAllLabs();
         Calendar currentDate = dateUtil.convertStringInDate(dateUtil.getCurrentDate());
         Calendar labDate;
 
-        for(Labs lab : allLAbs){
+        for(Laboratory lab : allLAbs){
             labDate = dateUtil.convertStringInDate(lab.getDeadline());
             if (currentDate.after(labDate) && lab.getStatus() != 1){
                 dataBase.updateLabStatus(2,lab.getIdSubject(),lab.getLabNumber());

@@ -5,7 +5,7 @@ import chstu.timetable.Bot;
 import chstu.timetable.Tasks;
 
 
-public class Main {
+public class CronChstu {
 
     public static void main(String[] args) {
         GUI form = new GUI();

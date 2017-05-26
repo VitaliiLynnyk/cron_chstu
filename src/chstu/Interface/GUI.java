@@ -1,9 +1,12 @@
 package chstu.Interface;
 
 import chstu.db.*;
+import chstu.db.entity.Laboratory;
+import chstu.db.entity.Lesson;
+import chstu.db.entity.LessonTimetable;
+import chstu.db.entity.Subjects;
 import chstu.timetable.DateUtil;
 import chstu.timetable.Tasks;
-import jdk.nashorn.internal.ir.Labels;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
@@ -16,8 +19,6 @@ import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.*;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
 /**
@@ -106,7 +107,7 @@ public class GUI {
                                           String numbers="1234567890";
                                           if(numbers.contains(numberOfLabs.toString())){
                                               DBAdapter db = DBAdapter.getInstance();
-                                              for (Labs lab : db.getAllLabs()){
+                                              for (Laboratory lab : db.getAllLabs()){
                                                   if(lab.getStatus() == 1 ){
                                                       completed++;
                                                   }
@@ -163,7 +164,7 @@ public class GUI {
         int completed = 0;
         int debts = 0;
         DBAdapter db = DBAdapter.getInstance();
-        for (Labs lab : db.getAllLabs()){
+        for (Laboratory lab : db.getAllLabs()){
             if(lab.getStatus() == 1 ){
                 completed++;
             }
@@ -265,7 +266,7 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String selectedDate = datePicker.getJFormattedTextField().getText();
-                List<Timetable> subjectInSelectDate = dataBase.getLessonsInDay(selectedDate);
+                List<LessonTimetable> subjectInSelectDate = dataBase.getLessonsInDay(selectedDate);
                 List<Lesson> selectLabs = dataBase.getLessonsToShow(selectedDate);
                 JLabel [] selectDayTimetableLable = new JLabel[subjectInSelectDate.size()];
 
@@ -347,7 +348,7 @@ public class GUI {
         lbSubjectNextDay.setFont(new Font("Times new roman", Font.BOLD, 25));
         projectFrame.add(lbSubjectNextDay);
 
-        List <Timetable> nextDaySubjects = dataBase.getLessonsInDay(strDate);
+        List <LessonTimetable> nextDaySubjects = dataBase.getLessonsInDay(strDate);
         List<Lesson> selectLabs = dataBase.getLessonsToShow(strDate);
         JPanel subjects [] = new JPanel[3];
         bottomRightPanel.setLayout(new GridLayout(5,3));
@@ -410,17 +411,17 @@ public class GUI {
         else {
             BottomCenterPanel.removeAll();
         }
-        List <Labs> labsForSubject = dataBase.getLabsBySubject(subject);
+        List <Laboratory> laboratoryForSubject = dataBase.getLabsBySubject(subject);
         Color backgroundColor = new Color(113, 74, 176);
         Border border = BorderFactory.createLineBorder(new Color(177, 148, 226),1);
 
-        BottomCenterPanel.setPreferredSize(new Dimension(650,100*labsForSubject.size()));
+        BottomCenterPanel.setPreferredSize(new Dimension(650,100* laboratoryForSubject.size()));
         BottomCenterPanel.setBackground(Color.LIGHT_GRAY);
 
-        JPanel labPanel [] = new JPanel[labsForSubject.size()];
+        JPanel labPanel [] = new JPanel[laboratoryForSubject.size()];
 
-        for(int labNumber = 0, panelHeight = 0; labNumber<labsForSubject.size(); labNumber++, panelHeight += 100) {
-            Labs labwork = labsForSubject.get(labNumber);
+        for(int labNumber = 0, panelHeight = 0; labNumber< laboratoryForSubject.size(); labNumber++, panelHeight += 100) {
+            Laboratory labwork = laboratoryForSubject.get(labNumber);
             labPanel[labNumber] = new JPanel(null);
             labPanel[labNumber].setBounds(0,panelHeight,650,100);
 
@@ -483,7 +484,7 @@ public class GUI {
             BottomCenterPanel.add(labPanel[labNumber]);
         }
     }
-    private ItemListener getCheckBoxEvent(JCheckBox jCheckBox ,Labs lab){
+    private ItemListener getCheckBoxEvent(JCheckBox jCheckBox ,Laboratory lab){
         return  new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
@@ -502,7 +503,7 @@ public class GUI {
         };
     }
 
-    private ActionListener createDatePickerListener(JDatePickerImpl datePicker ,Labs lab){
+    private ActionListener createDatePickerListener(JDatePickerImpl datePicker ,Laboratory lab){
         return  new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -511,7 +512,7 @@ public class GUI {
         };
     }
 
-    private DocumentListener createCommentAreaListener(JTextArea commentArea, Labs lab){
+    private DocumentListener createCommentAreaListener(JTextArea commentArea, Laboratory lab){
         return new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
@@ -530,7 +531,7 @@ public class GUI {
         };
     }
 
-    private Color getColorForLabStatus(Labs lab){
+    private Color getColorForLabStatus(Laboratory lab){
         Color statusColor = null;
 
         switch (lab.getStatus()){
