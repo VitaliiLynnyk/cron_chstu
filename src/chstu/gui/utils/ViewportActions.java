@@ -32,14 +32,12 @@ public class ViewportActions {
             @Override
             public void itemStateChanged(ItemEvent e) {
                 if (jCheckBox.isSelected()) {
-                    System.out.println("selected");
                     dataBase.updateLabStatus(1,lab.getIdSubject(),lab.getLabNumber());
-                    jCheckBox.setBackground(new Color(63, 171, 57));
+                    jCheckBox.setBackground(vStyle.colorPassedGreen);
                 }
                 else {
-                    System.out.println("not selected");
                     dataBase.updateLabStatus(0,lab.getIdSubject(),lab.getLabNumber());
-                    jCheckBox.setBackground(new Color( 113, 74, 176));
+                    jCheckBox.setBackground(vStyle.colorViolet1);
                 }
             }
         };
@@ -75,9 +73,9 @@ public class ViewportActions {
 
     public Color getColorForLabStatus(Laboratory lab){
         switch (lab.getStatus()){
-            case 0: return vStyle.violet1;
-            case 1: return vStyle.passedGreen;
-            case 2: return vStyle.debtRed;
+            case 0: return vStyle.colorViolet1;
+            case 1: return vStyle.colorPassedGreen;
+            case 2: return vStyle.colorDebtRed;
         }
         return null;
     }

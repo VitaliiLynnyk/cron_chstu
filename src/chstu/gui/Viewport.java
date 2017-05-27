@@ -7,12 +7,12 @@ import chstu.db.entity.LessonTimetable;
 import chstu.db.entity.Subject;
 import chstu.gui.utils.ViewportActions;
 import chstu.gui.utils.ViewportElements;
+import chstu.gui.utils.ViewportLogic;
 import chstu.gui.utils.ViewportStyle;
 import chstu.timetable.DateUtil;
 import chstu.timetable.Tasks;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
-import org.jdatepicker.impl.UtilDateModel;
 
 import javax.swing.*;
 
@@ -29,12 +29,14 @@ public class Viewport {
         bottomCenterPanel = new JPanel(null);
         jScrollPanelCenterBottomPanel = vElements.getScrollPane(bottomCenterPanel,new Rectangle(250,190,650,500));
         projectFrame.add(jScrollPanelCenterBottomPanel);
+        bottomCenterPanel.setBackground(vStyle.colorMPanelGray);
     }
     JFrame projectFrame = new JFrame();
     DBAdapter dataBase = DBAdapter.getInstance();
     ViewportElements vElements = new ViewportElements();
     ViewportStyle vStyle = ViewportStyle.getInstance();
     ViewportActions vActions = new ViewportActions();
+    ViewportLogic vLogic = new ViewportLogic();
 
     JScrollPane jScrollPanelCenterBottomPanel;
     JPanel bottomCenterPanel;
@@ -56,19 +58,19 @@ public class Viewport {
         projectFrame.setBackground(Color.white);
 
 //topMenu
-        JPanel leftTopMenu = vElements.getPanel(null,new Rectangle(0,0,250,40),vStyle.violet1);
+        JPanel leftTopMenu = vElements.getPanel(null,new Rectangle(0,0,250,40),vStyle.colorViolet1);
         projectFrame.add(leftTopMenu);
 
-        JLabel programName = vElements.getLable("CRON_CHSTU",vStyle.chl30,new Rectangle(45,0,150,40),vStyle.colorNameYellow);
+        JLabel programName = vElements.getLable("CRON_CHSTU",vStyle.fontChl30,new Rectangle(45,0,150,40),vStyle.colorNameYellow);
         leftTopMenu.add(programName);
 
-        JPanel centerTopMenu = vElements.getPanel(null,new Rectangle(251,0,648,40),vStyle.violet5);
+        JPanel centerTopMenu = vElements.getPanel(null,new Rectangle(251,0,648,40),vStyle.colorViolet5);
         projectFrame.add(centerTopMenu);
 
-        JLabel comment = vElements.getLable("введіть кількість лаб",vStyle.tnr15,new Rectangle(140,0,150,40),vStyle.violet1);
+        JLabel comment = vElements.getLable("введіть кількість лаб",vStyle.fontTnr15,new Rectangle(140,0,150,40),vStyle.colorViolet1);
         centerTopMenu.add(comment);
 
-        namePickedSubject = vElements.getLable("Назва ",vStyle.tnr15,new Rectangle(10,0,150,40),vStyle.violet1);
+        namePickedSubject = vElements.getLable("Назва ",vStyle.fontTnr15,new Rectangle(10,0,150,40),vStyle.colorViolet1);
         centerTopMenu.add(namePickedSubject);
 
         JTextField numberOfLabs = new JTextField();
@@ -102,7 +104,7 @@ public class Viewport {
                                               progressСompleted.setText(" Виконані:"+completed);
                                               progressDebt.setText(" В боргах:"+debts);
 
-                                              drawLabs(subjectId);
+                                              vLogic.showLabs(bottomCenterPanel,subjectId);
                                               panelSubjectInSelectDate.repaint();
                                           }else {
                                               numberOfLabs.setBackground(new Color(211, 81, 71));
@@ -133,7 +135,7 @@ public class Viewport {
         JScrollPane jScrollPaneLeftPanel = vElements.getScrollPane(leftPanel,new Rectangle(0,80,250,600));
         projectFrame.add(jScrollPaneLeftPanel);
 
-        JLabel labelSubjectName = vElements.getLable("Предмети",vStyle.tnrB30,new Rectangle(0,40,250,40),vStyle.violet1);
+        JLabel labelSubjectName = vElements.getLable("Предмети",vStyle.fontTnrB30,new Rectangle(0,40,250,40),vStyle.colorViolet1);
         projectFrame.add(labelSubjectName);
 
 //CENTER PANEL
@@ -148,26 +150,26 @@ public class Viewport {
                 debts++;
             }
         }
-        progressAllLabs = vElements.getLable("Всі лабораторні:"+db.getAllLabs().size(),vStyle.tnrB30,new Rectangle(0,0,300,100),vStyle.violet1);
-        progressСompleted = vElements.getLable(" Виконані:"+completed,vStyle.tnrB30,new Rectangle(220,0,300,100),vStyle.passedGreen);
-        progressDebt = vElements.getLable(" В боргах:"+debts,vStyle.tnrB30,new Rectangle(390,0,300,100),vStyle.debtRed);
+        progressAllLabs = vElements.getLable("Всі лабораторні:"+db.getAllLabs().size(),vStyle.fontTnrB30,new Rectangle(0,0,300,100),vStyle.colorViolet1);
+        progressСompleted = vElements.getLable(" Виконані:"+completed,vStyle.fontTnrB30,new Rectangle(220,0,300,100),vStyle.colorPassedGreen);
+        progressDebt = vElements.getLable(" В боргах:"+debts,vStyle.fontTnrB30,new Rectangle(390,0,300,100),vStyle.colorDebtRed);
 
-        JPanel topCenterPanel = vElements.getPanel(null,new Rectangle(250,40,650,100),vStyle.violet5);
+        JPanel topCenterPanel = vElements.getPanel(null,new Rectangle(250,40,650,100),vStyle.colorViolet5);
         topCenterPanel.add(progressAllLabs);
         topCenterPanel.add(progressСompleted);
         topCenterPanel.add(progressDebt);
         projectFrame.add(topCenterPanel);
 
-        JLabel labelSubjectNumber = vElements.getLable("№",vStyle.tnrB30,new Rectangle(250,140,35,50),vStyle.violet1);
+        JLabel labelSubjectNumber = vElements.getLable("№",vStyle.fontTnrB30,new Rectangle(250,140,35,50),vStyle.colorViolet1);
         projectFrame.add(labelSubjectNumber);
 
-        JLabel labelSubjectComment = vElements.getLable("Коментар",vStyle.tnrB30,new Rectangle(285,140,365,50),vStyle.violet1);
+        JLabel labelSubjectComment = vElements.getLable("Коментар",vStyle.fontTnrB30,new Rectangle(285,140,365,50),vStyle.colorViolet1);
         projectFrame.add(labelSubjectComment);
 
-        JLabel labelSubjectDate = vElements.getLable("Дата сдачі",vStyle.tnrB30,new Rectangle(650,140,200,50),vStyle.violet1);
+        JLabel labelSubjectDate = vElements.getLable("Дата сдачі",vStyle.fontTnrB30,new Rectangle(650,140,200,50),vStyle.colorViolet1);
         projectFrame.add(labelSubjectDate);
 //RIGHT PANEL
-        JPanel topRightPanel = vElements.getPanel(new GridLayout(1,0),new Rectangle(900,0,300,190),vStyle.violet1);
+        JPanel topRightPanel = vElements.getPanel(new GridLayout(1,0),new Rectangle(900,0,300,190),vStyle.colorViolet1);
         projectFrame.add(topRightPanel);
 
 
@@ -177,19 +179,19 @@ public class Viewport {
 
         JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new Calendars());
 
-        JLabel lbSelectSubject = vElements.getLable("Розклад  ",vStyle.tnr25,new Rectangle(900,193 ,300,43),vStyle.violet4);
+        JLabel lbSelectSubject = vElements.getLable("Розклад  ",vStyle.fontTnr25,new Rectangle(900,193 ,300,43),vStyle.colorViolet4);
         projectFrame.add(lbSelectSubject);
 
-        panelSubjectInSelectDate = vElements.getPanel(null,new Rectangle(900,270,300,190),vStyle.violet4);
+        panelSubjectInSelectDate = vElements.getPanel(null,new Rectangle(900,270,300,190),vStyle.colorViolet4);
         projectFrame.add(panelSubjectInSelectDate);
 
-        JLabel lbSelectSubjectRightPanel = vElements.getLable("№",vStyle.tnr25,new Rectangle(805,230 ,300,43),vStyle.violet4);
+        JLabel lbSelectSubjectRightPanel = vElements.getLable("№",vStyle.fontTnr25,new Rectangle(805,230 ,300,43),vStyle.colorViolet4);
         projectFrame.add(lbSelectSubjectRightPanel);
 
-        JLabel lbSelectNameRightPanel = vElements.getLable("Назва",vStyle.tnr25,new Rectangle(900,230 ,300,43),vStyle.violet4);
+        JLabel lbSelectNameRightPanel = vElements.getLable("Назва",vStyle.fontTnr25,new Rectangle(900,230 ,300,43),vStyle.colorViolet4);
         projectFrame.add(lbSelectNameRightPanel);
 
-        JLabel lbSelectTypeRightPanel = vElements.getLable("Тип",vStyle.tnr25,new Rectangle(1000,230 ,300,43),vStyle.violet4);
+        JLabel lbSelectTypeRightPanel = vElements.getLable("Тип",vStyle.fontTnr25,new Rectangle(1000,230 ,300,43),vStyle.colorViolet4);
         projectFrame.add(lbSelectTypeRightPanel);
 
         datePanel.addActionListener(new ActionListener() {
@@ -209,11 +211,11 @@ public class Viewport {
                     subjects[subjectNumber].setLayout(null);
                     subjects[subjectNumber].setBackground(new Color(137, 114, 176));
 
-                    JLabel labelNumberOfSubject = vElements.getLable(subjectInSelectDate.get(subjectNumber).getNumberLesson() + "",vStyle.clb26,new Rectangle(0,0,100,25),Color.black);
+                    JLabel labelNumberOfSubject = vElements.getLable(subjectInSelectDate.get(subjectNumber).getNumberLesson() + "",vStyle.fofntClb26,new Rectangle(0,0,100,25),Color.black);
 
-                    JLabel labelNameOfSubject = vElements.getLable(selectLabs.get(subjectNumber).getName()+"",vStyle.clb26,new Rectangle(100,0,100,25),Color.black);
+                    JLabel labelNameOfSubject = vElements.getLable(selectLabs.get(subjectNumber).getName()+"",vStyle.fofntClb26,new Rectangle(100,0,100,25),Color.black);
 
-                    JLabel labelTypeOfSubject = vElements.getLable(selectLabs.get(subjectNumber).getType().substring(0,3)+"",vStyle.clb26,new Rectangle(200,0,100,25),Color.black);
+                    JLabel labelTypeOfSubject = vElements.getLable(selectLabs.get(subjectNumber).getType().substring(0,3)+"",vStyle.fofntClb26,new Rectangle(200,0,100,25),Color.black);
 
                     subjects[subjectNumber].add(labelNumberOfSubject);
                     subjects[subjectNumber].add(labelNameOfSubject);
@@ -224,23 +226,23 @@ public class Viewport {
         });
 
 
-        JLabel lbSelectSubjectRightBottomPanel  = vElements.getLable("№",vStyle.tnr25,new Rectangle(805,490 ,300,43),vStyle.violet4);
+        JLabel lbSelectSubjectRightBottomPanel  = vElements.getLable("№",vStyle.fontTnr25,new Rectangle(805,490 ,300,43),vStyle.colorViolet4);
         projectFrame.add(lbSelectSubjectRightBottomPanel);
 
-        JLabel lbSelectNameRightBottomPanel = vElements.getLable("Назва",vStyle.tnr25,new Rectangle(900,490 ,300,43),vStyle.violet4);
+        JLabel lbSelectNameRightBottomPanel = vElements.getLable("Назва",vStyle.fontTnr25,new Rectangle(900,490 ,300,43),vStyle.colorViolet4);
         projectFrame.add(lbSelectNameRightBottomPanel);
 
-        JLabel lbSelectTypeRightBottomPanel = vElements.getLable("Тип",vStyle.tnr25,new Rectangle(1000,490 ,300,43),vStyle.violet4);
+        JLabel lbSelectTypeRightBottomPanel = vElements.getLable("Тип",vStyle.fontTnr25,new Rectangle(1000,490 ,300,43),vStyle.colorViolet4);
         projectFrame.add(lbSelectTypeRightBottomPanel);
 
-        JPanel bottomRightPanel = vElements.getPanel(null,new Rectangle(900,530,300,200),vStyle.violet2);
+        JPanel bottomRightPanel = vElements.getPanel(null,new Rectangle(900,530,300,200),vStyle.colorViolet2);
         bottomRightPanel.setLayout(new GridLayout(5,1));
         projectFrame.add(bottomRightPanel);
 
         DateUtil dates = new DateUtil();
         String strDate = dates.getCurrentDate();
 
-        JLabel lbSubjectNextDay = vElements.getLable("Розклад на сьогодні",vStyle.tnr25,new Rectangle(900,450 ,300,50),vStyle.violet4);
+        JLabel lbSubjectNextDay = vElements.getLable("Розклад на сьогодні",vStyle.fontTnr25,new Rectangle(900,450 ,300,50),vStyle.colorViolet4);
         projectFrame.add(lbSubjectNextDay);
 
         List <LessonTimetable> nextDaySubjects = dataBase.getLessonsInDay(strDate);
@@ -252,11 +254,11 @@ public class Viewport {
             subjects[subjectNumber].setLayout(new GridLayout(0,3));
             subjects[subjectNumber].setBackground(new Color(177, 148, 226));
 
-            JLabel labelNumberOfSubject = vElements.getLable(nextDaySubjects.get(subjectNumber).getNumberLesson() + "",vStyle.clb26,new Rectangle(0,0,100,25),Color.black);
+            JLabel labelNumberOfSubject = vElements.getLable(nextDaySubjects.get(subjectNumber).getNumberLesson() + "",vStyle.fofntClb26,new Rectangle(0,0,100,25),Color.black);
 
-            JLabel labelNameOfSubject = vElements.getLable(selectLabs.get(subjectNumber).getName()+"",vStyle.clb26,new Rectangle(100,0,100,25),Color.black);
+            JLabel labelNameOfSubject = vElements.getLable(selectLabs.get(subjectNumber).getName()+"",vStyle.fofntClb26,new Rectangle(100,0,100,25),Color.black);
 
-            JLabel labelTypeOfSubject = vElements.getLable(selectLabs.get(subjectNumber).getType().substring(0,3)+"",vStyle.clb26,new Rectangle(200,0,100,25),Color.black);
+            JLabel labelTypeOfSubject = vElements.getLable(selectLabs.get(subjectNumber).getType().substring(0,3)+"",vStyle.fofntClb26,new Rectangle(200,0,100,25),Color.black);
 
             subjects[subjectNumber].add(labelNumberOfSubject);
             subjects[subjectNumber].add(labelNameOfSubject);
@@ -274,7 +276,7 @@ public class Viewport {
         ActionListener action = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                drawLabs(subject);
+                vLogic.showLabs(bottomCenterPanel,subjectId);
                 subjectId = subject;
 
                 namePickedSubject.setText(dataBase.getAllSubjects().get(subject-1).getName());
@@ -282,67 +284,5 @@ public class Viewport {
             }
         };
         return action;
-    }
-
-    boolean isFirstShowInSession = true;
-    private void drawLabs(int subject){
-        if (isFirstShowInSession) {
-            isFirstShowInSession = false;
-        }
-        else {
-            bottomCenterPanel.removeAll();
-        }
-        List <Laboratory> laboratoryForSubject = dataBase.getLabsBySubject(subject);
-
-        bottomCenterPanel.setPreferredSize(new Dimension(650,100* laboratoryForSubject.size()));
-        bottomCenterPanel.setBackground(Color.LIGHT_GRAY);
-
-        JPanel labPanel [] = new JPanel[laboratoryForSubject.size()];
-
-        for(int labNumber = 0, panelHeight = 0; labNumber< laboratoryForSubject.size(); labNumber++, panelHeight += 100) {
-            Laboratory labwork = laboratoryForSubject.get(labNumber);
-            labPanel[labNumber] = vElements.getPanel(null,new Rectangle(0,panelHeight,650,100),null);
-
-            JLabel labelNumberLab = new JLabel("" + labwork.getLabNumber(), SwingConstants.CENTER);
-                labelNumberLab.setOpaque(true);
-                vElements.setJComponentExtendedProperties(labelNumberLab,vStyle.tnrI30,new Rectangle(0,0,35,100),vStyle.violet5,vStyle.violet1);
-
-            JTextArea labCommentArea = new JTextArea();
-                vElements.setJComponentExtendedProperties(labCommentArea,vStyle.tnrI30,new Rectangle(35,0,365,100),vStyle.violet5,vStyle.violet1);
-                labCommentArea.setLineWrap(true);
-                labCommentArea.setWrapStyleWord(true);
-                labCommentArea.setText(labwork.getComment().isEmpty() ? " Додайте свій коментар" : labwork.getComment());
-                labCommentArea.getDocument().addDocumentListener(vActions.createCommentAreaListener(labCommentArea,labwork));
-
-
-
-            JDatePanelImpl datePanel = vElements.getDataPanel();
-                DateUtil dateUtil = new DateUtil();
-                Calendar calendar = dateUtil.convertStringInDate(labwork.getDeadline());
-                int year = calendar.get(Calendar.YEAR);
-                int month = calendar.get(Calendar.MONTH) + 1;
-                int day = calendar.get(Calendar.DAY_OF_MONTH);
-                datePanel.getModel().setDate(year,month,day);
-
-
-            JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new Calendars());
-                datePicker.setBackground(new Color(113, 74, 176));
-                datePicker.setBounds(400,0,200,100);
-                datePicker.setToolTipText(labwork.getDeadline());
-                datePicker.addActionListener(vActions.createDatePickerListener(datePicker,labwork));
-
-            JCheckBox statBox = new JCheckBox();
-                vElements.setJComponentExtendedProperties(statBox,null,new Rectangle(600,0,50,100),null,vActions.getColorForLabStatus(labwork));
-                statBox.setVerticalAlignment(SwingConstants.CENTER);
-                statBox.setHorizontalAlignment(SwingConstants.CENTER);
-                statBox.setSelected(labwork.getStatus() == 1);
-                statBox.addItemListener(vActions.getCheckBoxEvent(statBox,labwork));
-
-            labPanel[labNumber].add(labelNumberLab);
-            labPanel[labNumber].add(labCommentArea);
-            labPanel[labNumber].add(datePicker);
-            labPanel[labNumber].add(statBox);
-            bottomCenterPanel.add(labPanel[labNumber]);
-        }
     }
 }
