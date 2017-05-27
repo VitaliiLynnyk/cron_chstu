@@ -1,31 +1,55 @@
-package chstu.Interface;
+package chstu.gui;
 
 import chstu.db.*;
+import chstu.db.entity.Laboratory;
+import chstu.db.entity.Lesson;
+import chstu.db.entity.LessonTimetable;
+import chstu.db.entity.Subjects;
+import chstu.gui.utils.ViewportElements;
+import chstu.gui.utils.ViewportStyle;
 import chstu.timetable.DateUtil;
-import jdk.nashorn.internal.ir.Labels;
-import org.jdatepicker.JDatePicker;
+import chstu.timetable.Tasks;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
-
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import java.awt.*;
 import java.awt.event.*;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
-
 /**
  * Created by linni on 5/13/2017.
  */
-public class GUI {
+public class Viewport {
+    public Viewport() {
+        bottomCenterPanel = new JPanel(null);
+        jScrollPanelCenterBottomPanel = new JScrollPane(bottomCenterPanel);
+        jScrollPanelCenterBottomPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        jScrollPanelCenterBottomPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        jScrollPanelCenterBottomPanel.getVerticalScrollBar().setUnitIncrement(13);
+        jScrollPanelCenterBottomPanel.getVerticalScrollBar().setPreferredSize(new Dimension(0,0));
+        jScrollPanelCenterBottomPanel.setBounds(250,190,650,500);
+        projectFrame.add(jScrollPanelCenterBottomPanel);
+    }
     JFrame projectFrame = new JFrame();
     DBAdapter dataBase = DBAdapter.getInstance();
+    ViewportElements vElements = new ViewportElements();
+    ViewportStyle vStyle = ViewportStyle.getInstance();
+
+    JScrollPane jScrollPanelCenterBottomPanel;
+    JPanel bottomCenterPanel;
+    JLabel progressAllLabs;
+    JLabel progressСompleted;
+    JLabel progressDebt;
+    JPanel panelSubjectInSelectDate;
+    private int subjectId = 0;
+    private JLabel namePickedSubject;
 
     public void makeForm(){
         projectFrame.setSize(1200,700);
@@ -46,42 +70,68 @@ public class GUI {
 
         JLabel programName = new JLabel();
         programName.setText("CRON_CHSTU");
-        programName.setForeground(Color.yellow);
+        programName.setForeground(vStyle.colorNameYellow);
         programName.setBounds(45,0,150,40);
         programName.setFont(new Font("Chiller", Font.ITALIC, 30));
         leftTopMenu.add(programName);
-
-
-
-
 
         JPanel centerTopMenu = new JPanel();
         centerTopMenu.setLayout(null);
         centerTopMenu.setBounds(251,0,648,40);
         projectFrame.add(centerTopMenu);
 
-
         JLabel comment = new JLabel();
         comment.setText("введіть кількість лаб");
-        comment.setBounds(300,0,150,40);
+        comment.setBounds(140,0,150,40);
+        comment.setForeground(new Color(113, 74, 176));
+        comment.setFont(new Font("Times New Roman", Font.BOLD, 15));
         centerTopMenu.add(comment);
 
-        JLabel namePickedSubject = new JLabel();
-        namePickedSubject.setText("NAME OF SUBJECT");
+        namePickedSubject = new JLabel();
+        namePickedSubject.setText("Назва предмета");
         namePickedSubject.setBounds(10,0,150,40);
+        namePickedSubject.setForeground(new Color(113, 74, 176));
+        namePickedSubject.setFont(new Font("Times New Roman", Font.BOLD, 15));
         centerTopMenu.add(namePickedSubject);
 
+        JTextField numberOfLabs = new JTextField();
+        numberOfLabs.setBounds(300,10,100,20);
+        centerTopMenu.add(numberOfLabs);
 
-
-        JTextField numberOfSubject = new JTextField();
-        numberOfSubject.setBounds(170,10,100,20);
-        centerTopMenu.add(numberOfSubject);
-
-        JButton btnOkey = new JButton("OK");
+        JButton btnOkey = new JButton("Додати");
         btnOkey.setBounds(500,10,100,20);
         centerTopMenu.add(btnOkey);
-//LEFT PANEL
 
+        btnOkey.addActionListener(new ActionListener()
+                                  {
+                                      public void actionPerformed(ActionEvent e)
+                                      {
+                                          int completed = 0;
+                                          int debts = 0;
+                                          String numbers="1234567890";
+                                          if(numbers.contains(numberOfLabs.toString())){
+                                              DBAdapter db = DBAdapter.getInstance();
+                                              for (Laboratory lab : db.getAllLabs()){
+                                                  if(lab.getStatus() == 1 ){
+                                                      completed++;
+                                                  }
+                                                  if(lab.getStatus() == 2 ){
+                                                      debts++;
+                                                  }
+                                              }
+                                              Tasks tasks = new Tasks();
+                                              tasks.setLabs(subjectId,Integer.parseInt(numberOfLabs.getText()));
+                                              progressAllLabs.setText("Всі лабораторні:"+db.getAllLabs().size());
+                                              drawLabs(subjectId);
+                                              panelSubjectInSelectDate.repaint();
+                                          }else {
+                                              numberOfLabs.setBackground(new Color(211, 81, 71));
+                                              numberOfLabs.setText("1-9");
+                                          }
+                                      }
+                                  }
+        );
+//LEFT PANEL
         JPanel leftPanel = new JPanel();
         leftPanel.setBounds(0,80,250,600);
         leftPanel.setBackground(Color.BLACK);
@@ -94,7 +144,7 @@ public class GUI {
             btn.get(i).setPreferredSize(new Dimension(100,100));
             leftPanel.setLayout(new GridLayout(0,1));
             btn.get(i).setFont(new Font("Calibri", Font.ITALIC, 26));
-            btn.get(i).setVerticalAlignment(JLabel.CENTER);
+            btn.get(i).setVerticalAlignment(SwingConstants.CENTER);
             btn.get(i).setBorderPainted(false);
             btn.get(i).setFocusPainted(false);
             btn.get(i).setBackground(new Color(177, 148, 226));
@@ -104,6 +154,7 @@ public class GUI {
 
         JScrollPane jScrollPaneLeftPanel = new JScrollPane(leftPanel,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                 JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        jScrollPaneLeftPanel.getVerticalScrollBar().setUnitIncrement(13);
         jScrollPaneLeftPanel.getVerticalScrollBar().setPreferredSize(new Dimension(0,0));
         jScrollPaneLeftPanel.setBounds(0,80,250,600);
         projectFrame.add(jScrollPaneLeftPanel);
@@ -113,36 +164,67 @@ public class GUI {
         labelSubjectName.setFont(new Font("Times New Roman", Font.BOLD, 30));
         projectFrame.add(labelSubjectName);
 
-
-
-
 //CENTER PANEL
+        int completed = 0;
+        int debts = 0;
+        DBAdapter db = DBAdapter.getInstance();
+        for (Laboratory lab : db.getAllLabs()){
+            if(lab.getStatus() == 1 ){
+                completed++;
+            }
+            if(lab.getStatus() == 2 ){
+                debts++;
+            }
+        }
+
+        progressAllLabs = new JLabel("Всі лабораторні:"+db.getAllLabs().size());
+        progressAllLabs.setFont(new Font("Times New Roman", Font.BOLD, 30));
+        progressAllLabs.setForeground(new Color(113, 74, 176));
+        progressAllLabs.setBounds(40,0,300,100);
+
+        progressСompleted = new JLabel(" Виконані:"+completed);
+        progressСompleted.setFont(new Font("Times New Roman", Font.BOLD, 30));
+        progressСompleted.setForeground(new Color(63, 171, 57));
+        progressСompleted.setBounds(300,0,300,100);
+
+        progressDebt = new JLabel(" В боргах:"+debts);
+        progressDebt.setFont(new Font("Times New Roman", Font.BOLD, 30));
+        progressDebt.setForeground(new Color(211, 81, 71));
+        progressDebt.setBounds(465,0,300,100);
+
         JPanel TopCenterPanel = new JPanel();
         TopCenterPanel.setBounds(250,40,650,100);
         TopCenterPanel.setBackground(new Color(214, 195, 244));
+        TopCenterPanel.setLayout(null);
+        TopCenterPanel.add(progressAllLabs);
+        TopCenterPanel.add(progressСompleted);
+        TopCenterPanel.add(progressDebt);
         projectFrame.add(TopCenterPanel);
 
-        JLabel labelSubjectNumber = new JLabel("Номер Лаб");
-        labelSubjectNumber.setBounds(265,140,200,50);
+        JLabel labelSubjectNumber = new JLabel("№");
+        labelSubjectNumber.setBounds(250,140,35,50);
+        labelSubjectNumber.setVerticalAlignment(JLabel.CENTER);
+        labelSubjectNumber.setHorizontalAlignment(JLabel.CENTER);
         labelSubjectNumber.setFont(new Font("Times New Roman", Font.BOLD, 30));
         labelSubjectNumber.setForeground(new Color(113, 74, 176));
         projectFrame.add(labelSubjectNumber);
 
-
         JLabel labelSubjectComment = new JLabel("Коментар");
-        labelSubjectComment.setBounds(470,140,300,50);
+        labelSubjectComment.setBounds(285,140,365,50);
         labelSubjectComment.setFont(new Font("Times New Roman", Font.BOLD, 30));
+        labelSubjectComment.setVerticalAlignment(JLabel.CENTER);
+        labelSubjectComment.setHorizontalAlignment(JLabel.CENTER);
         labelSubjectComment.setForeground(new Color(113, 74, 176));
         projectFrame.add(labelSubjectComment);
 
         JLabel labelSubjectDate = new JLabel("Дата сдачі");
-        labelSubjectDate.setBounds(670,140,300,50);
+        labelSubjectDate.setBounds(650,140,200,50);
         labelSubjectDate.setFont(new Font("Times New Roman", Font.BOLD, 30));
+        labelSubjectDate.setVerticalAlignment(JLabel.CENTER);
+        labelSubjectDate.setHorizontalAlignment(JLabel.CENTER);
         labelSubjectDate.setForeground(new Color(113, 74, 176));
         projectFrame.add(labelSubjectDate);
-
 //RIGHT PANEL
-
         JPanel topRightPanel = new JPanel();
         topRightPanel.setBounds(900,-5,300,207);
         topRightPanel.setBackground(new Color(113, 74, 176));
@@ -160,22 +242,17 @@ public class GUI {
 
         JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new Calendars());
 
-
-
-
         JLabel lbSelectSubject = new JLabel("Розклад  ");
         lbSelectSubject.setForeground(new Color(137, 114, 176));
         lbSelectSubject.setBounds(900,193 ,300,43);
         lbSelectSubject.setFont(new Font("Times new roman", Font.BOLD, 25));
         projectFrame.add(lbSelectSubject);
 
-
-        JPanel panelSubjectInSelectDate = new JPanel();
+        panelSubjectInSelectDate = new JPanel();
         panelSubjectInSelectDate.setLayout(new GridLayout(5,1));
         panelSubjectInSelectDate.setBounds(900,270,300,190);
         panelSubjectInSelectDate.setBackground(new Color(137, 114, 176));
         projectFrame.add(panelSubjectInSelectDate);
-
 
         JLabel lbSelectSubjectRightPanel = new JLabel("№");
         lbSelectSubjectRightPanel.setForeground(new Color(137, 114, 176));
@@ -195,13 +272,11 @@ public class GUI {
         lbSelectTypeRightPanel.setFont(new Font("Times new roman", Font.BOLD, 25));
         projectFrame.add(lbSelectTypeRightPanel);
 
-
-
         datePanel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String selectedDate = datePicker.getJFormattedTextField().getText();
-                List<Timetable> subjectInSelectDate = dataBase.getLessonsInDay(selectedDate);
+                List<LessonTimetable> subjectInSelectDate = dataBase.getLessonsInDay(selectedDate);
                 List<Lesson> selectLabs = dataBase.getLessonsToShow(selectedDate);
                 JLabel [] selectDayTimetableLable = new JLabel[subjectInSelectDate.size()];
 
@@ -243,13 +318,12 @@ public class GUI {
                 JScrollPane jScrollPaneRightBottomPanel = new JScrollPane(panelSubjectInSelectDate,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                         JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
                 jScrollPaneRightBottomPanel.getVerticalScrollBar().setPreferredSize(new Dimension(0,0));
+                jScrollPaneRightBottomPanel.getVerticalScrollBar().setUnitIncrement(13);
                 jScrollPaneRightBottomPanel.setBounds(900,270,300,190);
                 panelSubjectInSelectDate.revalidate();
                 projectFrame.add(jScrollPaneRightBottomPanel);
             }
         });
-
-
         JLabel lbSelectSubjectRightBottomPanel = new JLabel("№");
         lbSelectSubjectRightBottomPanel.setForeground(new Color(137, 114, 176));
         lbSelectSubjectRightBottomPanel.setBounds(900,490 ,300,43);
@@ -268,9 +342,6 @@ public class GUI {
         lbSelectTypeRightBottomPanel.setFont(new Font("Times new roman", Font.BOLD, 25));
         projectFrame.add(lbSelectTypeRightBottomPanel);
 
-
-
-
         JPanel bottomRightPanel = new JPanel();
         bottomRightPanel.setLayout(null);
         bottomRightPanel.setLayout(new GridLayout(5,1));
@@ -287,7 +358,7 @@ public class GUI {
         lbSubjectNextDay.setFont(new Font("Times new roman", Font.BOLD, 25));
         projectFrame.add(lbSubjectNextDay);
 
-        List <Timetable> nextDaySubjects = dataBase.getLessonsInDay(strDate);
+        List <LessonTimetable> nextDaySubjects = dataBase.getLessonsInDay(strDate);
         List<Lesson> selectLabs = dataBase.getLessonsToShow(strDate);
         JPanel subjects [] = new JPanel[3];
         bottomRightPanel.setLayout(new GridLayout(5,3));
@@ -329,121 +400,139 @@ public class GUI {
 
         projectFrame.setVisible(true);
     }
-
     private ActionListener getActionForButtons(int subject){
         ActionListener action = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 drawLabs(subject);
-                System.out.println(subject);
+                subjectId = subject;
+
+                namePickedSubject.setText(dataBase.getAllSubjects().get(subject-1).getName());
                 projectFrame.validate();
             }
         };
-
         return action;
     }
-
+    boolean isFirstShowInSession = true;
     private void drawLabs(int subject){
-        JPanel BottomCenterPanel = new JPanel();
-        BottomCenterPanel.setBounds(250,190,650,500);
-        BottomCenterPanel.setBackground(Color.LIGHT_GRAY);
-        projectFrame.add(BottomCenterPanel);
-        GridLayout gbl = new GridLayout(dataBase.getLabsBySubject(subject).size(),5);
-        BottomCenterPanel.setLayout(gbl);
+        if (isFirstShowInSession) {
+            isFirstShowInSession = false;
+        }
+        else {
+            bottomCenterPanel.removeAll();
+        }
+        List <Laboratory> laboratoryForSubject = dataBase.getLabsBySubject(subject);
 
-        JPanel labs [] = new JPanel[dataBase.getLabsBySubject(subject).size()];
+        bottomCenterPanel.setPreferredSize(new Dimension(650,100* laboratoryForSubject.size()));
+        bottomCenterPanel.setBackground(Color.LIGHT_GRAY);
 
-        List <Labs> ar = dataBase.getLabsBySubject(subject);
+        JPanel labPanel [] = new JPanel[laboratoryForSubject.size()];
 
-        for(int i=0; i<ar.size(); i++) {
-            labs[i] = new JPanel();
-            labs[i].setLayout(new GridLayout(0,4));
+        for(int labNumber = 0, panelHeight = 0; labNumber< laboratoryForSubject.size(); labNumber++, panelHeight += 100) {
+            Laboratory labwork = laboratoryForSubject.get(labNumber);
+            labPanel[labNumber] = vElements.getPanel(null,new Rectangle(0,panelHeight,650,100),null);
 
-            JLabel lb = new JLabel("             " + ar.get(i).getLabNumber());
-            lb.setFont(new Font("Times New Roman", Font.ITALIC, 30));
-            lb.setOpaque(true);
-            lb.setBackground(new Color(113, 74, 176));
-            lb.setPreferredSize(new Dimension(100,100));
+            JLabel labelNumberLab = new JLabel("" + labwork.getLabNumber(), SwingConstants.CENTER);
+                labelNumberLab.setOpaque(true);
+                vElements.setJComponentExtendedParametr(labelNumberLab,vStyle.tnrI30,new Rectangle(0,0,35,100),vStyle.violet5,vStyle.violet1);
 
-            JTextArea textArea = new JTextArea();
-            textArea.setLineWrap(true);
-            textArea.setWrapStyleWord(true);
-            if(ar.get(i).getComment() == null) textArea.setText("Додайте свій коментар");
-            else textArea.setText(ar.get(i).getComment());
-            textArea.setFont(new Font("Times New Roman", Font.ITALIC, 30));
-            textArea.setBackground(new Color(113, 74, 176));
-
-            textArea.setPreferredSize(new Dimension(200,50));
-
-            //JTextField txField = new JTextField(ar.get(i).getDeadline());
+            JTextArea labCommentArea = new JTextArea();
+                vElements.setJComponentExtendedParametr(labCommentArea,vStyle.tnrI30,new Rectangle(35,0,365,100),vStyle.violet5,vStyle.violet1);
+                labCommentArea.setLineWrap(true);
+                labCommentArea.setWrapStyleWord(true);
+                labCommentArea.setText(labwork.getComment().isEmpty() ? " Додайте свій коментар" : labwork.getComment());
+                labCommentArea.getDocument().addDocumentListener(createCommentAreaListener(labCommentArea,labwork));
 
             UtilDateModel model = new UtilDateModel();
-            model.setSelected(true);
-            Properties p = new Properties();
-            p.put("text.today", "Today");
-            p.put("text.month", "Month");
-            p.put("text.year", "Year");
-
-            JDatePanelImpl datePanel = new JDatePanelImpl(model,p);
-            datePanel.setPreferredSize(new Dimension(300,200));
-            datePanel.setBackground(new Color(113, 74, 176));
-
-
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
-
-            Calendar calendar = new GregorianCalendar();
-            try {
-
-                Date date = sdf.parse( ar.get(i).getDeadline());
-                calendar.setTime(date);
+                model.setSelected(true);
+                Properties p = new Properties();
+                p.put("text.today", "Today");
+                p.put("text.month", "Month");
+                p.put("text.year", "Year");
+                DateUtil dateUtil = new DateUtil();
+                Calendar calendar = dateUtil.convertStringInDate(labwork.getDeadline());
                 int year = calendar.get(Calendar.YEAR);
-
                 int month = calendar.get(Calendar.MONTH) + 1;
                 int day = calendar.get(Calendar.DAY_OF_MONTH);
                 model.setDate(year,month,day);
-                System.out.println(date);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
 
+            JDatePanelImpl datePanel = new JDatePanelImpl(model,p);
             JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new Calendars());
-            datePicker.setBackground(new Color(113, 74, 176));
-            datePicker.setPreferredSize(new Dimension(200,50));
-            datePicker.setToolTipText(ar.get(i).getDeadline());
-
-
-            datePicker.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    String selectedDate = datePicker.getJFormattedTextField().getText();
-                    System.out.println(selectedDate);
-                }
-            });
-
+                datePicker.setBackground(new Color(113, 74, 176));
+                datePicker.setBounds(400,0,200,100);
+                datePicker.setToolTipText(labwork.getDeadline());
+                datePicker.addActionListener(createDatePickerListener(datePicker,labwork));
 
             JCheckBox statBox = new JCheckBox();
-            statBox.setBackground(new Color(113, 74, 176));
-            statBox.setVerticalAlignment(SwingConstants.CENTER);
-            statBox.setPreferredSize(new Dimension(50,100));
+                vElements.setJComponentExtendedParametr(statBox,null,new Rectangle(600,0,50,100),null,getColorForLabStatus(labwork));
+                statBox.setVerticalAlignment(SwingConstants.CENTER);
+                statBox.setHorizontalAlignment(SwingConstants.CENTER);
+                statBox.setSelected(labwork.getStatus() == 1);
+                statBox.addItemListener(getCheckBoxEvent(statBox,labwork));
 
-            statBox.addItemListener(new ItemListener() {
-                @Override
-                public void itemStateChanged(ItemEvent e) {
-
-                }
-            });
-
-            labs[i].add(lb);
-            labs[i].add(textArea);
-            labs[i].add(datePicker);
-            labs[i].add(statBox);
-            BottomCenterPanel.add(labs[i]);
+            labPanel[labNumber].add(labelNumberLab);
+            labPanel[labNumber].add(labCommentArea);
+            labPanel[labNumber].add(datePicker);
+            labPanel[labNumber].add(statBox);
+            bottomCenterPanel.add(labPanel[labNumber]);
         }
-        JScrollPane jScrollPanelCenterBottomPanel = new JScrollPane(BottomCenterPanel,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        jScrollPanelCenterBottomPanel.getVerticalScrollBar().setPreferredSize(new Dimension(0,0));
-        jScrollPanelCenterBottomPanel.setBounds(250,190,650,500);
-        projectFrame.add(jScrollPanelCenterBottomPanel);
+    }
+    private ItemListener getCheckBoxEvent(JCheckBox jCheckBox ,Laboratory lab){
+        return  new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (jCheckBox.isSelected()) {
+                    System.out.println("selected");
+                    dataBase.updateLabStatus(1,lab.getIdSubject(),lab.getLabNumber());
+                    jCheckBox.setBackground(new Color(63, 171, 57));
+                }
+                else {
+                    System.out.println("not selected");
+                    dataBase.updateLabStatus(0,lab.getIdSubject(),lab.getLabNumber());
+                    jCheckBox.setBackground(new Color( 113, 74, 176));
+                }
+                projectFrame.validate();
+            }
+        };
+    }
 
+    private ActionListener createDatePickerListener(JDatePickerImpl datePicker ,Laboratory lab){
+        return  new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dataBase.updateLabDeadline(datePicker.getJFormattedTextField().getText(),lab.getIdSubject(),lab.getLabNumber());
+            }
+        };
+    }
+
+    private DocumentListener createCommentAreaListener(JTextArea commentArea, Laboratory lab){
+        return new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                dataBase.updateLabComment(commentArea.getText(),lab.getIdSubject(),lab.getLabNumber());
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                dataBase.updateLabComment(commentArea.getText(),lab.getIdSubject(),lab.getLabNumber());
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                dataBase.updateLabComment(commentArea.getText(),lab.getIdSubject(),lab.getLabNumber());
+            }
+        };
+    }
+
+    private Color getColorForLabStatus(Laboratory lab){
+        Color statusColor = null;
+
+        switch (lab.getStatus()){
+            case 0: statusColor = new Color(113, 74, 176); break;
+            case 1: statusColor = new Color(63, 171, 57); break;
+            case 2: statusColor = new Color(211, 81, 71 );
+        }
+
+        return statusColor;
     }
 }

@@ -1,5 +1,7 @@
 package chstu.db;
 
+import chstu.db.entity.*;
+
 import java.sql.*;
 import java.util.*;
 
@@ -35,8 +37,8 @@ public class DBAdapter {
         Methods for get ALL fields from tables of DB
     */
 
-    public List<LessonTimetable> getLessonTimetable(){
-        List<LessonTimetable> timetableList = new ArrayList<>();
+    public List<BellsTimetable> getLessonTimetable(){
+        List<BellsTimetable> timetableList = new ArrayList<>();
         String sqlTask = "SELECT * FROM lesson_timetable;";
 
         try{
@@ -45,7 +47,7 @@ public class DBAdapter {
                 int id = result.getInt("id");
                 String endLesson = result.getString("end_lesson");
 
-                timetableList.add(new LessonTimetable(id,endLesson));
+                timetableList.add(new BellsTimetable(id,endLesson));
             }
 
         }
@@ -59,7 +61,7 @@ public class DBAdapter {
 
     public List<Subjects> getAllSubjects(){
         List<Subjects> subjectsList = new ArrayList<>();
-        String sqlTask = "SELECT * FROM subjects;";
+        String sqlTask = "SELECT * FROM subjects ORDER BY id;";
 
         try{
             ResultSet result = statement.executeQuery(sqlTask);
@@ -105,37 +107,38 @@ public class DBAdapter {
         Methods for working with "labs" table
     */
 
-    public List<Labs> getAllLabs(){
+    public List<Laboratory> getAllLabs(){
         String sqlTask = "SELECT * FROM labs;";
         return getListOfLabs(sqlTask);
     }
 
-    public List<Labs> getDebtLabs(){
+    public List<Laboratory> getDebtLabs(){
         String sqlTask = "SELECT * FROM labs" +
                 " WHERE status = 2;";
         return getListOfLabs(sqlTask);
     }
 
-    public List<Labs> getLabsByDaySubject(String deadline, int subject){
+    public List<Laboratory> getLabsByDaySubject(String deadline, int subject){
         String sqlTask = "SELECT * FROM labs" +
                 " WHERE deadline = '" + deadline + "' AND id_subject = " + subject +";";
         return getListOfLabs(sqlTask);
     }
 
-    public List<Labs> getLabsByDay(String deadline){
+    public List<Laboratory> getLabsByDay(String deadline){
         String sqlTask = "SELECT * FROM labs" +
-                         " WHERE deadline = '" + deadline + "';";
+                " WHERE deadline = '" + deadline + "';";
         return getListOfLabs(sqlTask);
     }
 
-    public List<Labs> getLabsBySubject(int subject){
+    public List<Laboratory> getLabsBySubject(int subject){
         String sqlTask = "SELECT * FROM labs" +
-                " WHERE id_subject = '" + subject + "';";
+                " WHERE id_subject = '" + subject + "'" +
+                " ORDER BY lab_number;";
         return getListOfLabs(sqlTask);
     }
 
-    private List<Labs> getListOfLabs(String sqlTask){
-        List<Labs> labsList = new ArrayList<>();
+    private List<Laboratory> getListOfLabs(String sqlTask){
+        List<Laboratory> laboratoryList = new ArrayList<>();
 
         try{
             ResultSet result = statement.executeQuery(sqlTask);
@@ -147,20 +150,20 @@ public class DBAdapter {
                 String deadline = result.getString("deadline");
                 int status = result.getInt("status");
 
-                labsList.add(new Labs(id,idSubject,labNumber,comment,deadline,status));
+                laboratoryList.add(new Laboratory(id,idSubject,labNumber,comment,deadline,status));
             }
         }
         catch (Exception e){
             e.printStackTrace();
-            System.out.println("Labs can`t be get!");
+            System.out.println("Laboratory can`t be get!");
         }
 
-        return labsList;
+        return laboratoryList;
     }
 
     public void setNewLab(int id, int idSubject, int labNumber, String comment, String deadline, int status){
         String sqlTask = "INSERT INTO labs" +
-                         " VALUES (" + id + ", " + idSubject + ", " + labNumber + ", '" + comment + "', '" + deadline + "', " + status + ");";
+                " VALUES (" + id + ", " + idSubject + ", " + labNumber + ", '" + comment + "', '" + deadline + "', " + status + ");";
 
         try{
             statement.executeUpdate(sqlTask);
@@ -174,14 +177,14 @@ public class DBAdapter {
 
     public void updateLabComment(String newComment, int idSubject, int labNumber){
         String sqlTask = "UPDATE labs" +
-                         " SET comment = " + newComment +
-                         " WHERE id_subject = " + idSubject + " AND lab_number = " + labNumber + ";";
+                " SET comment = '" + newComment + "'" +
+                " WHERE id_subject = " + idSubject + " AND lab_number = " + labNumber + ";";
         updateLabInfo(sqlTask);
     }
 
     public void updateLabDeadline(String newDeadline, int idSubject, int labNumber){
         String sqlTask = "UPDATE labs" +
-                " SET deadline = " + newDeadline +
+                " SET deadline = '" + newDeadline + "'" +
                 " WHERE id_subject = " + idSubject + " AND lab_number = " + labNumber + ";";
         updateLabInfo(sqlTask);
     }
@@ -208,13 +211,13 @@ public class DBAdapter {
         Methods for working with timetable.
     */
 
-    public List<Timetable> getLessonsForSubjectInDay(int subject, String dayDate){
+    public List<LessonTimetable> getLessonsForSubjectInDay(int subject, String dayDate){
         String sqlTask = "SELECT * FROM timetable" +
-                         " WHERE id_subject = " + subject + " AND lesson_date = '" + dayDate + "';";
+                " WHERE id_subject = " + subject + " AND lesson_date = '" + dayDate + "';";
         return getTimetable(sqlTask);
     }
 
-    public List<Timetable> getLessonsInDay(String dayDate){
+    public List<LessonTimetable> getLessonsInDay(String dayDate){
         String sqlTask = "SELECT * FROM timetable" +
                 " WHERE lesson_date = '" + dayDate + "';";
         return getTimetable(sqlTask);
@@ -223,9 +226,9 @@ public class DBAdapter {
     public List<Lesson> getLessonsToShow(String dayDate){
         List<Lesson> lessonsForShow = new ArrayList<>();
         String sqlTask = "SELECT number_lesson, subjects.name AS sName, type_lesson.name AS tlName FROM timetable" +
-                         " INNER JOIN subjects ON timetable.id_subject = subjects.ID" +
-                         " INNER JOIN type_lesson ON timetable.type_lesson = type_lesson.id" +
-                         " WHERE lesson_date = '" + dayDate + "';";
+                " INNER JOIN subjects ON timetable.id_subject = subjects.ID" +
+                " INNER JOIN type_lesson ON timetable.type_lesson = type_lesson.id" +
+                " WHERE lesson_date = '" + dayDate + "';";
 
         try{
             ResultSet result = statement.executeQuery(sqlTask);
@@ -243,8 +246,8 @@ public class DBAdapter {
         }
         return lessonsForShow;
     }
-    private List<Timetable> getTimetable(String sqlTask){
-        List<Timetable> timetableList = new ArrayList<>();
+    private List<LessonTimetable> getTimetable(String sqlTask){
+        List<LessonTimetable> lessonTimetableList = new ArrayList<>();
 
         try{
             ResultSet result = statement.executeQuery(sqlTask);
@@ -255,15 +258,15 @@ public class DBAdapter {
                 String lessonDate = result.getString("lesson_date");
                 int typeLesson = result.getInt("type_lesson");
 
-                timetableList.add(new Timetable(id,numberLesson,idSubject,lessonDate,typeLesson));
+                lessonTimetableList.add(new LessonTimetable(id,numberLesson,idSubject,lessonDate,typeLesson));
             }
         }
         catch (Exception e){
             e.printStackTrace();
-            System.out.println("Timetable for group can`t get.");
+            System.out.println("LessonTimetable for group can`t get.");
         }
 
-        return timetableList;
+        return lessonTimetableList;
     }
 
 
@@ -273,8 +276,8 @@ public class DBAdapter {
         int countOfLessons = 0;
 
         String sqlTask = "SELECT COUNT(id) AS num FROM timetable" +
-                         " WHERE lesson_date = '" + dayDate + "' AND id_subject = " + subject +
-                         " AND type_lesson = (SELECT id FROM type_lesson WHERE name = \"Лабораторні\");";
+                " WHERE lesson_date = '" + dayDate + "' AND id_subject = " + subject +
+                " AND type_lesson = (SELECT id FROM type_lesson WHERE name = \"Лабораторні\");";
 
         try{
             ResultSet result = statement.executeQuery(sqlTask);

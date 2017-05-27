@@ -1,11 +1,9 @@
 package chstu.timetable;
 
 import chstu.db.DBAdapter;
-import chstu.db.LessonTimetable;
+import chstu.db.entity.BellsTimetable;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -34,23 +32,23 @@ public class DateUtilTest {
 
     @Test
     public void convertTimeInMS() throws Exception {
-        Date testDate = new Date(dateUtil.convertTimeInMS("16:20:00"));
-        SimpleDateFormat dateFormat = new SimpleDateFormat("kk:mm:ss");
-        assertEquals("Convertion is not correct","16:20:00",dateFormat.format(testDate));
+        Date testDate = new Date(dateUtil.convertTimeInMS("11:20:00"));
+        SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
+        assertEquals("Convertion is not correct","11:20:00",dateFormat.format(testDate));
         System.out.println("-convertTimeInMS: " + dateFormat.format(testDate));
     }
 
     @Test
     public void getTimeToNextLesson() throws Exception {
         DBAdapter dataBase = DBAdapter.getInstance();
-        List<LessonTimetable> lessonTimetables = dataBase.getLessonTimetable();
+        List<BellsTimetable> bellsTimetables = dataBase.getLessonTimetable();
         Boolean isMoreLesson = null;
 
         if (dateUtil.getTimeToNextLesson() < 0) return;
 
-        for (LessonTimetable lessonTimetable : lessonTimetables){
-            if (dateUtil.getCurrentTimeMS() + dateUtil.getTimeToNextLesson() == dateUtil.convertTimeInMS(lessonTimetable.getEndLesson())){
-                System.out.println("-getTimeToNextLesson: " + lessonTimetable.getEndLesson());
+        for (BellsTimetable bellsTimetable : bellsTimetables){
+            if (dateUtil.getCurrentTimeMS() + dateUtil.getTimeToNextLesson() == dateUtil.convertTimeInMS(bellsTimetable.getEndLesson())){
+                System.out.println("-getTimeToNextLesson: " + bellsTimetable.getEndLesson());
                 return;
             }
         }
@@ -64,12 +62,5 @@ public class DateUtilTest {
         SimpleDateFormat dateFormat = new SimpleDateFormat("kk:mm:ss");
 
         System.out.println("-getTimeToNextDayLesson: " + dateFormat.format(testDate));
-    }
-
-    @Test
-    public void convertMSinTome(){
-        Date date = new Date(67200000);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("kk:mm:ss");
-        System.out.println(dateFormat.format(date));
     }
 }

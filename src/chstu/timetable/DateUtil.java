@@ -1,10 +1,12 @@
 package chstu.timetable;
 
 import chstu.db.DBAdapter;
-import chstu.db.LessonTimetable;
+import chstu.db.entity.BellsTimetable;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 public class DateUtil {
@@ -12,11 +14,11 @@ public class DateUtil {
         dataBase = DBAdapter.getInstance();
 
         currentDate = new Date();
-        lessonTimetables = dataBase.getLessonTimetable();
+        bellsTimetables = dataBase.getLessonTimetable();
     }
 
     private Date currentDate;
-    private List<LessonTimetable> lessonTimetables;
+    private List<BellsTimetable> bellsTimetables;
     private DBAdapter dataBase;
 
     public String getCurrentDate() {
@@ -57,7 +59,7 @@ public class DateUtil {
         long timeToNextLesson = -1; //In position where method called, should be verification about not -1. It`s mean an error statement!
         int maxLessonInDay = 0;
 
-        for(LessonTimetable endOfLesson : lessonTimetables){
+        for(BellsTimetable endOfLesson : bellsTimetables){
             if(getCurrentTimeMS() < convertTimeInMS(endOfLesson.getEndLesson()) && maxLessonInDay < dataBase.getLessonsInDay(getCurrentDate()).size()){
                 timeToNextLesson = convertTimeInMS(endOfLesson.getEndLesson()) - getCurrentTimeMS();
             }
@@ -68,6 +70,19 @@ public class DateUtil {
 
     public long getTimeToNextDayLesson(){
         return convertTimeInMS("23:59:59") - getCurrentTimeMS() + convertTimeInMS("08:30:01");
+    }
+
+    public GregorianCalendar convertStringInDate(String dateToConvert){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
+        GregorianCalendar calendar = new GregorianCalendar();
+        try {
+            Date date = sdf.parse(dateToConvert);
+            calendar.setTime(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return calendar;
     }
 
 }

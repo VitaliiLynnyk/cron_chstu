@@ -1,7 +1,7 @@
-package chstu.db;
+package chstu.db.entity;
 
-public class Labs {
-    public Labs(int id, int idSubject, int labNumber, String comment, String deadline, int status) {
+public class Laboratory {
+    public Laboratory(int id, int idSubject, int labNumber, String comment, String deadline, int status) {
         this.id = id;
         this.idSubject = idSubject;
         this.labNumber = labNumber;
