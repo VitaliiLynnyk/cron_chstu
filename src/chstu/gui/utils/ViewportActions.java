@@ -19,12 +19,10 @@ import java.awt.event.ItemListener;
 public class ViewportActions {
     public ViewportActions() {
         vStyle = ViewportStyle.getInstance();
-        vLogic = new ViewportLogic();
         dataBase = DBAdapter.getInstance();
     }
 
     ViewportStyle vStyle;
-    ViewportLogic vLogic;
     DBAdapter dataBase;
 
     public ItemListener getCheckBoxEvent(JCheckBox jCheckBox , Laboratory lab){

@@ -2,6 +2,8 @@ package chstu.gui.utils;
 
 import chstu.db.DBAdapter;
 import chstu.db.entity.Laboratory;
+import chstu.db.entity.Lesson;
+import chstu.db.entity.LessonTimetable;
 import chstu.gui.Calendars;
 import chstu.timetable.DateUtil;
 import org.jdatepicker.impl.JDatePanelImpl;
@@ -73,6 +75,29 @@ public class ViewportLogic {
             panel.add(labCommentArea);
             panel.add(datePicker);
             panel.add(statBox);
+        }
+    }
+
+    public void showTimetable(JPanel panel, String date){
+        if (panel.getComponentCount() > 0){
+            System.out.println("remove");
+            panel.removeAll();
+        }
+
+        List<Lesson> lessonsTimetable = dataBase.getLessonsToShow(date);
+        panel.setSize(new Dimension(300, 25*lessonsTimetable.size() < 200 ? 200 : 25*lessonsTimetable.size()));
+        int blockHeight = 0;
+
+        for (Lesson lesson : lessonsTimetable){
+            JLabel labelNumberOfSubject = vElements.getLable("" + lesson.getNumber(),vStyle.fofntClb26,new Rectangle(0,blockHeight,35,25),Color.black);
+            JLabel labelNameOfSubject = vElements.getLable(lesson.getName(),vStyle.fofntClb26,new Rectangle(35,blockHeight,190,25),Color.black);
+            JLabel labelTypeOfSubject = vElements.getLable("" + lesson.getType().substring(0,3),vStyle.fofntClb26,new Rectangle(225,blockHeight,75,25),Color.black);
+
+            panel.add(labelNumberOfSubject);
+            panel.add(labelNameOfSubject);
+            panel.add(labelTypeOfSubject);
+
+            blockHeight += 25;
         }
     }
 }
