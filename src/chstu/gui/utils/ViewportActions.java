@@ -21,7 +21,7 @@ public class ViewportActions {
         vStyle = ViewportStyle.getInstance();
         dataBase = DBAdapter.getInstance();
     }
-
+//TODO Need fix. Conflict with vLogic object.
     ViewportStyle vStyle;
     DBAdapter dataBase;
 
@@ -65,6 +65,15 @@ public class ViewportActions {
             @Override
             public void changedUpdate(DocumentEvent e) {
                 dataBase.updateLabComment(commentArea.getText(),lab.getIdSubject(),lab.getLabNumber());
+            }
+        };
+    }
+
+    public ActionListener createDatePickerListener(JPanel panel, JDatePickerImpl datePicker){
+        return new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //TODO vLogic.showTimetable(panel, datePicker.getJFormattedTextField().getText());
             }
         };
     }

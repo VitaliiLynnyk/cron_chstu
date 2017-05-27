@@ -163,51 +163,32 @@ public class Viewport {
         JPanel topRightPanel = vElements.getPanel(new GridLayout(1,0),new Rectangle(900,0,300,190),vStyle.colorViolet1);
             projectFrame.add(topRightPanel);
 
+        panelSubjectInSelectDate = vElements.getPanel(null,new Rectangle(900,270,300,190),vStyle.colorViolet4);
+            JScrollPane jScrollPaneRightTopPanel = vElements.getScrollPane(panelSubjectInSelectDate,new Rectangle(900,270,300,190));
+        projectFrame.add(jScrollPaneRightTopPanel);
+
         JDatePanelImpl datePanel = vElements.getDataPanel();
             datePanel.setBounds(900,30,300,100);
             topRightPanel.add(datePanel);
         JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new Calendars());
+            datePanel.addActionListener(vActions.createDatePickerListener(panelSubjectInSelectDate,datePicker));
 
         JLabel lbSelectSubject = vElements.getLable("Розклад  ",vStyle.fontTnr25,new Rectangle(900,193 ,300,43),vStyle.colorViolet4);
             projectFrame.add(lbSelectSubject);
 
-        panelSubjectInSelectDate = vElements.getPanel(null,new Rectangle(900,270,300,190),vStyle.colorViolet4);
-        JScrollPane jScrollPaneRightTopPanel = vElements.getScrollPane(panelSubjectInSelectDate,new Rectangle(900,270,300,190));
-            projectFrame.add(jScrollPaneRightTopPanel);
+        JPanel topTimetableInfoPanel = vElements.getTimetableInfoPanel(new Rectangle(900,230,300,43));
+            projectFrame.add(topTimetableInfoPanel);
 
-        JLabel lbSelectSubjectRightPanel = vElements.getLable("№",vStyle.fontTnr25,new Rectangle(805,230 ,300,43),vStyle.colorViolet4);
-        projectFrame.add(lbSelectSubjectRightPanel);
-
-        JLabel lbSelectNameRightPanel = vElements.getLable("Назва",vStyle.fontTnr25,new Rectangle(900,230 ,300,43),vStyle.colorViolet4);
-        projectFrame.add(lbSelectNameRightPanel);
-
-        JLabel lbSelectTypeRightPanel = vElements.getLable("Тип",vStyle.fontTnr25,new Rectangle(1000,230 ,300,43),vStyle.colorViolet4);
-        projectFrame.add(lbSelectTypeRightPanel);
-
-        datePanel.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                vLogic.showTimetable(panelSubjectInSelectDate, datePicker.getJFormattedTextField().getText());
-            }
-        });
-
-
-        JLabel lbSelectSubjectRightBottomPanel  = vElements.getLable("№",vStyle.fontTnr25,new Rectangle(805,490 ,300,43),vStyle.colorViolet4);
-            projectFrame.add(lbSelectSubjectRightBottomPanel);
-
-        JLabel lbSelectNameRightBottomPanel = vElements.getLable("Назва",vStyle.fontTnr25,new Rectangle(900,490 ,300,43),vStyle.colorViolet4);
-            projectFrame.add(lbSelectNameRightBottomPanel);
-
-        JLabel lbSelectTypeRightBottomPanel = vElements.getLable("Тип",vStyle.fontTnr25,new Rectangle(1000,490 ,300,43),vStyle.colorViolet4);
-            projectFrame.add(lbSelectTypeRightBottomPanel);
 
         JLabel lbSubjectNextDay = vElements.getLable("Розклад на сьогодні",vStyle.fontTnr25,new Rectangle(900,450 ,300,50),vStyle.colorViolet4);
             projectFrame.add(lbSubjectNextDay);
 
-        JPanel bottomRightPanel = vElements.getPanel(null,new Rectangle(900,530,300,200),vStyle.colorViolet2);
+        JPanel bottomTimetableInfoPanel = vElements.getTimetableInfoPanel(new Rectangle(900,490,300,43));
+            projectFrame.add(bottomTimetableInfoPanel);
+
+        JPanel bottomRightPanel = vElements.getPanel(null,new Rectangle(900,530,300,200),vStyle.colorViolet4);
             JScrollPane jScrollPaneRightBottomPanel = vElements.getScrollPane(bottomRightPanel,new Rectangle(900,530,300,200));
             vLogic.showTimetable(bottomRightPanel,new DateUtil().getCurrentDate());
-
         projectFrame.add(jScrollPaneRightBottomPanel);
 
 

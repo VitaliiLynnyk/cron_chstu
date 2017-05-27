@@ -62,4 +62,12 @@ public class ViewportElements {
 
         return datePanel;
     }
+
+    public JPanel getTimetableInfoPanel(Rectangle boundsValue){
+        JPanel panel = getPanel(null, boundsValue,null);
+            panel.add(getLable("№",vStyle.fontTnr25,new Rectangle(0,0 ,35,43),vStyle.colorViolet4));
+            panel.add(getLable("Назва",vStyle.fontTnr25,new Rectangle(35,0 ,190,43),vStyle.colorViolet4));
+            panel.add(getLable("Тип",vStyle.fontTnr25,new Rectangle(225,0 ,75,43),vStyle.colorViolet4));
+        return panel;
+    }
 }
