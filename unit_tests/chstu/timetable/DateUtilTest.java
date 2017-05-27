@@ -1,7 +1,7 @@
 package chstu.timetable;
 
 import chstu.db.DBAdapter;
-import chstu.db.entity.BellsTimetable;
+import chstu.db.entity.BellTimetable;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import java.text.SimpleDateFormat;
@@ -41,14 +41,14 @@ public class DateUtilTest {
     @Test
     public void getTimeToNextLesson() throws Exception {
         DBAdapter dataBase = DBAdapter.getInstance();
-        List<BellsTimetable> bellsTimetables = dataBase.getLessonTimetable();
+        List<BellTimetable> bellTimetables = dataBase.getLessonTimetable();
         Boolean isMoreLesson = null;
 
         if (dateUtil.getTimeToNextLesson() < 0) return;
 
-        for (BellsTimetable bellsTimetable : bellsTimetables){
-            if (dateUtil.getCurrentTimeMS() + dateUtil.getTimeToNextLesson() == dateUtil.convertTimeInMS(bellsTimetable.getEndLesson())){
-                System.out.println("-getTimeToNextLesson: " + bellsTimetable.getEndLesson());
+        for (BellTimetable bellTimetable : bellTimetables){
+            if (dateUtil.getCurrentTimeMS() + dateUtil.getTimeToNextLesson() == dateUtil.convertTimeInMS(bellTimetable.getEndLesson())){
+                System.out.println("-getTimeToNextLesson: " + bellTimetable.getEndLesson());
                 return;
             }
         }

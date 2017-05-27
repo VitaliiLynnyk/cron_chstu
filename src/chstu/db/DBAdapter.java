@@ -37,8 +37,8 @@ public class DBAdapter {
         Methods for get ALL fields from tables of DB
     */
 
-    public List<BellsTimetable> getLessonTimetable(){
-        List<BellsTimetable> timetableList = new ArrayList<>();
+    public List<BellTimetable> getLessonTimetable(){
+        List<BellTimetable> timetableList = new ArrayList<>();
         String sqlTask = "SELECT * FROM lesson_timetable;";
 
         try{
@@ -47,7 +47,7 @@ public class DBAdapter {
                 int id = result.getInt("id");
                 String endLesson = result.getString("end_lesson");
 
-                timetableList.add(new BellsTimetable(id,endLesson));
+                timetableList.add(new BellTimetable(id,endLesson));
             }
 
         }
@@ -59,8 +59,8 @@ public class DBAdapter {
         return timetableList;
     }
 
-    public List<Subjects> getAllSubjects(){
-        List<Subjects> subjectsList = new ArrayList<>();
+    public List<Subject> getAllSubjects(){
+        List<Subject> subjectList = new ArrayList<>();
         String sqlTask = "SELECT * FROM subjects ORDER BY id;";
 
         try{
@@ -69,7 +69,7 @@ public class DBAdapter {
                 int id = result.getInt("id");
                 String name = result.getString("name");
 
-                subjectsList.add(new Subjects(id,name));
+                subjectList.add(new Subject(id,name));
             }
 
         }
@@ -78,7 +78,7 @@ public class DBAdapter {
             System.out.println("Can`t get subjects.");
         }
 
-        return subjectsList;
+        return subjectList;
     }
 
     public List<TypeLesson> getAllLessonsType(){

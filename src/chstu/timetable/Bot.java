@@ -2,8 +2,8 @@ package chstu.timetable;
 
 import chstu.db.*;
 import chstu.db.entity.Laboratory;
-import chstu.db.entity.BellsTimetable;
-import chstu.db.entity.Subjects;
+import chstu.db.entity.BellTimetable;
+import chstu.db.entity.Subject;
 import chstu.db.entity.LessonTimetable;
 
 import java.awt.*;
@@ -70,9 +70,9 @@ public class Bot {
 
     private long getLessonTimeInMS(int numberLesson){
         long lessonTime = -1;
-        List<BellsTimetable> endOfLessons = dataBase.getLessonTimetable();
+        List<BellTimetable> endOfLessons = dataBase.getLessonTimetable();
 
-        for (BellsTimetable timetable : endOfLessons){
+        for (BellTimetable timetable : endOfLessons){
             if (timetable.getId() == numberLesson){
                 lessonTime = dateUtil.convertTimeInMS(timetable.getEndLesson());
             }
@@ -82,9 +82,9 @@ public class Bot {
     }
 
     private String getLabSubjectName(Laboratory lab){
-        List<Subjects> subjectsList = dataBase.getAllSubjects();
+        List<Subject> subjectList = dataBase.getAllSubjects();
 
-        for (Subjects subject : subjectsList){
+        for (Subject subject : subjectList){
             if (lab.getIdSubject() == subject.getId()){
                     return subject.getName();
             }

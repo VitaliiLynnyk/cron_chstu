@@ -4,7 +4,8 @@ import chstu.db.*;
 import chstu.db.entity.Laboratory;
 import chstu.db.entity.Lesson;
 import chstu.db.entity.LessonTimetable;
-import chstu.db.entity.Subjects;
+import chstu.db.entity.Subject;
+import chstu.gui.utils.ViewportActions;
 import chstu.gui.utils.ViewportElements;
 import chstu.gui.utils.ViewportStyle;
 import chstu.timetable.DateUtil;
@@ -14,9 +15,6 @@ import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -41,6 +39,7 @@ public class Viewport {
     DBAdapter dataBase = DBAdapter.getInstance();
     ViewportElements vElements = new ViewportElements();
     ViewportStyle vStyle = ViewportStyle.getInstance();
+    ViewportActions vActions = new ViewportActions();
 
     JScrollPane jScrollPanelCenterBottomPanel;
     JPanel bottomCenterPanel;
@@ -137,7 +136,7 @@ public class Viewport {
         leftPanel.setBackground(Color.BLACK);
         projectFrame.add(leftPanel);
 
-        List<Subjects> arrayList= dataBase.getAllSubjects();
+        List<Subject> arrayList= dataBase.getAllSubjects();
         ArrayList<JButton>btn = new ArrayList<>();
         for (int i = 0; i < arrayList.size(); i++) {
             btn.add(i,new JButton(arrayList.get(i).getName()+""));
@@ -400,6 +399,7 @@ public class Viewport {
 
         projectFrame.setVisible(true);
     }
+
     private ActionListener getActionForButtons(int subject){
         ActionListener action = new ActionListener() {
             @Override
@@ -413,6 +413,7 @@ public class Viewport {
         };
         return action;
     }
+
     boolean isFirstShowInSession = true;
     private void drawLabs(int subject){
         if (isFirstShowInSession) {
@@ -434,14 +435,14 @@ public class Viewport {
 
             JLabel labelNumberLab = new JLabel("" + labwork.getLabNumber(), SwingConstants.CENTER);
                 labelNumberLab.setOpaque(true);
-                vElements.setJComponentExtendedParametr(labelNumberLab,vStyle.tnrI30,new Rectangle(0,0,35,100),vStyle.violet5,vStyle.violet1);
+                vElements.setJComponentExtendedProperties(labelNumberLab,vStyle.tnrI30,new Rectangle(0,0,35,100),vStyle.violet5,vStyle.violet1);
 
             JTextArea labCommentArea = new JTextArea();
-                vElements.setJComponentExtendedParametr(labCommentArea,vStyle.tnrI30,new Rectangle(35,0,365,100),vStyle.violet5,vStyle.violet1);
+                vElements.setJComponentExtendedProperties(labCommentArea,vStyle.tnrI30,new Rectangle(35,0,365,100),vStyle.violet5,vStyle.violet1);
                 labCommentArea.setLineWrap(true);
                 labCommentArea.setWrapStyleWord(true);
                 labCommentArea.setText(labwork.getComment().isEmpty() ? " Додайте свій коментар" : labwork.getComment());
-                labCommentArea.getDocument().addDocumentListener(createCommentAreaListener(labCommentArea,labwork));
+                labCommentArea.getDocument().addDocumentListener(vActions.createCommentAreaListener(labCommentArea,labwork));
 
             UtilDateModel model = new UtilDateModel();
                 model.setSelected(true);
@@ -461,14 +462,14 @@ public class Viewport {
                 datePicker.setBackground(new Color(113, 74, 176));
                 datePicker.setBounds(400,0,200,100);
                 datePicker.setToolTipText(labwork.getDeadline());
-                datePicker.addActionListener(createDatePickerListener(datePicker,labwork));
+                datePicker.addActionListener(vActions.createDatePickerListener(datePicker,labwork));
 
             JCheckBox statBox = new JCheckBox();
-                vElements.setJComponentExtendedParametr(statBox,null,new Rectangle(600,0,50,100),null,getColorForLabStatus(labwork));
+                vElements.setJComponentExtendedProperties(statBox,null,new Rectangle(600,0,50,100),null,vActions.getColorForLabStatus(labwork));
                 statBox.setVerticalAlignment(SwingConstants.CENTER);
                 statBox.setHorizontalAlignment(SwingConstants.CENTER);
                 statBox.setSelected(labwork.getStatus() == 1);
-                statBox.addItemListener(getCheckBoxEvent(statBox,labwork));
+                statBox.addItemListener(vActions.getCheckBoxEvent(statBox,labwork));
 
             labPanel[labNumber].add(labelNumberLab);
             labPanel[labNumber].add(labCommentArea);
@@ -476,63 +477,5 @@ public class Viewport {
             labPanel[labNumber].add(statBox);
             bottomCenterPanel.add(labPanel[labNumber]);
         }
-    }
-    private ItemListener getCheckBoxEvent(JCheckBox jCheckBox ,Laboratory lab){
-        return  new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                if (jCheckBox.isSelected()) {
-                    System.out.println("selected");
-                    dataBase.updateLabStatus(1,lab.getIdSubject(),lab.getLabNumber());
-                    jCheckBox.setBackground(new Color(63, 171, 57));
-                }
-                else {
-                    System.out.println("not selected");
-                    dataBase.updateLabStatus(0,lab.getIdSubject(),lab.getLabNumber());
-                    jCheckBox.setBackground(new Color( 113, 74, 176));
-                }
-                projectFrame.validate();
-            }
-        };
-    }
-
-    private ActionListener createDatePickerListener(JDatePickerImpl datePicker ,Laboratory lab){
-        return  new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dataBase.updateLabDeadline(datePicker.getJFormattedTextField().getText(),lab.getIdSubject(),lab.getLabNumber());
-            }
-        };
-    }
-
-    private DocumentListener createCommentAreaListener(JTextArea commentArea, Laboratory lab){
-        return new DocumentListener() {
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                dataBase.updateLabComment(commentArea.getText(),lab.getIdSubject(),lab.getLabNumber());
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                dataBase.updateLabComment(commentArea.getText(),lab.getIdSubject(),lab.getLabNumber());
-            }
-
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                dataBase.updateLabComment(commentArea.getText(),lab.getIdSubject(),lab.getLabNumber());
-            }
-        };
-    }
-
-    private Color getColorForLabStatus(Laboratory lab){
-        Color statusColor = null;
-
-        switch (lab.getStatus()){
-            case 0: statusColor = new Color(113, 74, 176); break;
-            case 1: statusColor = new Color(63, 171, 57); break;
-            case 2: statusColor = new Color(211, 81, 71 );
-        }
-
-        return statusColor;
     }
 }
