@@ -74,36 +74,7 @@ public class Viewport {
         JButton btnOkey = new JButton("Додати");
             btnOkey.setBounds(500,10,100,20);
             centerTopMenu.add(btnOkey);
-            btnOkey.addActionListener(new ActionListener() {
-                                          public void actionPerformed(ActionEvent e) {
-                                              int completed = 0;
-                                              int debts = 0;
-                                              String numbers="1234567890";
-                                              if(numbers.contains(numberOfLabs.getText())){
-                                                  DBAdapter db = DBAdapter.getInstance();
-                                                  for (Laboratory lab : db.getAllLabs()){
-                                                      if(lab.getStatus() == 1 ){
-                                                          completed++;
-                                                      }
-                                                      if(lab.getStatus() == 2 ){
-                                                          debts++;
-                                                      }
-                                                  }
-                                                  Tasks tasks = new Tasks();
-                                                  tasks.setLabs(subjectId,Integer.parseInt(numberOfLabs.getText()));
-                                                  /*progressAllLabs.setText("Всі лабораторні:"+db.getAllLabs().size());
-                                                  progressСompleted.setText(" Виконані:"+completed);
-                                                  progressDebt.setText(" В боргах:"+debts);*/
-
-                                                  vLogic.showLabs(bottomCenterPanel,subjectId);
-                                                  panelSubjectInSelectDate.repaint();
-                                              }else {
-                                                  numberOfLabs.setBackground(new Color(211, 81, 71));
-                                                  numberOfLabs.setText("1-9");
-                                              }
-                                          }
-                                      }
-            );
+            //btnOkey.addActionListener(vActions.createOkButtonListener()); TODO do something with necessary labels
 
 //LEFT PANEL
         JPanel leftPanel = vElements.getPanel(new GridLayout(0,1),new Rectangle(0,80,250,600),null);
@@ -130,20 +101,10 @@ public class Viewport {
             projectFrame.add(labelSubjectName);
 
 //CENTER PANEL
-        int completed = 0;
-        int debts = 0;
-        DBAdapter db = DBAdapter.getInstance();
-        for (Laboratory lab : db.getAllLabs()){
-            if(lab.getStatus() == 1 ){
-                completed++;
-            }
-            if(lab.getStatus() == 2 ){
-                debts++;
-            }
-        }
-        JLabel progressAllLabs = vElements.getLable("Всі лабораторні:"+db.getAllLabs().size(),vStyle.fontTnrB30,new Rectangle(0,0,300,100),vStyle.colorViolet1);
-        JLabel progressСompleted = vElements.getLable(" Виконані:"+completed,vStyle.fontTnrB30,new Rectangle(220,0,300,100),vStyle.colorPassedGreen);
-        JLabel progressDebt = vElements.getLable(" В боргах:"+debts,vStyle.fontTnrB30,new Rectangle(390,0,300,100),vStyle.colorDebtRed);
+        JLabel progressAllLabs = vElements.getLable("",vStyle.fontTnrB30,new Rectangle(0,0,300,100),vStyle.colorViolet1);
+        JLabel progressСompleted = vElements.getLable("",vStyle.fontTnrB30,new Rectangle(220,0,300,100),vStyle.colorPassedGreen);
+        JLabel progressDebt = vElements.getLable("",vStyle.fontTnrB30,new Rectangle(390,0,300,100),vStyle.colorDebtRed);
+            vLogic.setLabStatistic(progressAllLabs, progressСompleted, progressDebt);
 
         JPanel topCenterPanel = vElements.getPanel(null,new Rectangle(250,40,650,100),vStyle.colorViolet5);
             topCenterPanel.add(progressAllLabs);

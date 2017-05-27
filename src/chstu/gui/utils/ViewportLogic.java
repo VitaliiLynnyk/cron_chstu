@@ -99,4 +99,22 @@ public class ViewportLogic {
             blockHeight += 35;
         }
     }
+
+    public void setLabStatistic(JLabel progressAllLabs, JLabel progressСompleted, JLabel progressDebt){
+        int completed = 0;
+        int debts = 0;
+
+        for (Laboratory lab : dataBase.getAllLabs()){
+            if(lab.getStatus() == 1 ){
+                completed++;
+            }
+            if(lab.getStatus() == 2 ){
+                debts++;
+            }
+        }
+
+        progressAllLabs.setText("Всі лабораторні:"+dataBase.getAllLabs().size());
+        progressСompleted.setText(" Виконані:"+completed);
+        progressDebt.setText(" В боргах:"+debts);
+    }
 }

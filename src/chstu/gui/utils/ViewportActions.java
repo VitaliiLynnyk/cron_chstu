@@ -2,6 +2,7 @@ package chstu.gui.utils;
 
 import chstu.db.DBAdapter;
 import chstu.db.entity.Laboratory;
+import chstu.timetable.Tasks;
 import org.jdatepicker.impl.JDatePickerImpl;
 
 import javax.swing.*;
@@ -23,6 +24,7 @@ public class ViewportActions {
     }
 //TODO Need fix. Conflict with vLogic object.
     ViewportStyle vStyle;
+    ViewportLogic vLogic;
     DBAdapter dataBase;
 
     public ItemListener getCheckBoxEvent(JCheckBox jCheckBox , Laboratory lab){
@@ -73,10 +75,29 @@ public class ViewportActions {
         return new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //TODO vLogic.showTimetable(panel, datePicker.getJFormattedTextField().getText());
+                vLogic.showTimetable(panel, datePicker.getJFormattedTextField().getText());
             }
         };
     }
+
+    /*public ActionListener createOkButtonListener(JTextField numberLabs, JLabel progressAllLabs, JLabel progressСompleted, JLabel progressDebt){
+        return new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String numbers="1234567890";
+                if(numbers.contains(numberLabs.getText())){
+                    Tasks tasks = new Tasks();
+                    tasks.setLabs(subjectId,Integer.parseInt(numberLabs.getText()));
+
+                    vLogic.setLabStatistic(progressAllLabs, progressСompleted, progressDebt);
+                    vLogic.showLabs(bottomCenterPanel,subjectId);
+                    //panelSubjectInSelectDate.repaint(); TODO check why it need to be repaint
+                }else {
+                    numberOfLabs.setBackground(new Color(211, 81, 71));
+                    numberOfLabs.setText("1-9");
+                }
+            }
+        };
+    }*/
 
     public Color getColorForLabStatus(Laboratory lab){
         switch (lab.getStatus()){
