@@ -87,7 +87,7 @@ public class Viewport {
                                           int completed = 0;
                                           int debts = 0;
                                           String numbers="1234567890";
-                                          if(numbers.contains(numberOfLabs.toString())){
+                                          if(numbers.contains(numberOfLabs.getText())){
                                               DBAdapter db = DBAdapter.getInstance();
                                               for (Laboratory lab : db.getAllLabs()){
                                                   if(lab.getStatus() == 1 ){
@@ -100,6 +100,9 @@ public class Viewport {
                                               Tasks tasks = new Tasks();
                                               tasks.setLabs(subjectId,Integer.parseInt(numberOfLabs.getText()));
                                               progressAllLabs.setText("Всі лабораторні:"+db.getAllLabs().size());
+                                              progressСompleted.setText(" Виконані:"+completed);
+                                              progressDebt.setText(" В боргах:"+debts);
+
                                               drawLabs(subjectId);
                                               panelSubjectInSelectDate.repaint();
                                           }else {
