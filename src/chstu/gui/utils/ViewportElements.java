@@ -1,6 +1,5 @@
 package chstu.gui.utils;
 
-import chstu.gui.Viewport;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
@@ -26,7 +25,7 @@ public class ViewportElements {
 
     public JLabel getLable(String text, Font font, Rectangle boundsValue, Color foregroundColor){
         JLabel label = new JLabel(text,SwingConstants.CENTER);
-            setJComponentCommonParametr(label,font,boundsValue,foregroundColor);
+            setJComponentCommonProperties(label,font,boundsValue,foregroundColor);
         return label;
     }
 
@@ -38,13 +37,13 @@ public class ViewportElements {
         return scrollPane;
     }
 
-    public void setJComponentExtendedParametr(JComponent component, Font font, Rectangle boundsValue, Color foregroundColor, Color backgroundColor){
-        setJComponentCommonParametr(component,font,boundsValue,foregroundColor);
+    public void setJComponentExtendedProperties(JComponent component, Font font, Rectangle boundsValue, Color foregroundColor, Color backgroundColor){
+        setJComponentCommonProperties(component,font,boundsValue,foregroundColor);
         component.setBorder(vStyle.border);
         component.setBackground(backgroundColor);
     }
 
-    public void setJComponentCommonParametr(JComponent component, Font font, Rectangle boundsValue, Color foregroundColor){
+    public void setJComponentCommonProperties(JComponent component, Font font, Rectangle boundsValue, Color foregroundColor){
         component.setBounds(boundsValue);
         component.setForeground(foregroundColor);
         component.setFont(font);
@@ -52,14 +51,15 @@ public class ViewportElements {
 
     public JDatePanelImpl getDataPanel(){
         UtilDateModel model = new UtilDateModel();
-        model.setSelected(true);
+            model.setSelected(true);
         Properties p = new Properties();
-        p.put("text.today", "Today");
-        p.put("text.month", "Month");
-        p.put("text.year", "Year");
+            p.put("text.today", "Today");
+            p.put("text.month", "Month");
+            p.put("text.year", "Year");
 
         JDatePanelImpl datePanel = new JDatePanelImpl(model,p);
-        datePanel.setPreferredSize(new Dimension(300,200));
+            datePanel.setPreferredSize(new Dimension(300,200));
+
         return datePanel;
     }
 }
