@@ -1,9 +1,12 @@
 package chstu.gui.utils;
 
 import chstu.gui.Viewport;
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.UtilDateModel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Properties;
 
 /**
  * Created by Ar-Krav on 26.05.2017.
@@ -45,5 +48,18 @@ public class ViewportElements {
         component.setBounds(boundsValue);
         component.setForeground(foregroundColor);
         component.setFont(font);
+    }
+
+    public JDatePanelImpl getDataPanel(){
+        UtilDateModel model = new UtilDateModel();
+        model.setSelected(true);
+        Properties p = new Properties();
+        p.put("text.today", "Today");
+        p.put("text.month", "Month");
+        p.put("text.year", "Year");
+
+        JDatePanelImpl datePanel = new JDatePanelImpl(model,p);
+        datePanel.setPreferredSize(new Dimension(300,200));
+        return datePanel;
     }
 }

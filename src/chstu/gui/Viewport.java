@@ -171,14 +171,8 @@ public class Viewport {
         JPanel topRightPanel = vElements.getPanel(new GridLayout(1,0),new Rectangle(900,0,300,190),vStyle.violet1);
         projectFrame.add(topRightPanel);
 
-        UtilDateModel model = new UtilDateModel();
-        Properties p = new Properties();
-        p.put("text.today", "Today");
-        p.put("text.month", "Month");
-        p.put("text.year", "Year");
 
-        JDatePanelImpl datePanel = new JDatePanelImpl(model,p);
-        datePanel.setPreferredSize(new Dimension(300,200));
+        JDatePanelImpl datePanel = vElements.getDataPanel();
         datePanel.setBounds(900,30,300,100);
         topRightPanel.add(datePanel);
 
@@ -319,20 +313,17 @@ public class Viewport {
                 labCommentArea.setText(labwork.getComment().isEmpty() ? " Додайте свій коментар" : labwork.getComment());
                 labCommentArea.getDocument().addDocumentListener(createCommentAreaListener(labCommentArea,labwork));
 
-            UtilDateModel model = new UtilDateModel();
-                model.setSelected(true);
-                Properties p = new Properties();
-                p.put("text.today", "Today");
-                p.put("text.month", "Month");
-                p.put("text.year", "Year");
+
+
+            JDatePanelImpl datePanel = vElements.getDataPanel();
                 DateUtil dateUtil = new DateUtil();
                 Calendar calendar = dateUtil.convertStringInDate(labwork.getDeadline());
                 int year = calendar.get(Calendar.YEAR);
                 int month = calendar.get(Calendar.MONTH) + 1;
                 int day = calendar.get(Calendar.DAY_OF_MONTH);
-                model.setDate(year,month,day);
+                datePanel.getModel().setDate(year,month,day);
 
-            JDatePanelImpl datePanel = new JDatePanelImpl(model,p);
+
             JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new Calendars());
                 datePicker.setBackground(new Color(113, 74, 176));
                 datePicker.setBounds(400,0,200,100);
