@@ -1,7 +1,7 @@
 package chstu.timetable;
 
 import chstu.db.DBAdapter;
-import chstu.db.Labs;
+import chstu.db.entity.Laboratory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,8 +64,8 @@ public class Tasks {
 
     private int getMaxLabNumber(int subject){
         int maxLabNumber = 1;
-        List<Labs> subjectLabs = dbAdapter.getLabsBySubject(subject);
-        for (Labs lab : subjectLabs){
+        List<Laboratory> subjectLabs = dbAdapter.getLabsBySubject(subject);
+        for (Laboratory lab : subjectLabs){
             if (lab.getLabNumber() >= maxLabNumber) maxLabNumber = lab.getLabNumber();
         }
 

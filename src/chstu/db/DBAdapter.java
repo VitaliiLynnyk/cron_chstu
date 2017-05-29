@@ -1,5 +1,7 @@
 package chstu.db;
 
+import chstu.db.entity.*;
+
 import java.sql.*;
 import java.util.*;
 
@@ -35,8 +37,8 @@ public class DBAdapter {
         Methods for get ALL fields from tables of DB
     */
 
-    public List<LessonTimetable> getLessonTimetable(){
-        List<LessonTimetable> timetableList = new ArrayList<>();
+    public List<BellTimetable> getLessonTimetable(){
+        List<BellTimetable> timetableList = new ArrayList<>();
         String sqlTask = "SELECT * FROM lesson_timetable;";
 
         try{
@@ -45,7 +47,7 @@ public class DBAdapter {
                 int id = result.getInt("id");
                 String endLesson = result.getString("end_lesson");
 
-                timetableList.add(new LessonTimetable(id,endLesson));
+                timetableList.add(new BellTimetable(id,endLesson));
             }
 
         }
@@ -57,8 +59,8 @@ public class DBAdapter {
         return timetableList;
     }
 
-    public List<Subjects> getAllSubjects(){
-        List<Subjects> subjectsList = new ArrayList<>();
+    public List<Subject> getAllSubjects(){
+        List<Subject> subjectList = new ArrayList<>();
         String sqlTask = "SELECT * FROM subjects ORDER BY id;";
 
         try{
@@ -67,7 +69,7 @@ public class DBAdapter {
                 int id = result.getInt("id");
                 String name = result.getString("name");
 
-                subjectsList.add(new Subjects(id,name));
+                subjectList.add(new Subject(id,name));
             }
 
         }
@@ -76,7 +78,7 @@ public class DBAdapter {
             System.out.println("Can`t get subjects.");
         }
 
-        return subjectsList;
+        return subjectList;
     }
 
     public List<TypeLesson> getAllLessonsType(){
@@ -105,38 +107,38 @@ public class DBAdapter {
         Methods for working with "labs" table
     */
 
-    public List<Labs> getAllLabs(){
+    public List<Laboratory> getAllLabs(){
         String sqlTask = "SELECT * FROM labs;";
         return getListOfLabs(sqlTask);
     }
 
-    public List<Labs> getDebtLabs(){
+    public List<Laboratory> getDebtLabs(){
         String sqlTask = "SELECT * FROM labs" +
                 " WHERE status = 2;";
         return getListOfLabs(sqlTask);
     }
 
-    public List<Labs> getLabsByDaySubject(String deadline, int subject){
+    public List<Laboratory> getLabsByDaySubject(String deadline, int subject){
         String sqlTask = "SELECT * FROM labs" +
                 " WHERE deadline = '" + deadline + "' AND id_subject = " + subject +";";
         return getListOfLabs(sqlTask);
     }
 
-    public List<Labs> getLabsByDay(String deadline){
+    public List<Laboratory> getLabsByDay(String deadline){
         String sqlTask = "SELECT * FROM labs" +
                 " WHERE deadline = '" + deadline + "';";
         return getListOfLabs(sqlTask);
     }
 
-    public List<Labs> getLabsBySubject(int subject){
+    public List<Laboratory> getLabsBySubject(int subject){
         String sqlTask = "SELECT * FROM labs" +
                 " WHERE id_subject = '" + subject + "'" +
                 " ORDER BY lab_number;";
         return getListOfLabs(sqlTask);
     }
 
-    private List<Labs> getListOfLabs(String sqlTask){
-        List<Labs> labsList = new ArrayList<>();
+    private List<Laboratory> getListOfLabs(String sqlTask){
+        List<Laboratory> laboratoryList = new ArrayList<>();
 
         try{
             ResultSet result = statement.executeQuery(sqlTask);
@@ -148,15 +150,15 @@ public class DBAdapter {
                 String deadline = result.getString("deadline");
                 int status = result.getInt("status");
 
-                labsList.add(new Labs(id,idSubject,labNumber,comment,deadline,status));
+                laboratoryList.add(new Laboratory(id,idSubject,labNumber,comment,deadline,status));
             }
         }
         catch (Exception e){
             e.printStackTrace();
-            System.out.println("Labs can`t be get!");
+            System.out.println("Laboratory can`t be get!");
         }
 
-        return labsList;
+        return laboratoryList;
     }
 
     public void setNewLab(int id, int idSubject, int labNumber, String comment, String deadline, int status){
@@ -209,13 +211,13 @@ public class DBAdapter {
         Methods for working with timetable.
     */
 
-    public List<Timetable> getLessonsForSubjectInDay(int subject, String dayDate){
+    public List<LessonTimetable> getLessonsForSubjectInDay(int subject, String dayDate){
         String sqlTask = "SELECT * FROM timetable" +
                 " WHERE id_subject = " + subject + " AND lesson_date = '" + dayDate + "';";
         return getTimetable(sqlTask);
     }
 
-    public List<Timetable> getLessonsInDay(String dayDate){
+    public List<LessonTimetable> getLessonsInDay(String dayDate){
         String sqlTask = "SELECT * FROM timetable" +
                 " WHERE lesson_date = '" + dayDate + "';";
         return getTimetable(sqlTask);
@@ -244,8 +246,8 @@ public class DBAdapter {
         }
         return lessonsForShow;
     }
-    private List<Timetable> getTimetable(String sqlTask){
-        List<Timetable> timetableList = new ArrayList<>();
+    private List<LessonTimetable> getTimetable(String sqlTask){
+        List<LessonTimetable> lessonTimetableList = new ArrayList<>();
 
         try{
             ResultSet result = statement.executeQuery(sqlTask);
@@ -256,15 +258,15 @@ public class DBAdapter {
                 String lessonDate = result.getString("lesson_date");
                 int typeLesson = result.getInt("type_lesson");
 
-                timetableList.add(new Timetable(id,numberLesson,idSubject,lessonDate,typeLesson));
+                lessonTimetableList.add(new LessonTimetable(id,numberLesson,idSubject,lessonDate,typeLesson));
             }
         }
         catch (Exception e){
             e.printStackTrace();
-            System.out.println("Timetable for group can`t get.");
+            System.out.println("LessonTimetable for group can`t get.");
         }
 
-        return timetableList;
+        return lessonTimetableList;
     }
 
 

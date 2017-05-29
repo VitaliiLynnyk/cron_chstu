@@ -1,10 +1,10 @@
-package chstu.db;
+package chstu.db.entity;
 
 /**
  * Created by Ar-Krav on 18.05.2017.
  */
-public class LessonTimetable {
-    public LessonTimetable(int id, String endLesson) {
+public class BellTimetable {
+    public BellTimetable(int id, String endLesson) {
         this.id = id;
         this.endLesson = endLesson;
     }

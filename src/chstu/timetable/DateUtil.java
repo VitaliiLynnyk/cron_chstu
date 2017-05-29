@@ -1,11 +1,10 @@
 package chstu.timetable;
 
 import chstu.db.DBAdapter;
-import chstu.db.LessonTimetable;
+import chstu.db.entity.BellTimetable;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -15,11 +14,11 @@ public class DateUtil {
         dataBase = DBAdapter.getInstance();
 
         currentDate = new Date();
-        lessonTimetables = dataBase.getLessonTimetable();
+        bellTimetables = dataBase.getLessonTimetable();
     }
 
     private Date currentDate;
-    private List<LessonTimetable> lessonTimetables;
+    private List<BellTimetable> bellTimetables;
     private DBAdapter dataBase;
 
     public String getCurrentDate() {
@@ -60,7 +59,7 @@ public class DateUtil {
         long timeToNextLesson = -1; //In position where method called, should be verification about not -1. It`s mean an error statement!
         int maxLessonInDay = 0;
 
-        for(LessonTimetable endOfLesson : lessonTimetables){
+        for(BellTimetable endOfLesson : bellTimetables){
             if(getCurrentTimeMS() < convertTimeInMS(endOfLesson.getEndLesson()) && maxLessonInDay < dataBase.getLessonsInDay(getCurrentDate()).size()){
                 timeToNextLesson = convertTimeInMS(endOfLesson.getEndLesson()) - getCurrentTimeMS();
             }

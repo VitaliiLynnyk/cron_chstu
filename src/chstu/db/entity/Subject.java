@@ -1,8 +1,8 @@
-package chstu.db;
+package chstu.db.entity;
 
 
-public class Subjects {
-    public Subjects(int id, String name) {
+public class Subject {
+    public Subject(int id, String name) {
         this.id = id;
         this.name = name;
     }

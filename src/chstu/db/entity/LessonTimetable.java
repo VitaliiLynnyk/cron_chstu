@@ -1,8 +1,8 @@
-package chstu.db;
+package chstu.db.entity;
 
 
-public class Timetable {
-    public Timetable(int id, int numberLesson, int idSubject, String lessonDate, int typeLesson) {
+public class LessonTimetable {
+    public LessonTimetable(int id, int numberLesson, int idSubject, String lessonDate, int typeLesson) {
         this.id = id;
         this.numberLesson = numberLesson;
         this.idSubject = idSubject;

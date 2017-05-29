@@ -1,4 +1,4 @@
-package chstu.db;
+package chstu.db.entity;
 
 
 public class Lesson {

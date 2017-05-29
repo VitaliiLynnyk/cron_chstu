@@ -1,10 +1,9 @@
-package chstu.Interface;
+package chstu.gui;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import javax.swing.JFormattedTextField.AbstractFormatter;
-import java.util.*;
 
 /**
  * Created by linni on 5/13/2017.
