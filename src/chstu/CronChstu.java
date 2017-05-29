@@ -1,7 +1,7 @@
 package chstu;
 
 import chstu.gui.Viewport;
-import chstu.timetable.Bot;
+import chstu.bot.BotProgressCheckedPart;
 
 
 public class CronChstu {
@@ -10,9 +10,9 @@ public class CronChstu {
         Viewport form = new Viewport();
             form.makeForm();
 
-        Bot bot = new Bot();
-            bot.checkPreviousDates();
-            bot.remindDebts();
-            bot.startBot();
+        BotProgressCheckedPart botMainSystem = new BotProgressCheckedPart();
+            botMainSystem.checkPreviousDates();
+            botMainSystem.remindDebts();
+            botMainSystem.startCheckProgress();
     }
 }

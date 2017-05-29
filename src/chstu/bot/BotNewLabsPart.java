@@ -1,4 +1,4 @@
-package chstu.timetable;
+package chstu.bot;
 
 import chstu.db.DBAdapter;
 import chstu.db.entity.Laboratory;
@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Created by alex3 on 5/20/2017.
  */
-public class Tasks {
+public class BotNewLabsPart {
     final int startDate = 15;
     final int finishDate = 26;
     DBAdapter dbAdapter = DBAdapter.getInstance();
@@ -63,7 +63,7 @@ public class Tasks {
     }
 
     private int getMaxLabNumber(int subject){
-        int maxLabNumber = 1;
+        int maxLabNumber = 0;
         List<Laboratory> subjectLabs = dbAdapter.getLabsBySubject(subject);
         for (Laboratory lab : subjectLabs){
             if (lab.getLabNumber() >= maxLabNumber) maxLabNumber = lab.getLabNumber();

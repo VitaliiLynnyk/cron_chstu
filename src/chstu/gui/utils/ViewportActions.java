@@ -1,8 +1,7 @@
 package chstu.gui.utils;
 
-import chstu.db.DBAdapter;
 import chstu.db.entity.Laboratory;
-import chstu.timetable.Tasks;
+import chstu.bot.BotNewLabsPart;
 import org.jdatepicker.impl.JDatePickerImpl;
 
 import javax.swing.*;
@@ -84,8 +83,8 @@ public class ViewportActions extends ViewportLogic{
             public void actionPerformed(ActionEvent e) {
                 String numbers="1234567890";
                 if(numbers.contains(numberLabsInputField.getText())){
-                    Tasks tasks = new Tasks();
-                    tasks.setLabs(subjectId,Integer.parseInt(numberLabsInputField.getText()));
+                    BotNewLabsPart BotNewLabs = new BotNewLabsPart();
+                    BotNewLabs.setLabs(subjectId,Integer.parseInt(numberLabsInputField.getText()));
 
                     setLabStatistic();
                     showLabs(labsPanel,subjectId);

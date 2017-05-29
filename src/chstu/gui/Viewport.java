@@ -1,25 +1,18 @@
 package chstu.gui;
 
 import chstu.db.*;
-import chstu.db.entity.Laboratory;
-import chstu.db.entity.Lesson;
-import chstu.db.entity.LessonTimetable;
 import chstu.db.entity.Subject;
 import chstu.gui.utils.ViewportActions;
 import chstu.gui.utils.ViewportElements;
-import chstu.gui.utils.ViewportLogic;
 import chstu.gui.utils.ViewportStyle;
-import chstu.timetable.DateUtil;
-import chstu.timetable.Tasks;
+import chstu.bot.util.DateUtil;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 
 import javax.swing.*;
 
 import java.awt.*;
-import java.awt.event.*;
 
-import java.util.*;
 import java.util.List;
 /**
  * Created by linni on 5/13/2017.

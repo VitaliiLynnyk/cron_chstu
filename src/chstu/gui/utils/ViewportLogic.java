@@ -3,10 +3,8 @@ package chstu.gui.utils;
 import chstu.db.DBAdapter;
 import chstu.db.entity.Laboratory;
 import chstu.db.entity.Lesson;
-import chstu.db.entity.LessonTimetable;
 import chstu.gui.Calendars;
-import chstu.gui.Viewport;
-import chstu.timetable.DateUtil;
+import chstu.bot.util.DateUtil;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 

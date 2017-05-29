@@ -1,7 +1,8 @@
-package chstu.timetable;
+package chstu.bot;
 
 import chstu.db.DBAdapter;
 import chstu.db.entity.BellTimetable;
+import chstu.bot.util.DateUtil;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import java.text.SimpleDateFormat;
