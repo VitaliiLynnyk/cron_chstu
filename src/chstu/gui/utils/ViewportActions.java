@@ -1,8 +1,7 @@
 package chstu.gui.utils;
 
-import chstu.db.DBAdapter;
 import chstu.db.entity.Laboratory;
-import chstu.timetable.Tasks;
+import chstu.bot.BotNewLabsPart;
 import org.jdatepicker.impl.JDatePickerImpl;
 
 import javax.swing.*;
@@ -42,7 +41,7 @@ public class ViewportActions extends ViewportLogic{
         };
     }
 
-    public ActionListener createDatePickerListener(JDatePickerImpl datePicker , Laboratory lab){
+    public ActionListener createDatePickerUpdateLabListener(JDatePickerImpl datePicker , Laboratory lab){
         return  new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -70,10 +69,11 @@ public class ViewportActions extends ViewportLogic{
         };
     }
 
-    public ActionListener createDatePickerListener(JPanel panel, JDatePickerImpl datePicker){
+    public ActionListener createDatePickerShowTimetableListener(JPanel panel, JDatePickerImpl datePicker, JLabel timetableDate){
         return new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                timetableDate.setText("Розклад на " + datePicker.getJFormattedTextField().getText());
                 showTimetable(panel, datePicker.getJFormattedTextField().getText());
             }
         };
@@ -84,8 +84,8 @@ public class ViewportActions extends ViewportLogic{
             public void actionPerformed(ActionEvent e) {
                 String numbers="1234567890";
                 if(numbers.contains(numberLabsInputField.getText())){
-                    Tasks tasks = new Tasks();
-                    tasks.setLabs(subjectId,Integer.parseInt(numberLabsInputField.getText()));
+                    BotNewLabsPart BotNewLabs = new BotNewLabsPart();
+                    BotNewLabs.setLabs(subjectId,Integer.parseInt(numberLabsInputField.getText()));
 
                     setLabStatistic();
                     showLabs(labsPanel,subjectId);

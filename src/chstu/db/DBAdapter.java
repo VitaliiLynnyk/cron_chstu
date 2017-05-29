@@ -53,7 +53,7 @@ public class DBAdapter {
         }
         catch (Exception e){
             e.printStackTrace();
-            System.out.println("Lesson timetable is secret.");
+            System.out.println("Lesson bot is secret.");
         }
 
         return timetableList;
@@ -208,17 +208,17 @@ public class DBAdapter {
     }
 
     /*
-        Methods for working with timetable.
+        Methods for working with bot.
     */
 
     public List<LessonTimetable> getLessonsForSubjectInDay(int subject, String dayDate){
-        String sqlTask = "SELECT * FROM timetable" +
+        String sqlTask = "SELECT * FROM bot" +
                 " WHERE id_subject = " + subject + " AND lesson_date = '" + dayDate + "';";
         return getTimetable(sqlTask);
     }
 
     public List<LessonTimetable> getLessonsInDay(String dayDate){
-        String sqlTask = "SELECT * FROM timetable" +
+        String sqlTask = "SELECT * FROM bot" +
                 " WHERE lesson_date = '" + dayDate + "';";
         return getTimetable(sqlTask);
     }

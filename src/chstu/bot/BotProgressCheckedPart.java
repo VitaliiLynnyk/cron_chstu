@@ -1,17 +1,18 @@
-package chstu.timetable;
+package chstu.bot;
 
 import chstu.db.*;
 import chstu.db.entity.Laboratory;
 import chstu.db.entity.BellTimetable;
 import chstu.db.entity.Subject;
 import chstu.db.entity.LessonTimetable;
+import chstu.bot.util.DateUtil;
 
 import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-public class Bot {
-    public Bot() {
+public class BotProgressCheckedPart {
+    public BotProgressCheckedPart() {
         currentDate = new Date();
         dataBase = DBAdapter.getInstance();
     }
@@ -25,7 +26,7 @@ public class Bot {
     private int inProcess = 0, debt = 2;
 
 
-    public void startBot(){
+    public void startCheckProgress(){
         if (!haveUserDutyForToday()){
             startTimer(dateUtil.getTimeToNextDayLesson());
             return;
@@ -113,7 +114,7 @@ public class Bot {
 
     private void startTimer(long delay){
         Timer timer = new Timer();
-        BotCronTask botCronTask = new BotCronTask(timer);
+        BotCronTaskPart botCronTask = new BotCronTaskPart(timer);
         timer.schedule(botCronTask,delay);
     }
 

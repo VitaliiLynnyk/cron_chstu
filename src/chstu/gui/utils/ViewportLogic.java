@@ -3,10 +3,8 @@ package chstu.gui.utils;
 import chstu.db.DBAdapter;
 import chstu.db.entity.Laboratory;
 import chstu.db.entity.Lesson;
-import chstu.db.entity.LessonTimetable;
 import chstu.gui.Calendars;
-import chstu.gui.Viewport;
-import chstu.timetable.DateUtil;
+import chstu.bot.util.DateUtil;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 
@@ -74,7 +72,7 @@ public class ViewportLogic {
                 datePicker.setBackground(new Color(113, 74, 176));
                 datePicker.setBounds(400,blockHeight,200,100);
                 datePicker.setToolTipText(labwork.getDeadline());
-                datePicker.addActionListener(vActions.createDatePickerListener(datePicker,labwork));
+                datePicker.addActionListener(vActions.createDatePickerUpdateLabListener(datePicker,labwork));
 
             JCheckBox statBox = new JCheckBox();
                 vElements.setJComponentExtendedProperties(statBox,null,new Rectangle(600,blockHeight,50,100),null,vActions.getColorForLabStatus(labwork));
