@@ -17,15 +17,10 @@ import java.awt.event.ItemListener;
 /**
  * Created by Ar-Krav on 27.05.2017.
  */
-public class ViewportActions {
-    public ViewportActions() {
-        vStyle = ViewportStyle.getInstance();
-        dataBase = DBAdapter.getInstance();
+public class ViewportActions extends ViewportLogic{
+    public ViewportActions(JLabel progressAllLabs, JLabel progressСompleted, JLabel progressDebt) {
+        super(progressAllLabs, progressСompleted, progressDebt);
     }
-//TODO Need fix. Conflict with vLogic object.
-    ViewportStyle vStyle;
-    ViewportLogic vLogic;
-    DBAdapter dataBase;
 
     private int subjectId;
 
@@ -42,7 +37,7 @@ public class ViewportActions {
                     jCheckBox.setBackground(vStyle.colorViolet1);
                 }
 
-                vLogic.setLabStatistic();
+                setLabStatistic();
             }
         };
     }
@@ -79,7 +74,7 @@ public class ViewportActions {
         return new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                vLogic.showTimetable(panel, datePicker.getJFormattedTextField().getText());
+                showTimetable(panel, datePicker.getJFormattedTextField().getText());
             }
         };
     }
@@ -92,8 +87,8 @@ public class ViewportActions {
                     Tasks tasks = new Tasks();
                     tasks.setLabs(subjectId,Integer.parseInt(numberLabsInputField.getText()));
 
-                    vLogic.setLabStatistic();
-                    vLogic.showLabs(labsPanel,subjectId);
+                    setLabStatistic();
+                    showLabs(labsPanel,subjectId);
 
                 }else {
                     numberLabsInputField.setBackground(vStyle.colorDebtRed);
@@ -107,7 +102,7 @@ public class ViewportActions {
         ActionListener action = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                vLogic.showLabs(labsPanel,subject);
+                showLabs(labsPanel,subject);
                 subjectId = subject;
 
                 subjectNameLabel.setText(dataBase.getAllSubjects().get(subject).getName());

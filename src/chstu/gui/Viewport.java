@@ -29,32 +29,24 @@ public class Viewport {
         dataBase = DBAdapter.getInstance();
         vElements = new ViewportElements();
         vStyle = ViewportStyle.getInstance();
-        vActions = new ViewportActions();
-        vLogic = new ViewportLogic();
+
+        bottomCenterPanel = vElements.getPanel(null, new Rectangle(0,0,0,0), vStyle.colorMPanelGray);
+        progressAllLabs = vElements.getLable("",vStyle.fontTnrB30,new Rectangle(0,0,300,100),vStyle.colorViolet1);
+        progressСompleted = vElements.getLable("",vStyle.fontTnrB30,new Rectangle(220,0,300,100),vStyle.colorPassedGreen);
+        progressDebt = vElements.getLable("",vStyle.fontTnrB30,new Rectangle(390,0,300,100),vStyle.colorDebtRed);
+
+        vActions = new ViewportActions(progressAllLabs, progressСompleted, progressDebt);
     }
 
     private DBAdapter dataBase;
     private ViewportElements vElements;
     private ViewportStyle vStyle;
     private ViewportActions vActions;
-    private ViewportLogic vLogic;
 
     private JPanel bottomCenterPanel;
     private JLabel progressAllLabs;
     private JLabel progressСompleted;
     private JLabel progressDebt;
-
-    public JLabel getProgressAllLabs() {
-        return progressAllLabs;
-    }
-
-    public JLabel getProgressСompleted() {
-        return progressСompleted;
-    }
-
-    public JLabel getProgressDebt() {
-        return progressDebt;
-    }
 
     public void makeForm(){
         JFrame projectFrame = new JFrame("CRON_CHSTU");
@@ -114,17 +106,13 @@ public class Viewport {
             projectFrame.add(labelSubjectName);
 
 //CENTER PANEL
-        progressAllLabs = vElements.getLable("",vStyle.fontTnrB30,new Rectangle(0,0,300,100),vStyle.colorViolet1);
-        progressСompleted = vElements.getLable("",vStyle.fontTnrB30,new Rectangle(220,0,300,100),vStyle.colorPassedGreen);
-        progressDebt = vElements.getLable("",vStyle.fontTnrB30,new Rectangle(390,0,300,100),vStyle.colorDebtRed);
-            vLogic.setLabStatistic();
-
         JPanel topCenterPanel = vElements.getPanel(null,new Rectangle(250,40,650,100),vStyle.colorViolet5);
             topCenterPanel.add(progressAllLabs);
             topCenterPanel.add(progressСompleted);
             topCenterPanel.add(progressDebt);
             projectFrame.add(topCenterPanel);
 
+        vActions.setLabStatistic();
 
         JLabel labelSubjectNumber = vElements.getLable("№",vStyle.fontTnrB30,new Rectangle(250,140,35,50),vStyle.colorViolet1);
             projectFrame.add(labelSubjectNumber);
@@ -134,7 +122,6 @@ public class Viewport {
             projectFrame.add(labelSubjectDate);
 
 //CENTRAL BOTTOM PANEL
-        bottomCenterPanel = vElements.getPanel(null, new Rectangle(0,0,0,0), vStyle.colorMPanelGray);
         JScrollPane jScrollPanelCenterBottomPanel = vElements.getScrollPane(bottomCenterPanel,new Rectangle(250,190,650,500));
             projectFrame.add(jScrollPanelCenterBottomPanel);
 
@@ -167,7 +154,7 @@ public class Viewport {
 
         JPanel bottomRightPanel = vElements.getPanel(null,new Rectangle(900,530,300,200),vStyle.colorViolet4);
             JScrollPane jScrollPaneRightBottomPanel = vElements.getScrollPane(bottomRightPanel,new Rectangle(900,530,300,200));
-            vLogic.showTimetable(bottomRightPanel,new DateUtil().getCurrentDate());
+            vActions.showTimetable(bottomRightPanel,new DateUtil().getCurrentDate());
         projectFrame.add(jScrollPaneRightBottomPanel);
 
 

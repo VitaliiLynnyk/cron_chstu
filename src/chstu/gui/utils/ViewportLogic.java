@@ -20,25 +20,34 @@ import java.util.List;
  */
 public class ViewportLogic {
 
-    public ViewportLogic() {
+    public ViewportLogic(JLabel progressAllLabs, JLabel progressСompleted, JLabel progressDebt) {
         vStyle = ViewportStyle.getInstance();
         vElements = new ViewportElements();
-        vActions = new ViewportActions();
-        viewport = new Viewport();
         dataBase = DBAdapter.getInstance();
+
+        this.progressAllLabs = progressAllLabs;
+        this.progressСompleted = progressСompleted;
+        this.progressDebt = progressDebt;
     }
 
-    private ViewportStyle vStyle;
-    private ViewportElements vElements;
-    private ViewportActions vActions;
-    private Viewport viewport;
-    private DBAdapter dataBase;
+
+
+    protected ViewportStyle vStyle;
+    protected ViewportElements vElements;
+    protected ViewportActions vActions;
+    protected DBAdapter dataBase;
+
+    private JLabel progressAllLabs;
+    private JLabel progressСompleted;
+    private JLabel progressDebt;
     
     
     public void showLabs(JPanel panel, int subject){
         if (panel.getComponentCount() > 0){
             panel.removeAll();
         }
+
+        vActions = new ViewportActions(progressAllLabs, progressСompleted, progressDebt);
 
         List<Laboratory> laboratoryForSubject = dataBase.getLabsBySubject(subject);
         panel.setPreferredSize(new Dimension(650,100* laboratoryForSubject.size()));
@@ -116,8 +125,8 @@ public class ViewportLogic {
             }
         }
 
-        viewport.getProgressAllLabs().setText("Всі лабораторні:"+dataBase.getAllLabs().size());
-        viewport.getProgressСompleted().setText(" Виконані:"+completed);
-        viewport.getProgressDebt().setText(" В боргах:"+debts);
+        progressAllLabs.setText("Всі лабораторні:"+dataBase.getAllLabs().size());
+        progressСompleted.setText(" Виконані:"+completed);
+        progressDebt.setText(" В боргах:"+debts);
     }
 }
