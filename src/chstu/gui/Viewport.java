@@ -122,6 +122,12 @@ public class Viewport {
         JPanel topRightPanel = vElements.getPanel(new GridLayout(1,0),new Rectangle(900,0,300,190),vStyle.colorViolet1);
             projectFrame.add(topRightPanel);
 
+        JLabel lbTimetableOnDate = vElements.getLable("Розклад  ",vStyle.fontTnr25,new Rectangle(900,193 ,300,43),vStyle.colorViolet4);
+            projectFrame.add(lbTimetableOnDate);
+
+        JPanel topTimetableInfoPanel = vElements.getTimetableInfoPanel(new Rectangle(900,230,300,43));
+            projectFrame.add(topTimetableInfoPanel);
+
         JPanel panelSubjectInSelectDate = vElements.getPanel(null,new Rectangle(900,270,300,190),vStyle.colorViolet4);
             JScrollPane jScrollPaneRightTopPanel = vElements.getScrollPane(panelSubjectInSelectDate,new Rectangle(900,270,300,190));
         projectFrame.add(jScrollPaneRightTopPanel);
@@ -130,17 +136,11 @@ public class Viewport {
             datePanel.setBounds(900,30,300,100);
             topRightPanel.add(datePanel);
         JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new Calendars());
-            datePanel.addActionListener(vActions.createDatePickerListener(panelSubjectInSelectDate,datePicker));
-
-        JLabel lbSelectSubject = vElements.getLable("Розклад  ",vStyle.fontTnr25,new Rectangle(900,193 ,300,43),vStyle.colorViolet4);
-            projectFrame.add(lbSelectSubject);
-
-        JPanel topTimetableInfoPanel = vElements.getTimetableInfoPanel(new Rectangle(900,230,300,43));
-            projectFrame.add(topTimetableInfoPanel);
+            datePanel.addActionListener(vActions.createDatePickerShowTimetableListener(panelSubjectInSelectDate,datePicker, lbTimetableOnDate));
 
 
-        JLabel lbSubjectNextDay = vElements.getLable("Розклад на сьогодні",vStyle.fontTnr25,new Rectangle(900,450 ,300,50),vStyle.colorViolet4);
-            projectFrame.add(lbSubjectNextDay);
+        JLabel lbtimetableOnToday = vElements.getLable("Розклад на сьогодні",vStyle.fontTnr25,new Rectangle(900,450 ,300,50),vStyle.colorViolet4);
+            projectFrame.add(lbtimetableOnToday);
 
         JPanel bottomTimetableInfoPanel = vElements.getTimetableInfoPanel(new Rectangle(900,490,300,43));
             projectFrame.add(bottomTimetableInfoPanel);

@@ -41,7 +41,7 @@ public class ViewportActions extends ViewportLogic{
         };
     }
 
-    public ActionListener createDatePickerListener(JDatePickerImpl datePicker , Laboratory lab){
+    public ActionListener createDatePickerUpdateLabListener(JDatePickerImpl datePicker , Laboratory lab){
         return  new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -69,10 +69,11 @@ public class ViewportActions extends ViewportLogic{
         };
     }
 
-    public ActionListener createDatePickerListener(JPanel panel, JDatePickerImpl datePicker){
+    public ActionListener createDatePickerShowTimetableListener(JPanel panel, JDatePickerImpl datePicker, JLabel timetableDate){
         return new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                timetableDate.setText("Розклад на " + datePicker.getJFormattedTextField().getText());
                 showTimetable(panel, datePicker.getJFormattedTextField().getText());
             }
         };
