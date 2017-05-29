@@ -26,31 +26,44 @@ import java.util.List;
  */
 public class Viewport {
     public Viewport() {
-        bottomCenterPanel = new JPanel(null);
-        jScrollPanelCenterBottomPanel = vElements.getScrollPane(bottomCenterPanel,new Rectangle(250,190,650,500));
-        projectFrame.add(jScrollPanelCenterBottomPanel);
-        bottomCenterPanel.setBackground(vStyle.colorMPanelGray);
+        dataBase = DBAdapter.getInstance();
+        vElements = new ViewportElements();
+        vStyle = ViewportStyle.getInstance();
+        vActions = new ViewportActions();
+        vLogic = new ViewportLogic();
     }
-    JFrame projectFrame = new JFrame("CRON_CHSTU");
-    DBAdapter dataBase = DBAdapter.getInstance();
-    ViewportElements vElements = new ViewportElements();
-    ViewportStyle vStyle = ViewportStyle.getInstance();
-    ViewportActions vActions = new ViewportActions();
-    ViewportLogic vLogic = new ViewportLogic();
 
-    JScrollPane jScrollPanelCenterBottomPanel;
-    JPanel bottomCenterPanel;
-    JPanel panelSubjectInSelectDate;
-    private int subjectId = 0;
-    private JLabel namePickedSubject;
+    private DBAdapter dataBase;
+    private ViewportElements vElements;
+    private ViewportStyle vStyle;
+    private ViewportActions vActions;
+    private ViewportLogic vLogic;
+
+    private JPanel bottomCenterPanel;
+    private JLabel progressAllLabs;
+    private JLabel progressСompleted;
+    private JLabel progressDebt;
+
+    public JLabel getProgressAllLabs() {
+        return progressAllLabs;
+    }
+
+    public JLabel getProgressСompleted() {
+        return progressСompleted;
+    }
+
+    public JLabel getProgressDebt() {
+        return progressDebt;
+    }
 
     public void makeForm(){
-        projectFrame.setSize(1200,700);
-        projectFrame.setResizable(false);
-        projectFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        projectFrame.setLocationRelativeTo(null);
-        projectFrame.setLayout(null);
-        projectFrame.setBackground(Color.white);
+        JFrame projectFrame = new JFrame("CRON_CHSTU");
+            projectFrame.setSize(1200,700);
+            projectFrame.setResizable(false);
+            projectFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            projectFrame.setLocationRelativeTo(null);
+            projectFrame.setLayout(null);
+            projectFrame.setBackground(Color.white);
 
 //topMenu
         JLabel programName = new JLabel("CRON_CHSTU", SwingConstants.CENTER);
@@ -64,7 +77,7 @@ public class Viewport {
         JLabel comment = vElements.getLable("введіть кількість лаб",vStyle.fontTnr15,new Rectangle(140,0,150,40),vStyle.colorViolet1);
             centerTopMenu.add(comment);
 
-        namePickedSubject = vElements.getLable("Назва ",vStyle.fontTnr15,new Rectangle(10,0,150,40),vStyle.colorViolet1);
+        JLabel namePickedSubject = vElements.getLable("Назва ",vStyle.fontTnr15,new Rectangle(10,0,150,40),vStyle.colorViolet1);
             centerTopMenu.add(namePickedSubject);
 
         JTextField numberOfLabs = new JTextField();
@@ -74,7 +87,7 @@ public class Viewport {
         JButton btnOkey = new JButton("Додати");
             btnOkey.setBounds(500,10,100,20);
             centerTopMenu.add(btnOkey);
-            //btnOkey.addActionListener(vActions.createOkButtonListener()); TODO do something with necessary labels
+            btnOkey.addActionListener(vActions.createOkButtonListener(numberOfLabs,bottomCenterPanel));
 
 //LEFT PANEL
         JPanel leftPanel = vElements.getPanel(new GridLayout(0,1),new Rectangle(0,80,250,600),null);
@@ -89,7 +102,7 @@ public class Viewport {
             sButton.setBorderPainted(false);
             sButton.setFocusPainted(false);
             sButton.setBackground(vStyle.colorViolet2);
-            sButton.addActionListener(getActionForButtons(subject.getId()));
+            sButton.addActionListener(vActions.createSubjectButtonListener(subject.getId(), bottomCenterPanel, namePickedSubject));
 
             leftPanel.add(sButton);
         }
@@ -101,10 +114,10 @@ public class Viewport {
             projectFrame.add(labelSubjectName);
 
 //CENTER PANEL
-        JLabel progressAllLabs = vElements.getLable("",vStyle.fontTnrB30,new Rectangle(0,0,300,100),vStyle.colorViolet1);
-        JLabel progressСompleted = vElements.getLable("",vStyle.fontTnrB30,new Rectangle(220,0,300,100),vStyle.colorPassedGreen);
-        JLabel progressDebt = vElements.getLable("",vStyle.fontTnrB30,new Rectangle(390,0,300,100),vStyle.colorDebtRed);
-            vLogic.setLabStatistic(progressAllLabs, progressСompleted, progressDebt);
+        progressAllLabs = vElements.getLable("",vStyle.fontTnrB30,new Rectangle(0,0,300,100),vStyle.colorViolet1);
+        progressСompleted = vElements.getLable("",vStyle.fontTnrB30,new Rectangle(220,0,300,100),vStyle.colorPassedGreen);
+        progressDebt = vElements.getLable("",vStyle.fontTnrB30,new Rectangle(390,0,300,100),vStyle.colorDebtRed);
+            vLogic.setLabStatistic();
 
         JPanel topCenterPanel = vElements.getPanel(null,new Rectangle(250,40,650,100),vStyle.colorViolet5);
             topCenterPanel.add(progressAllLabs);
@@ -120,11 +133,16 @@ public class Viewport {
         JLabel labelSubjectDate = vElements.getLable("Дата сдачі",vStyle.fontTnrB30,new Rectangle(650,140,200,50),vStyle.colorViolet1);
             projectFrame.add(labelSubjectDate);
 
+//CENTRAL BOTTOM PANEL
+        bottomCenterPanel = vElements.getPanel(null, new Rectangle(0,0,0,0), vStyle.colorMPanelGray);
+        JScrollPane jScrollPanelCenterBottomPanel = vElements.getScrollPane(bottomCenterPanel,new Rectangle(250,190,650,500));
+            projectFrame.add(jScrollPanelCenterBottomPanel);
+
 //RIGHT PANEL
         JPanel topRightPanel = vElements.getPanel(new GridLayout(1,0),new Rectangle(900,0,300,190),vStyle.colorViolet1);
             projectFrame.add(topRightPanel);
 
-        panelSubjectInSelectDate = vElements.getPanel(null,new Rectangle(900,270,300,190),vStyle.colorViolet4);
+        JPanel panelSubjectInSelectDate = vElements.getPanel(null,new Rectangle(900,270,300,190),vStyle.colorViolet4);
             JScrollPane jScrollPaneRightTopPanel = vElements.getScrollPane(panelSubjectInSelectDate,new Rectangle(900,270,300,190));
         projectFrame.add(jScrollPaneRightTopPanel);
 
@@ -154,19 +172,5 @@ public class Viewport {
 
 
         projectFrame.setVisible(true);
-    }
-
-    private ActionListener getActionForButtons(int subject){
-        ActionListener action = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                vLogic.showLabs(bottomCenterPanel,subject);
-                subjectId = subject;
-
-                namePickedSubject.setText(dataBase.getAllSubjects().get(subject-1).getName());
-                projectFrame.validate();
-            }
-        };
-        return action;
     }
 }

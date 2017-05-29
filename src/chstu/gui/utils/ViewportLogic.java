@@ -5,6 +5,7 @@ import chstu.db.entity.Laboratory;
 import chstu.db.entity.Lesson;
 import chstu.db.entity.LessonTimetable;
 import chstu.gui.Calendars;
+import chstu.gui.Viewport;
 import chstu.timetable.DateUtil;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
@@ -23,12 +24,14 @@ public class ViewportLogic {
         vStyle = ViewportStyle.getInstance();
         vElements = new ViewportElements();
         vActions = new ViewportActions();
+        viewport = new Viewport();
         dataBase = DBAdapter.getInstance();
     }
 
     private ViewportStyle vStyle;
     private ViewportElements vElements;
     private ViewportActions vActions;
+    private Viewport viewport;
     private DBAdapter dataBase;
     
     
@@ -100,7 +103,7 @@ public class ViewportLogic {
         }
     }
 
-    public void setLabStatistic(JLabel progressAllLabs, JLabel progressСompleted, JLabel progressDebt){
+    public void setLabStatistic(){
         int completed = 0;
         int debts = 0;
 
@@ -113,8 +116,8 @@ public class ViewportLogic {
             }
         }
 
-        progressAllLabs.setText("Всі лабораторні:"+dataBase.getAllLabs().size());
-        progressСompleted.setText(" Виконані:"+completed);
-        progressDebt.setText(" В боргах:"+debts);
+        viewport.getProgressAllLabs().setText("Всі лабораторні:"+dataBase.getAllLabs().size());
+        viewport.getProgressСompleted().setText(" Виконані:"+completed);
+        viewport.getProgressDebt().setText(" В боргах:"+debts);
     }
 }

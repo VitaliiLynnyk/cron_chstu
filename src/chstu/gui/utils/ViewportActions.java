@@ -27,6 +27,8 @@ public class ViewportActions {
     ViewportLogic vLogic;
     DBAdapter dataBase;
 
+    private int subjectId;
+
     public ItemListener getCheckBoxEvent(JCheckBox jCheckBox , Laboratory lab){
         return  new ItemListener() {
             @Override
@@ -39,6 +41,8 @@ public class ViewportActions {
                     dataBase.updateLabStatus(0,lab.getIdSubject(),lab.getLabNumber());
                     jCheckBox.setBackground(vStyle.colorViolet1);
                 }
+
+                vLogic.setLabStatistic();
             }
         };
     }
@@ -80,24 +84,38 @@ public class ViewportActions {
         };
     }
 
-    /*public ActionListener createOkButtonListener(JTextField numberLabs, JLabel progressAllLabs, JLabel progressСompleted, JLabel progressDebt){
+    public ActionListener createOkButtonListener(JTextField numberLabsInputField, JPanel labsPanel){
         return new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String numbers="1234567890";
-                if(numbers.contains(numberLabs.getText())){
+                if(numbers.contains(numberLabsInputField.getText())){
                     Tasks tasks = new Tasks();
-                    tasks.setLabs(subjectId,Integer.parseInt(numberLabs.getText()));
+                    tasks.setLabs(subjectId,Integer.parseInt(numberLabsInputField.getText()));
 
-                    vLogic.setLabStatistic(progressAllLabs, progressСompleted, progressDebt);
-                    vLogic.showLabs(bottomCenterPanel,subjectId);
-                    //panelSubjectInSelectDate.repaint(); TODO check why it need to be repaint
+                    vLogic.setLabStatistic();
+                    vLogic.showLabs(labsPanel,subjectId);
+
                 }else {
-                    numberOfLabs.setBackground(new Color(211, 81, 71));
-                    numberOfLabs.setText("1-9");
+                    numberLabsInputField.setBackground(vStyle.colorDebtRed);
+                    numberLabsInputField.setText("1-9");
                 }
             }
         };
-    }*/
+    }
+
+    public ActionListener createSubjectButtonListener(int subject, JPanel labsPanel, JLabel subjectNameLabel){
+        ActionListener action = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                vLogic.showLabs(labsPanel,subject);
+                subjectId = subject;
+
+                subjectNameLabel.setText(dataBase.getAllSubjects().get(subject).getName());
+                labsPanel.validate();
+            }
+        };
+        return action;
+    }
 
     public Color getColorForLabStatus(Laboratory lab){
         switch (lab.getStatus()){
