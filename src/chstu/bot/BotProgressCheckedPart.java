@@ -23,6 +23,9 @@ public class BotProgressCheckedPart {
     public BotProgressCheckedPart() {
         currentDate = new Date();
         dataBase = DBAdapter.getInstance();
+
+        laboratoryForPassToday = new ArrayList<>();
+        lessonForPass = new ArrayList<>();
     }
 
     public void startCheckProgress(){
