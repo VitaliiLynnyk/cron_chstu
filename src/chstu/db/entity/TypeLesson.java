@@ -2,13 +2,13 @@ package chstu.db.entity;
 
 
 public class TypeLesson {
+    private int id;
+    private String name;
+
     public TypeLesson(int id, String name) {
         this.id = id;
         this.name = name;
     }
-
-    private int id;
-    private String name;
 
     public int getId() {
         return id;

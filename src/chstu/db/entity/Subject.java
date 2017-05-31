@@ -2,13 +2,13 @@ package chstu.db.entity;
 
 
 public class Subject {
+    private int id;
+    private String name;
+
     public Subject(int id, String name) {
         this.id = id;
         this.name = name;
     }
-
-    private int id;
-    private String name;
 
     public int getId() {
         return id;

@@ -2,7 +2,7 @@ package chstu.bot;
 
 import chstu.db.DBAdapter;
 import chstu.db.entity.BellTimetable;
-import chstu.bot.util.DateUtil;
+import chstu.utils.DateUtil;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import java.text.SimpleDateFormat;

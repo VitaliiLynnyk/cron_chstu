@@ -5,18 +5,13 @@ import chstu.db.entity.Laboratory;
 import chstu.db.entity.BellTimetable;
 import chstu.db.entity.Subject;
 import chstu.db.entity.LessonTimetable;
-import chstu.bot.util.DateUtil;
+import chstu.utils.DateUtil;
 
 import java.awt.*;
 import java.util.*;
 import java.util.List;
 
 public class BotProgressCheckedPart {
-    public BotProgressCheckedPart() {
-        currentDate = new Date();
-        dataBase = DBAdapter.getInstance();
-    }
-
     private Date currentDate;
     private DBAdapter dataBase;
     private DateUtil dateUtil = new DateUtil();
@@ -25,6 +20,10 @@ public class BotProgressCheckedPart {
     private List<LessonTimetable> lessonForPass;
     private int inProcess = 0, debt = 2;
 
+    public BotProgressCheckedPart() {
+        currentDate = new Date();
+        dataBase = DBAdapter.getInstance();
+    }
 
     public void startCheckProgress(){
         if (!haveUserDutyForToday()){

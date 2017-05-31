@@ -4,7 +4,7 @@ import chstu.gui.Viewport;
 import chstu.bot.BotProgressCheckedPart;
 
 
-public class CronChstu {
+public class Main {
 
     public static void main(String[] args) {
         Viewport form = new Viewport();

@@ -1,10 +1,9 @@
-package chstu.gui.utils;
+package chstu.utils;
 
 import chstu.db.DBAdapter;
 import chstu.db.entity.Laboratory;
 import chstu.db.entity.Lesson;
 import chstu.gui.Calendars;
-import chstu.bot.util.DateUtil;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 
@@ -16,36 +15,31 @@ import java.util.List;
 /**
  * Created by Ar-Krav on 27.05.2017.
  */
-public class ViewportLogic {
+public class ViewportLogicUtil {
+    private ViewportStyleUtil vStyle;
+    private ViewportElementsUtil vElements;
+    private ViewportActionsUtil vActions;
+    private DBAdapter dataBase;
 
-    public ViewportLogic(JLabel progressAllLabs, JLabel progressСompleted, JLabel progressDebt) {
-        vStyle = ViewportStyle.getInstance();
-        vElements = new ViewportElements();
+    private JLabel progressAllLabs;
+    private JLabel progressСompleted;
+    private JLabel progressDebt;
+
+    public ViewportLogicUtil(ViewportActionsUtil vActions, JLabel progressAllLabs, JLabel progressСompleted, JLabel progressDebt) {
+        vStyle = ViewportStyleUtil.getInstance();
+        vElements = new ViewportElementsUtil();
         dataBase = DBAdapter.getInstance();
+        this.vActions = vActions;
 
         this.progressAllLabs = progressAllLabs;
         this.progressСompleted = progressСompleted;
         this.progressDebt = progressDebt;
     }
 
-
-
-    protected ViewportStyle vStyle;
-    protected ViewportElements vElements;
-    protected ViewportActions vActions;
-    protected DBAdapter dataBase;
-
-    private JLabel progressAllLabs;
-    private JLabel progressСompleted;
-    private JLabel progressDebt;
-    
-    
     public void showLabs(JPanel panel, int subject){
         if (panel.getComponentCount() > 0){
             panel.removeAll();
         }
-
-        vActions = new ViewportActions(progressAllLabs, progressСompleted, progressDebt);
 
         List<Laboratory> laboratoryForSubject = dataBase.getLabsBySubject(subject);
         panel.setPreferredSize(new Dimension(650,100* laboratoryForSubject.size()));

@@ -1,6 +1,13 @@
 package chstu.db.entity;
 
 public class Laboratory {
+    private int id;
+    private int idSubject;
+    private int labNumber;
+    private String comment;
+    private String deadline;
+    private int status;
+
     public Laboratory(int id, int idSubject, int labNumber, String comment, String deadline, int status) {
         this.id = id;
         this.idSubject = idSubject;
@@ -9,13 +16,6 @@ public class Laboratory {
         this.deadline = deadline;
         this.status = status;
     }
-
-    private int id;
-    private int idSubject;
-    private int labNumber;
-    private String comment;
-    private String deadline;
-    private int status;
 
     public int getId() {
         return id;

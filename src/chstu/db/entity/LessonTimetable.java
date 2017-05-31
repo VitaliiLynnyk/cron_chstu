@@ -2,6 +2,12 @@ package chstu.db.entity;
 
 
 public class LessonTimetable {
+    private int id;
+    private int numberLesson;
+    private int idSubject;
+    private String lessonDate;
+    private int typeLesson;
+
     public LessonTimetable(int id, int numberLesson, int idSubject, String lessonDate, int typeLesson) {
         this.id = id;
         this.numberLesson = numberLesson;
@@ -9,12 +15,6 @@ public class LessonTimetable {
         this.lessonDate = lessonDate;
         this.typeLesson = typeLesson;
     }
-
-    private int id;
-    private int numberLesson;
-    private int idSubject;
-    private String lessonDate;
-    private int typeLesson;
 
     public int getId() {
         return id;

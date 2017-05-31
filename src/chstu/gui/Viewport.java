@@ -2,10 +2,11 @@ package chstu.gui;
 
 import chstu.db.*;
 import chstu.db.entity.Subject;
-import chstu.gui.utils.ViewportActions;
-import chstu.gui.utils.ViewportElements;
-import chstu.gui.utils.ViewportStyle;
-import chstu.bot.util.DateUtil;
+import chstu.utils.ViewportActionsUtil;
+import chstu.utils.ViewportElementsUtil;
+import chstu.utils.ViewportLogicUtil;
+import chstu.utils.ViewportStyleUtil;
+import chstu.utils.DateUtil;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 
@@ -18,28 +19,30 @@ import java.util.List;
  * Created by linni on 5/13/2017.
  */
 public class Viewport {
+    private DBAdapter dataBase;
+    private ViewportElementsUtil vElements;
+    private ViewportStyleUtil vStyle;
+    private ViewportActionsUtil vActions;
+    private ViewportLogicUtil vLogix;
+
+    private JPanel bottomCenterPanel;
+    private JLabel progressAllLabs;
+    private JLabel progressСompleted;
+    private JLabel progressDebt;
+
     public Viewport() {
         dataBase = DBAdapter.getInstance();
-        vElements = new ViewportElements();
-        vStyle = ViewportStyle.getInstance();
+        vElements = new ViewportElementsUtil();
+        vStyle = ViewportStyleUtil.getInstance();
 
         bottomCenterPanel = vElements.getPanel(null, new Rectangle(0,0,0,0), vStyle.colorMPanelGray);
         progressAllLabs = vElements.getLable("",vStyle.fontTnrB30,new Rectangle(0,0,300,100),vStyle.colorViolet1);
         progressСompleted = vElements.getLable("",vStyle.fontTnrB30,new Rectangle(220,0,300,100),vStyle.colorPassedGreen);
         progressDebt = vElements.getLable("",vStyle.fontTnrB30,new Rectangle(390,0,300,100),vStyle.colorDebtRed);
 
-        vActions = new ViewportActions(progressAllLabs, progressСompleted, progressDebt);
+        vActions = new ViewportActionsUtil(progressAllLabs, progressСompleted, progressDebt);
+        vLogix = vActions.getVLogic();
     }
-
-    private DBAdapter dataBase;
-    private ViewportElements vElements;
-    private ViewportStyle vStyle;
-    private ViewportActions vActions;
-
-    private JPanel bottomCenterPanel;
-    private JLabel progressAllLabs;
-    private JLabel progressСompleted;
-    private JLabel progressDebt;
 
     public void makeForm(){
         JFrame projectFrame = new JFrame("CRON_CHSTU");
@@ -105,7 +108,7 @@ public class Viewport {
             topCenterPanel.add(progressDebt);
             projectFrame.add(topCenterPanel);
 
-        vActions.setLabStatistic();
+        vLogix.setLabStatistic();
 
         JLabel labelSubjectNumber = vElements.getLable("№",vStyle.fontTnrB30,new Rectangle(250,140,35,50),vStyle.colorViolet1);
             projectFrame.add(labelSubjectNumber);
@@ -147,7 +150,7 @@ public class Viewport {
 
         JPanel bottomRightPanel = vElements.getPanel(null,new Rectangle(900,530,300,200),vStyle.colorViolet4);
             JScrollPane jScrollPaneRightBottomPanel = vElements.getScrollPane(bottomRightPanel,new Rectangle(900,530,300,200));
-            vActions.showTimetable(bottomRightPanel,new DateUtil().getCurrentDate());
+            vLogix.showTimetable(bottomRightPanel,new DateUtil().getCurrentDate());
         projectFrame.add(jScrollPaneRightBottomPanel);
 
 

@@ -1,4 +1,4 @@
-package chstu.bot.util;
+package chstu.utils;
 
 import chstu.db.DBAdapter;
 import chstu.db.entity.BellTimetable;

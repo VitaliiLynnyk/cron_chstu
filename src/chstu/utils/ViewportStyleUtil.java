@@ -1,4 +1,4 @@
-package chstu.gui.utils;
+package chstu.utils;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -8,8 +8,16 @@ import java.awt.*;
  * Created by Ar-Krav on 26.05.2017.
  */
 
-public class ViewportStyle {
-    public ViewportStyle() {
+public class ViewportStyleUtil {
+    public final Color colorDebtRed, colorPassedGreen, colorNameYellow, colorMPanelGray,
+            colorViolet1, colorViolet2, colorViolet3, colorViolet4, colorViolet5;
+
+    public final Font fontTnr15, fontTnr25, fontTnrB30, fontTnrI30,
+            fontChl30, fofntClb26;
+
+    public final Border border;
+
+    public ViewportStyleUtil() {
         colorDebtRed = new Color(211, 81, 71 );
         colorPassedGreen = new Color(63, 171, 57);
         colorNameYellow = Color.yellow;
@@ -30,19 +38,11 @@ public class ViewportStyle {
         border = BorderFactory.createLineBorder(colorViolet2,1);
     }
 
-    private static ViewportStyle instance;
-    public static ViewportStyle getInstance(){
+    private static ViewportStyleUtil instance;
+    public static ViewportStyleUtil getInstance(){
         if (instance == null){
-            instance = new ViewportStyle();
+            instance = new ViewportStyleUtil();
         }
         return instance;
     }
-
-    public final Color colorDebtRed, colorPassedGreen, colorNameYellow, colorMPanelGray,
-                       colorViolet1, colorViolet2, colorViolet3, colorViolet4, colorViolet5;
-
-    public final Font fontTnr15, fontTnr25, fontTnrB30, fontTnrI30,
-                      fontChl30, fofntClb26;
-
-    public final Border border;
 }

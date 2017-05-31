@@ -1,5 +1,6 @@
-package chstu.gui.utils;
+package chstu.utils;
 
+import chstu.db.DBAdapter;
 import chstu.db.entity.Laboratory;
 import chstu.bot.BotNewLabsPart;
 import org.jdatepicker.impl.JDatePickerImpl;
@@ -16,12 +17,21 @@ import java.awt.event.ItemListener;
 /**
  * Created by Ar-Krav on 27.05.2017.
  */
-public class ViewportActions extends ViewportLogic{
-    public ViewportActions(JLabel progressAllLabs, JLabel progressСompleted, JLabel progressDebt) {
-        super(progressAllLabs, progressСompleted, progressDebt);
+public class ViewportActionsUtil {
+    private ViewportLogicUtil vLogic;
+    private DBAdapter dataBase;
+    private ViewportStyleUtil vStyle;
+    private int subjectId;
+
+    public ViewportActionsUtil(JLabel progressAllLabs, JLabel progressСompleted, JLabel progressDebt) {
+        vLogic = new ViewportLogicUtil(this,progressAllLabs, progressСompleted, progressDebt);
+        dataBase = DBAdapter.getInstance();
+        vStyle = ViewportStyleUtil.getInstance();
     }
 
-    private int subjectId;
+    public ViewportLogicUtil getVLogic() {
+        return vLogic;
+    }
 
     public ItemListener getCheckBoxEvent(JCheckBox jCheckBox , Laboratory lab){
         return  new ItemListener() {
@@ -36,7 +46,7 @@ public class ViewportActions extends ViewportLogic{
                     jCheckBox.setBackground(vStyle.colorViolet1);
                 }
 
-                setLabStatistic();
+                vLogic.setLabStatistic();
             }
         };
     }
@@ -74,7 +84,7 @@ public class ViewportActions extends ViewportLogic{
             @Override
             public void actionPerformed(ActionEvent e) {
                 timetableDate.setText("Розклад на " + datePicker.getJFormattedTextField().getText());
-                showTimetable(panel, datePicker.getJFormattedTextField().getText());
+                vLogic.showTimetable(panel, datePicker.getJFormattedTextField().getText());
             }
         };
     }
@@ -87,8 +97,8 @@ public class ViewportActions extends ViewportLogic{
                     BotNewLabsPart BotNewLabs = new BotNewLabsPart();
                     BotNewLabs.setLabs(subjectId,Integer.parseInt(numberLabsInputField.getText()));
 
-                    setLabStatistic();
-                    showLabs(labsPanel,subjectId);
+                    vLogic.setLabStatistic();
+                    vLogic.showLabs(labsPanel,subjectId);
 
                 }else {
                     numberLabsInputField.setBackground(vStyle.colorDebtRed);
@@ -102,7 +112,7 @@ public class ViewportActions extends ViewportLogic{
         ActionListener action = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                showLabs(labsPanel,subject);
+                vLogic.showLabs(labsPanel,subject);
                 subjectId = subject;
 
                 subjectNameLabel.setText(dataBase.getAllSubjects().get(subject).getName());

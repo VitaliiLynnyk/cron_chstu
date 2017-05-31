@@ -1,4 +1,4 @@
-package chstu.gui.utils;
+package chstu.utils;
 
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.UtilDateModel;
@@ -10,11 +10,11 @@ import java.util.Properties;
 /**
  * Created by Ar-Krav on 26.05.2017.
  */
-public class ViewportElements {
-    public ViewportElements() {
+public class ViewportElementsUtil {
+    public ViewportElementsUtil() {
 
     }
-    ViewportStyle vStyle = ViewportStyle.getInstance();
+    ViewportStyleUtil vStyle = ViewportStyleUtil.getInstance();
 
     public JPanel getPanel(LayoutManager layout, Rectangle boundsValue, Color backgroundColor){
         JPanel panel = new JPanel(layout);
