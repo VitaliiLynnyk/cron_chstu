@@ -38,6 +38,7 @@ public class ViewportStyle {
         return instance;
     }
 
+    // todo these fields should be declared first
     public final Color colorDebtRed, colorPassedGreen, colorNameYellow, colorMPanelGray,
                        colorViolet1, colorViolet2, colorViolet3, colorViolet4, colorViolet5;
 

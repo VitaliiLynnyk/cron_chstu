@@ -16,6 +16,7 @@ import java.util.List;
 /**
  * Created by Ar-Krav on 27.05.2017.
  */
+// todo it's good practice to have name of class ended with Utils cuz it's in package utils, this logic can be apply to any class, like UserEntity,
 public class ViewportLogic {
 
     public ViewportLogic(JLabel progressAllLabs, JLabel progressСompleted, JLabel progressDebt) {

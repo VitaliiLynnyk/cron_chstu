@@ -29,6 +29,9 @@ public class DateUtilTest {
         SimpleDateFormat dateFormat = new SimpleDateFormat("kk:mm:ss");
         assertEquals("Time is diferent!",dateFormat.format(currentDate),dateFormat.format(testDate));
         System.out.println("-getCurrentTime: " + dateFormat.format(currentDate));
+
+        // todo try to use assertj to confirm tests, like this one
+        assertThat(dateFormat.format(currentDate)).isEquilTo(dateFormat.format(testDate));
     }
 
     @Test
@@ -39,6 +42,7 @@ public class DateUtilTest {
         System.out.println("-convertTimeInMS: " + dateFormat.format(testDate));
     }
 
+    // todo this test is wrong, there is no any assert
     @Test
     public void getTimeToNextLesson() throws Exception {
         DBAdapter dataBase = DBAdapter.getInstance();
@@ -57,6 +61,7 @@ public class DateUtilTest {
         fail("Time to next lesson not correct.");
     }
 
+    // todo this test is wrong, there is no any assert
     @Test
     public void getTimeToNextDayLesson() throws Exception {
         Date testDate = new Date(dateUtil.getTimeToNextDayLesson());

@@ -17,6 +17,8 @@ public class Laboratory {
     private String deadline;
     private int status;
 
+    // todo good practice - constructor should be here, after fields, same for other classes
+
     public int getId() {
         return id;
     }

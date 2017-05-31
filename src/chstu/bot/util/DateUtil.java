@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+// todo move all utils to one package, you do not want to have them separated around the project
 public class DateUtil {
     public DateUtil() {
         dataBase = DBAdapter.getInstance();
@@ -26,6 +27,7 @@ public class DateUtil {
         return dateFormat.format(currentDate);
     }
 
+    // todo there is method System.currentTimeMillis() it does the same
     public long getCurrentTimeMS(){
         currentDate = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("kk:mm:ss");

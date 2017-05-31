@@ -19,6 +19,7 @@ public class Calendars extends AbstractFormatter{
             return dateFormatter.parseObject(text);
         }
 
+        // todo as I see it works for Calendar only, why use Object  as parameter?
         @Override
         public String valueToString(Object value) throws ParseException {
             if (value != null) {

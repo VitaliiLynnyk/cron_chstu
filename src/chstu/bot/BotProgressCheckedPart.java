@@ -35,6 +35,7 @@ public class BotProgressCheckedPart {
         for(LessonTimetable lesson : lessonForPass){
             if(dateUtil.getCurrentTimeMS() >= getLessonTimeInMS(lesson.getNumberLesson())){
                 System.out.println(getLessonTimeInMS(lesson.getNumberLesson()));
+                // todo you use collection that was not initialized in constructor, it should be at last empty, but not null
                 for(Laboratory lab : laboratoryForPassToday){
                     if (lab.getIdSubject() == lesson.getIdSubject() && lab.getStatus() == inProcess) {
                         dataBase.updateLabStatus(debt,lab.getIdSubject(),lab.getLabNumber());

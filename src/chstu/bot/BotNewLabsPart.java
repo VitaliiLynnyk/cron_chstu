@@ -42,6 +42,7 @@ public class BotNewLabsPart {
         arrayDates.clear();
     }
 
+    // todo it's very wrong solution!!!!! Obviously it will fail next month
     private String convertIntToDate(int day){
         return "2017-05-"+day;
     }

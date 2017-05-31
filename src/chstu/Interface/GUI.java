@@ -23,6 +23,8 @@ import java.util.List;
 /**
  * Created by linni on 5/13/2017.
  */
+
+// todo remove this file if no needed
 public class GUI {
     public GUI() {
         BottomCenterPanel = new JPanel(null);
@@ -85,8 +87,8 @@ public class GUI {
         namePickedSubject = new JLabel();
         namePickedSubject.setText("Назва предмета");
         namePickedSubject.setBounds(10,0,150,40);
-        namePickedSubject.setForeground(new Color(113, 74, 176));
-        namePickedSubject.setFont(new Font("Times New Roman", Font.BOLD, 15));
+        namePickedSubject.setForeground(new Color(113, 74, 176)); // todo use some utils to get color you need! everywhere
+        namePickedSubject.setFont(new Font("Times New Roman", Font.BOLD, 15)); // todo use some utils to get Font you need! everywhere
         centerTopMenu.add(namePickedSubject);
 
         JTextField numberOfLabs = new JTextField();
